@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import * as Yup from 'yup';
 
-import { Auth } from 'aws-amplify';
+import { Auth } from '@aws-amplify/cli';
 
 
 import AppText from '../../../components/AppText';

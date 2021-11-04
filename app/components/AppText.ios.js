@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 
 
-import defaultStyles from '../config/styles';
+import defaultStyles from '../../../../../../SportEdge/NudPob/app/config/styles';
 
 
 function AppText({children, style, ...otherProps}) {
