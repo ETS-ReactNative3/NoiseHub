@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NoiseHub",
-    "slug": "NoiseHub",
+    "name": "react-native-firebase",
+    "slug": "react-native-firebase",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
