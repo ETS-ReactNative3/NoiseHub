@@ -11,15 +11,15 @@ import {
   SurveyScreen1,
   SurveyScreen2,
 } from "./src/screens";
-import { decode, encode } from "base-64";
-import { BarcodeScreen } from "./src/screens";
+// import { decode, encode } from "base-64";
+// import { BarcodeScreen } from "./src/screens";
 
-if (!global.btoa) {
-  global.btoa = encode;
-}
-if (!global.atob) {
-  global.atob = decode;
-}
+// if (!global.btoa) {
+//   global.btoa = encode;
+// }
+// if (!global.atob) {
+//   global.atob = decode;
+// }
 
 const Stack = createStackNavigator();
 
@@ -29,11 +29,11 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
-        <Stack.Screen name="Barcode" component={BarcodeScreen} />
+        {/* <Stack.Screen name="Barcode" component={BarcodeScreen} /> */}
         <Stack.Screen
           name="ForgotPasswordScreen"
           component={ForgotPasswordScreen}
