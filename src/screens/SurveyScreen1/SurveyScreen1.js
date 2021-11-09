@@ -1,6 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput } from 'react-native';
+import styles from "./styles";
 
-export default function SurveyScreen1({ navigation }) {
-  <Text>SurveyScreen1</Text>;
+// Components
+import BlankScreen from '../../components/BlankScreen';
+import Button_1 from '../../components/Button_1';
+
+// Configurations
+import colors from '../../config/colors';
+
+import { Auth } from 'aws-amplify'
+
+export default function LoginScreen({ navigation}) {
+  return (
+    <BlankScreen style={styles.container}>
+    </BlankScreen>
+  );
 }

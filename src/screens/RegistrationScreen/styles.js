@@ -1,56 +1,36 @@
 import { StyleSheet } from "react-native";
-
+import colors from '../../config/colors'
 export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: 'center',
+    backgroundColor: colors.primaryBlue
   },
-  title: {},
-  logo: {
-    flex: 1,
-    height: 140,
-    width: 200,
-    alignSelf: "center",
-    margin: 30,
+  inputContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginVertical: '2.5%',
+    backgroundColor: colors.primaryWhite,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
   },
-  input: {
-    height: 48,
-    borderRadius: 5,
-    overflow: "hidden",
-    backgroundColor: "white",
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
-    paddingLeft: 16,
+  buttonContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginVertical: '2.5%',
   },
-  button: {
-    backgroundColor: "#788eec",
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-    height: 48,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+  inputsContainer: {
+
   },
-  buttonTitle: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+  buttonsContainer: {
+
   },
-  footerView: {
-    flex: 1,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  footerText: {
-    fontSize: 16,
-    color: "#2e2e2d",
-  },
-  footerLink: {
-    color: "#788eec",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
+  textInput: {
+    color: colors.primaryPink,
+    fontSize: 22,
+    width: '85%'
+  }
 });

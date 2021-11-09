@@ -11,15 +11,10 @@ import {
   SurveyScreen1,
   SurveyScreen2,
 } from "./src/screens";
-// import { decode, encode } from "base-64";
-// import { BarcodeScreen } from "./src/screens";
 
-// if (!global.btoa) {
-//   global.btoa = encode;
-// }
-// if (!global.atob) {
-//   global.atob = decode;
-// }
+import Amplify from 'aws-amplify'
+import config from './src/aws-exports'
+Amplify.configure(config)
 
 const Stack = createStackNavigator();
 
@@ -38,7 +33,7 @@ export default function App() {
           name="ForgotPasswordScreen"
           component={ForgotPasswordScreen}
         />
-        <Stack.Screen name="ConfirmScreen" component={ConfirmScreen} />
+        <Stack.Screen name="Confirm" component={ConfirmScreen} />
         <Stack.Screen name="SurveyScreen1" component={SurveyScreen1} />
         <Stack.Screen name="SurveyScreen2" component={SurveyScreen2} />
       </Stack.Navigator>
