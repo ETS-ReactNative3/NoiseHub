@@ -54,9 +54,6 @@ export default StyleSheet.create({
     marginTop: 20,
     backgroundColor: colors.primaryWhite,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
-    
   },
   dropdown: {
     width: '65%',
@@ -74,15 +71,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: '65%',
     backgroundColor: colors.primaryWhite,
-    alignItems: 'center',
+    borderRadius: 10
   },
   dropdownMenuText: {
-    color: colors.primaryPink,
-
+    color: colors.primaryBlue,
     fontSize: 18,
     paddingHorizontal: 10,
     paddingVertical: 16,
-    width: '100%',
+    width: '95%',
     textAlign: 'center',
+    alignSelf: 'center',
+  },
+  dropDownMenuTextSelected: {
+    color: colors.primaryPink
   }
 });

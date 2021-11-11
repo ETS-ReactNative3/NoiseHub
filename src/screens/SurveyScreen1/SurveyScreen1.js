@@ -15,8 +15,9 @@ import { Auth } from 'aws-amplify'
 export default function LoginScreen({ navigation }) {
   school_list = [
     'Boston University',
-    'NorthEastern University',
-    'Boston College'
+    'Northeastern University',
+    'Northeastefsdfasdfsadfasdfadsrn University',
+    'Boston College',
   ]
 
   return (
@@ -32,6 +33,8 @@ export default function LoginScreen({ navigation }) {
           textStyle={styles.dropdownText}
           dropdownStyle={styles.dropdownMenu}
           dropdownTextStyle={styles.dropdownMenuText}
+          dropdownTextHighlightStyle={styles.dropDownMenuTextSelected}
+          showsVerticalScrollIndicator={true}
         ></ModalDropdown>
       </View>
       <View style={styles.buttonsContainer}>
