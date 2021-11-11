@@ -26,11 +26,63 @@ export default StyleSheet.create({
 
   },
   buttonsContainer: {
-
+    marginTop: '15%'
+  },
+  textContainer: {
+    flexDirection: 'row',
+    width: '85%',
+  },
+  text: {
+    flex: 1,
+    flexWrap: 'wrap',
+    width: 348,
+    // height: 68,
+    color: '#ffffff',
+    fontFamily: 'Roboto',
+    fontSize: 30,
+    fontWeight: '400',
+    fontStyle: 'normal',
+    textAlign: 'center',
+    lineHeight: 36,
   },
   textInput: {
     color: colors.primaryPink,
     fontSize: 22,
     width: '85%'
+  },
+  dropdownContainer: {
+    marginTop: 20,
+    backgroundColor: colors.primaryWhite,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+    
+  },
+  dropdown: {
+    width: '65%',
+  },
+  dropdownText: {
+    color: colors.primaryPink,
+    fontSize: 22,
+    paddingHorizontal: 10,
+    paddingVertical: 16,
+    width: '100%',
+    textAlign: 'center',
+  },
+  dropdownMenu: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '65%',
+    backgroundColor: colors.primaryWhite,
+    alignItems: 'center',
+  },
+  dropdownMenuText: {
+    color: colors.primaryPink,
+
+    fontSize: 18,
+    paddingHorizontal: 10,
+    paddingVertical: 16,
+    width: '100%',
+    textAlign: 'center',
   }
 });
