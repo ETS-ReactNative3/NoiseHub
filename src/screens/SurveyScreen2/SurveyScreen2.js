@@ -40,9 +40,31 @@ export default function LoginScreen({ navigation, route }) {
         <Text style={styles.text}>What do you consider when finding a place to study?</Text>
       </View>
       <View style={styles.radioContainer}>
-      {/* It's confusing, but when I turn radio into a component make sense */}
-      <View style={styles.radio1}> 
+        {/* It's confusing, but when I turn radio into a component make sense */}
+        <View style={styles.radio1}> 
           <Text style={styles.radioTitle}>Noise</Text>
+          <View style={styles.radio}>
+            <TouchableOpacity style={button1 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton1}>
+              <Text style={button1 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={button2 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton2}>
+              <Text style={button2 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.radio1}> 
+          <Text style={styles.radioTitle}>Temperature</Text>
+          <View style={styles.radio}>
+            <TouchableOpacity style={button1 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton1}>
+              <Text style={button1 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={button2 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton2}>
+              <Text style={button2 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.radio1}> 
+          <Text style={styles.radioTitle}>Crowdedness</Text>
           <View style={styles.radio}>
             <TouchableOpacity style={button1 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton1}>
               <Text style={button1 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>Yes</Text>
