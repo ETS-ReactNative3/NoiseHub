@@ -13,6 +13,8 @@ import colors from '../../config/colors';
 import { Auth } from 'aws-amplify'
 
 export default function LoginScreen({ navigation }) {
+  const [userSchool, setSchool] = useState("Select a School");
+
   school_list = [
     'Boston University',
     'Northeastern University',
@@ -28,20 +30,21 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.dropdownContainer}>
         <ModalDropdown 
           options={school_list}  
-          defaultValue='Select a School'
+          defaultValue={userSchool}
           style={styles.dropdown}
           textStyle={styles.dropdownText}
           dropdownStyle={styles.dropdownMenu}
           dropdownTextStyle={styles.dropdownMenuText}
           dropdownTextHighlightStyle={styles.dropDownMenuTextSelected}
           showsVerticalScrollIndicator={true}
+          onSelect = {(value) => setSchool(school_list[value])} // Value is the index
         ></ModalDropdown>
       </View>
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
           <Button_1
             title='Next' 
-            onPress={() => confirm()}
+            onPress={() => navigation.navigate('SurveyScreen2', {school: userSchool})}
           />
         </View>
       </View>
