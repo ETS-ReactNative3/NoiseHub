@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./styles";
 
 // Components
-import BlankScreen from '../../components/BlankScreen';
-import Button_1 from '../../components/Button_1';
+import BlankScreen from "../../components/BlankScreen";
+import Button_1 from "../../components/Button_1";
 
 export default function LoginScreen({ navigation, route }) {
   // SurveryScreen1 Values
@@ -28,49 +28,129 @@ export default function LoginScreen({ navigation, route }) {
   }
 
   school_list = [
-    'Boston University',
-    'Northeastern University',
-    'Northeastefsdfasdfsadfasdfadsrn University',
-    'Boston College',
-  ]
+    "Boston University",
+    "Northeastern University",
+    "Northeastefsdfasdfsadfasdfadsrn University",
+    "Boston College",
+  ];
 
   return (
     <BlankScreen style={styles.container}>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>What do you consider when finding a place to study?</Text>
+        <Text style={styles.text}>
+          What do you consider when finding a place to study?
+        </Text>
       </View>
       <View style={styles.radioContainer}>
         {/* It's confusing, but when I turn radio into a component make sense */}
-        <View style={styles.radio1}> 
+        <View style={styles.radio1}>
           <Text style={styles.radioTitle}>Noise</Text>
           <View style={styles.radio}>
-            <TouchableOpacity style={button1 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton1}>
-              <Text style={button1 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>Yes</Text>
+            <TouchableOpacity
+              style={
+                button1 ? styles.radioButtonActive : styles.radioButtonInactive
+              }
+              onPress={setRadioButton1}
+            >
+              <Text
+                style={
+                  button1
+                    ? styles.radioButtonTextActive
+                    : styles.radioButtonTextInactive
+                }
+              >
+                Yes
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={button2 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton2}>
-              <Text style={button2 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>No</Text>
+            <TouchableOpacity
+              style={
+                button2 ? styles.radioButtonActive : styles.radioButtonInactive
+              }
+              onPress={setRadioButton2}
+            >
+              <Text
+                style={
+                  button2
+                    ? styles.radioButtonTextActive
+                    : styles.radioButtonTextInactive
+                }
+              >
+                No
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.radio1}> 
+        <View style={styles.radio1}>
           <Text style={styles.radioTitle}>Temperature</Text>
           <View style={styles.radio}>
-            <TouchableOpacity style={button1 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton1}>
-              <Text style={button1 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>Yes</Text>
+            <TouchableOpacity
+              style={
+                button1 ? styles.radioButtonActive : styles.radioButtonInactive
+              }
+              onPress={setRadioButton1}
+            >
+              <Text
+                style={
+                  button1
+                    ? styles.radioButtonTextActive
+                    : styles.radioButtonTextInactive
+                }
+              >
+                Yes
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={button2 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton2}>
-              <Text style={button2 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>No</Text>
+            <TouchableOpacity
+              style={
+                button2 ? styles.radioButtonActive : styles.radioButtonInactive
+              }
+              onPress={setRadioButton2}
+            >
+              <Text
+                style={
+                  button2
+                    ? styles.radioButtonTextActive
+                    : styles.radioButtonTextInactive
+                }
+              >
+                No
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.radio1}> 
+        <View style={styles.radio1}>
           <Text style={styles.radioTitle}>Crowdedness</Text>
           <View style={styles.radio}>
-            <TouchableOpacity style={button1 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton1}>
-              <Text style={button1 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>Yes</Text>
+            <TouchableOpacity
+              style={
+                button1 ? styles.radioButtonActive : styles.radioButtonInactive
+              }
+              onPress={setRadioButton1}
+            >
+              <Text
+                style={
+                  button1
+                    ? styles.radioButtonTextActive
+                    : styles.radioButtonTextInactive
+                }
+              >
+                Yes
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={button2 ? styles.radioButtonActive : styles.radioButtonInactive} onPress={setRadioButton2}>
-              <Text style={button2 ? styles.radioButtonTextActive : styles.radioButtonTextInactive}>No</Text>
+            <TouchableOpacity
+              style={
+                button2 ? styles.radioButtonActive : styles.radioButtonInactive
+              }
+              onPress={setRadioButton2}
+            >
+              <Text
+                style={
+                  button2
+                    ? styles.radioButtonTextActive
+                    : styles.radioButtonTextInactive
+                }
+              >
+                No
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -78,8 +158,10 @@ export default function LoginScreen({ navigation, route }) {
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
           <Button_1
-            title='Next' 
-            onPress={() => navigation.navigat('SurveyScreen2', {school: userSchool})}
+            title="Next"
+            onPress={() =>
+              navigation.navigate("SurveyScreen2", { school: userSchool })
+            }
           />
         </View>
       </View>
