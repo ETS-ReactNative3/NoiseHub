@@ -20,7 +20,7 @@ export default function LoginScreen({ navigation }) {
       try {
           const user = await Auth.signIn(username, password);
           global.username = username;
-          navigation.navigate('Home')
+          navigation.navigate('SurveyScreen1')
       } catch (error) {
           console.log('Error signing in - ', error);
       }
