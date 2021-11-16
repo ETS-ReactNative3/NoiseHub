@@ -5,5 +5,7 @@ College study spaces are often inconsistently managed. That variability can hind
 
 ## Frontend Setup
 npm install or yarn install
+
 amplify pull --appId d2suojejlgv7v2 --envName dev
+
 amplify add codegen --apiId jlrrmhzoizaelo6eli6dan264q
