@@ -6,6 +6,10 @@ import styles from "./styles";
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 
+// API
+import { createUser } from '../../graphql/mutations'
+import { API, graphqlOperation } from 'aws-amplify';
+
 export default function LoginScreen({ navigation, route }) {
   // SurveyScreen1 Values
   const userSchool = route.params.school;
@@ -22,19 +26,40 @@ export default function LoginScreen({ navigation, route }) {
   async function setRadio(radio, button) {
     switch (radio) {
       case 1:
-        setRadio1(button == 1 ? {button1: true, button2: false} : {button1: false, button2: true}); break;
+        setRadio1(button == 1 ? {button1: true, button2: false} : {button1: false, button2: true});
+        setNoise(button == 1 ? true : false)
+        break;
       case 2:
-        setRadio2(button == 1 ? {button1: true, button2: false} : {button1: false, button2: true}); break;
+        setRadio2(button == 1 ? {button1: true, button2: false} : {button1: false, button2: true});
+        setTemp(button == 1 ? true : false)
+        break;
       case 3:
-        setRadio3(button == 1 ? {button1: true, button2: false} : {button1: false, button2: true}); break;
+        setRadio3(button == 1 ? {button1: true, button2: false} : {button1: false, button2: true});
+        setCrowd(button == 1 ? true : false)
+        break;
       default:
         console.log('setRadio: Passed nonexistent radio input!')
     }
   }
 
-  // async function getValues() {
-  //   setNoise()
-  // }
+  async function createUser() {
+    try {
+      const user = await API.graphql(graphqlOperation(createUser, { input: {
+        username: username,
+        school: userSchool,
+        noisePref: userNoise,
+        tempPref: userTemp,
+        crowdPref: userCrowd
+      }}))
+    } catch(error) {
+      console.log('Error creating User - ', error);
+    }
+  }
+
+  async function onPressAction() {
+    createUser();
+    navigation.navigate('SurveyScreen2', {school: userSchool})
+  }
 
   return (
     <BlankScreen style={styles.container}>
@@ -81,7 +106,7 @@ export default function LoginScreen({ navigation, route }) {
         <View style={styles.buttonContainer}>
           <Button_1
             title='Next' 
-            onPress={() => navigation.navigate('SurveyScreen2', {school: userSchool})}
+            onPress={() => onPressAction()}
           />
         </View>
       </View>

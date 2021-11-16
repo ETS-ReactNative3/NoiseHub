@@ -9,6 +9,9 @@ import Button_1 from '../../components/Button_1';
 // Configurations
 import colors from '../../config/colors';
 
+// API
+import { createUser } from '../../graphql/mutations'
+
 import { Auth } from 'aws-amplify'
 
 export default function LoginScreen({ navigation, route }) {
