@@ -8,7 +8,7 @@ import Button_1 from '../../components/Button_1';
 
 // API
 import { createUser } from '../../graphql/mutations'
-import { API, graphqlOperation } from 'aws-amplify';
+import { Auth, API, graphqlOperation } from 'aws-amplify';
 
 export default function LoginScreen({ navigation, route }) {
   // SurveyScreen1 Values
@@ -17,6 +17,7 @@ export default function LoginScreen({ navigation, route }) {
   const [userNoise, setNoise] = useState();
   const [userTemp, setTemp] = useState();
   const [userCrowd, setCrowd] = useState();
+  const [username, setUsername] = useState();
 
   // Why not put all of these into one big array called radios? Because then it will reload every single radio when only one is updated
   const [radio1, setRadio1] = useState({button1: false, button2: false});
@@ -42,8 +43,19 @@ export default function LoginScreen({ navigation, route }) {
     }
   }
 
-  async function createUser() {
+  async function create_user() {
     try {
+      Auth.currentAuthenticatedUser({
+          bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+      }).then(user => setUsername(user.username))
+      .catch(err => console.log(err));
+
+      console.log(username);
+      console.log(userSchool);
+      console.log(userNoise);
+      console.log(userTemp);
+      console.log(userCrowd);
+
       const user = await API.graphql(graphqlOperation(createUser, { input: {
         username: username,
         school: userSchool,
@@ -57,7 +69,7 @@ export default function LoginScreen({ navigation, route }) {
   }
 
   async function onPressAction() {
-    createUser();
+    create_user();
     navigation.navigate('SurveyScreen2', {school: userSchool})
   }
 
