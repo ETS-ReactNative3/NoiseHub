@@ -11,3 +11,6 @@ export { default as ConfirmScreen } from "./ConfirmScreen/ConfirmScreen";
 export { default as SurveyScreen1 } from "./SurveyScreen1/SurveyScreen1";
 
 export { default as SurveyScreen2 } from "./SurveyScreen2/SurveyScreen2";
+
+import 'react-native-get-random-values'
+import "react-native-url-polyfill/auto";

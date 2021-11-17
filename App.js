@@ -12,6 +12,9 @@ import {
   SurveyScreen2,
 } from "./src/screens";
 
+import 'react-native-get-random-values'
+import "react-native-url-polyfill/auto";
+
 import Amplify from "aws-amplify";
 import config from "./src/aws-exports";
 Amplify.configure(config);

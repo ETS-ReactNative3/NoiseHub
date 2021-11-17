@@ -10,9 +10,9 @@ import Button_1 from '../../components/Button_1';
 import colors from '../../config/colors';
 
 // API
-import { createUser } from '../../graphql/mutations'
+// import { createUser } from '../../graphql/mutations'
 
-import { Auth } from 'aws-amplify'
+import { API, Auth, graphqlOperation } from 'aws-amplify'
 
 export default function LoginScreen({ navigation, route }) {
   const [confirmationCode, setCode] = useState("");
@@ -28,12 +28,24 @@ export default function LoginScreen({ navigation, route }) {
       }
   }
 
+  // async function createUser() {
+  //   try {
+  //     const user = await API.graphql(graphqlOperation(createUser, { input: {
+  //       username: username,
+  //       school: school
+  //     }}))
+  //   } catch(error) {
+  //     console.log('Error creating User - ', error);
+  //   }
+  // }
+
   async function confirm() {
       try {
           await Auth.confirmSignUp(username, confirmationCode);
           console.log('confirmed');
           signIn(); // Sign in with the new user
           navigation.navigate('SurveyScreen1');
+
       } catch (error) {
           console.log('error confirming sign up', error);
       }
