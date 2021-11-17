@@ -11,6 +11,7 @@
     "@aws-sdk/client-cognito-identity": "^3.41.0",
     "@aws-sdk/client-dynamodb": "^3.41.0",
     "@aws-sdk/client-timestream-query": "^3.41.0",
+    "@aws-sdk/client-timestream-write": "^3.41.0",
     "@aws-sdk/credential-provider-cognito-identity": "^3.41.0",
     "@react-native-async-storage/async-storage": "^1.15.11",
     "@react-native-community/async-storage": "^1.12.1",
