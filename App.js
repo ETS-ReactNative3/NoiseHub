@@ -12,9 +12,9 @@ import {
   SurveyScreen2,
 } from "./src/screens";
 
-import Amplify from 'aws-amplify'
-import config from './src/aws-exports'
-Amplify.configure(config)
+import Amplify from "aws-amplify";
+import config from "./src/aws-exports";
+Amplify.configure(config);
 
 const Stack = createStackNavigator();
 
@@ -24,7 +24,10 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
