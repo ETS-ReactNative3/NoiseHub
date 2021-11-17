@@ -7,8 +7,8 @@ import styles from "./styles";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-timestream-query/index.html#getting-started
-import { TimestreamQuery, TimestreamQueryClient, CancelQueryCommand, QueryCommand, DescribeEndpointsCommand } from "@aws-sdk/client-timestream-query";
-import { TimestreamWrite, TimestreamWriteClient, CreateDatabaseCommand } from "@aws-sdk/client-timestream-write";
+import { TimestreamQuery, QueryCommand } from "@aws-sdk/client-timestream-query";
+// import { TimestreamWrite, TimestreamWriteClient, CreateDatabaseCommand } from "@aws-sdk/client-timestream-write";
 
 
 import 'react-native-get-random-values';
