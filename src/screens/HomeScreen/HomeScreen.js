@@ -158,44 +158,44 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <DataTable>
         <DataTable.Header>
-          <DataTable.Title>Location</DataTable.Title>
-          <DataTable.Title numeric>Temperature</DataTable.Title>
-          <DataTable.Title numeric>Time</DataTable.Title>
+          <DataTable.Title><Text style={styles.row}>Location</Text></DataTable.Title>
+          <DataTable.Title numeric><Text style={styles.row}>Temperature</Text></DataTable.Title>
+          <DataTable.Title numeric><Text style={styles.row}>Time</Text></DataTable.Title>
         </DataTable.Header>
         <DataTable.Row>
-          <DataTable.Cell>{data[0]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[0]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[0]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[0]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[0]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[0]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>{data[1]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[1]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[1]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[1]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[1]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[1]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>{data[2]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[2]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[2]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[2]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[2]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[2]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>{data[3]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[3]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[3]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[3]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[3]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[3]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>{data[4]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[4]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[4]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[4]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[4]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[4]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>{data[5]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[5]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[5]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[5]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[5]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[5]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>{data[6]["location"]}</DataTable.Cell>
-          <DataTable.Cell>{data[6]["temp"]}</DataTable.Cell>
-          <DataTable.Cell numeric>{data[6]["time"]}</DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[6]["location"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[6]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell numeric><Text style={styles.row}>{data[6]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
       </DataTable>
       <View style={styles.buttonsContainer}>

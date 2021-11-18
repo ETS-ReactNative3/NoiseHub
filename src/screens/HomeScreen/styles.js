@@ -5,7 +5,8 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: 'center',
-    backgroundColor: colors.primaryBlue
+    backgroundColor: colors.primaryBlue,
+    color: colors.primaryWhite
   },
   inputContainer: {
     alignSelf: 'center',
@@ -101,5 +102,8 @@ export default StyleSheet.create({
   },
   radio1: {
     marginVertical: '5%',
+  },
+  row: {
+    color: colors.primaryWhite,
   }
 });
