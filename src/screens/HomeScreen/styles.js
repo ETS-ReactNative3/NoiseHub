@@ -1,55 +1,105 @@
 import { StyleSheet } from "react-native";
-
+import colors from '../../config/colors'
 export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: 'center',
+    backgroundColor: colors.primaryBlue
   },
-  input: {
-    height: 48,
-    borderRadius: 5,
-    overflow: "hidden",
-    backgroundColor: "white",
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
-    paddingLeft: 100,
+  inputContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginVertical: '2.5%',
+    backgroundColor: colors.primaryWhite,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
   },
-  button: {
-    backgroundColor: "#788eec",
-    marginLeft: 100,
-    marginRight: 100,
-    marginTop: 20,
-    height: 48,
-    borderRadius: 5,
+  buttonContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginVertical: '2.5%',
+  },
+  inputsContainer: {
+    
+  },
+  buttonsContainer: {
+    marginTop: '10%'
+  },
+  textContainer: {
+    flexDirection: 'row',
+    width: '85%',
+  },
+  text: {
+    flex: 1,
+    flexWrap: 'wrap',
+    width: 348,
+    // height: 68,
+    color: '#ffffff',
+    fontFamily: 'Roboto',
+    fontSize: 30,
+    fontWeight: '400',
+    fontStyle: 'normal',
+    textAlign: 'center',
+    lineHeight: 36,
+  },
+  textInput: {
+    color: colors.primaryPink,
+    fontSize: 22,
+    width: '85%'
+  },
+  radioContainer: {
+    // flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    paddingLeft: 50,
-    paddingRight: 50,
+    justifyContent: 'center',
+    fontSize: 50,
+    color: colors.primaryPink,
+    // marginTop: 20,
   },
-  button2: {
-    backgroundColor: "#788eec",
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: -10,
-    height: 48,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
+  radio: {
+    flexDirection: 'row',
+    width: '100%',
+    // marginTop: 30,
   },
-  buttonTitle: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-    alignItems: "center",
+  radioButtonActive: {
+    backgroundColor: colors.primaryPink,
+    width: 140,
+    height: 60,
+    justifyContent: 'center',
+    marginHorizontal: '2.5%',
+    borderRadius: 10,
   },
-  DBtext: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-    alignItems: "center",
+  radioButtonInactive: {
+    backgroundColor: colors.primaryWhite,
+    width: 140,
+    height: 60,
+    justifyContent: 'center',
+    marginHorizontal: '2.5%',
+    borderRadius: 10,
   },
+  radioButtonTextActive: {
+    fontSize: 24,
+    color: colors.primaryWhite,
+    textAlign: 'center',
+  },
+  radioButtonTextInactive: {
+    fontSize: 24,
+    color: colors.primaryPink,
+    textAlign: 'center',
+  },
+  radioTitle: {
+    color: '#ffffff',
+    fontFamily: 'Roboto',
+    fontSize: 30,
+    fontWeight: '400',
+    fontStyle: 'normal',
+    textAlign: 'center',
+    lineHeight: 36,
+    marginBottom: 5,
+  },
+  radio1: {
+    marginVertical: '5%',
+  }
 });
