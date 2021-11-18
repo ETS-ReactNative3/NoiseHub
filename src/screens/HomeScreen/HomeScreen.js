@@ -25,76 +25,84 @@ import { DataTable } from 'react-native-paper';
 export default function HomeScreen({ navigation }) {
   const [data, setData] = useState([
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
     {
-      "device_name": "temp",
-      "location": "temp",
-      "measure_name": "temp",
-      "measure_val_double": "temp",
-      "measure_val_varchar": undefined,
-      "temp": "temp",
-      "time": "temp"
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
     },
   ]);
 
@@ -124,6 +132,7 @@ export default function HomeScreen({ navigation }) {
     const DatabaseName = 'noisehub-timestream';
     const TableName = 'sensordata';
     const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 10`;
+    // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" WHERE time between ago(15m) and now() ORDER BY time DESC LIMIT 10`;
     // console.log(await queryClient.query({ QueryString })); // Also a valid way to query
     const command = new QueryCommand({QueryString: QueryString})
     const ts_data = await queryClient.send(command);
@@ -132,15 +141,17 @@ export default function HomeScreen({ navigation }) {
       let cur_obj = ts_data['Rows'][i]["Data"];
       let temp = cur_obj[0]["ScalarValue"];
       let device_name = cur_obj[1]["ScalarValue"];
-      let location = cur_obj[2]["ScalarValue"];
-      let measure_name = cur_obj[3]["ScalarValue"];
-      let time = cur_obj[4]["ScalarValue"];
-      let measure_val_varchar = cur_obj[5]["ScalarValue"];
-      let measure_val_double = cur_obj[6]["ScalarValue"];
+      let dist = cur_obj[2]["ScalarValue"];
+      let location = cur_obj[3]["ScalarValue"];
+      let measure_name = cur_obj[4]["ScalarValue"];
+      let time = cur_obj[5]["ScalarValue"];
+      let measure_val_varchar = cur_obj[6]["ScalarValue"];
+      let measure_val_double = cur_obj[7]["ScalarValue"];
 
       result.push({
         "temp": temp,
         "device_name": device_name,
+        "dist": dist,
         "location": location,
         "measure_name": measure_name,
         "time": time,
@@ -149,7 +160,6 @@ export default function HomeScreen({ navigation }) {
       })
     }
     setData(result);
-    console.log(data);
   }
   
   return (
@@ -158,41 +168,49 @@ export default function HomeScreen({ navigation }) {
         <DataTable.Header>
           <DataTable.Title><Text style={styles.row}>Location</Text></DataTable.Title>
           <DataTable.Title numeric><Text style={styles.row}>Temperature</Text></DataTable.Title>
+          <DataTable.Title numeric><Text style={styles.row}>Distance</Text></DataTable.Title>
           <DataTable.Title numeric><Text style={styles.row}>Time</Text></DataTable.Title>
         </DataTable.Header>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[0]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[0]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[0]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[0]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[1]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[1]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[1]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[1]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[2]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[2]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[2]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[2]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[3]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[3]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[3]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[3]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[4]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[4]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[4]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[4]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[5]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[5]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[5]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[5]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
           <DataTable.Cell><Text style={styles.row}>{data[6]["location"]}</Text></DataTable.Cell>
           <DataTable.Cell><Text style={styles.row}>{data[6]["temp"]}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={styles.row}>{data[6]["dist"]}</Text></DataTable.Cell>
           <DataTable.Cell numeric><Text style={styles.row}>{data[6]["time"]}</Text></DataTable.Cell>
         </DataTable.Row>
       </DataTable>
