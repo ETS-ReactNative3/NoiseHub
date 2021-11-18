@@ -43,13 +43,13 @@ export default function LoginScreen({ navigation, route }) {
     }
   }
 
+  Auth.currentAuthenticatedUser({
+      bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+  }).then(user => setUsername(user.username))
+  .catch(err => console.log(err));
+
   async function create_user() {
     try {
-      Auth.currentAuthenticatedUser({
-          bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-      }).then(user => setUsername(user.username))
-      .catch(err => console.log(err));
-
       console.log(username);
       console.log(userSchool);
       console.log(userNoise);
@@ -70,7 +70,7 @@ export default function LoginScreen({ navigation, route }) {
 
   async function onPressAction() {
     create_user();
-    navigation.navigate('SurveyScreen2', {school: userSchool})
+    navigation.navigate('Home')
   }
 
   return (

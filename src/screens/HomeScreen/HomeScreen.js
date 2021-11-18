@@ -98,8 +98,6 @@ export default function HomeScreen({ navigation }) {
     },
   ]);
 
-  console.log(data);
-
   async function getData() {
     let result = [];
     const region = "us-east-2";
