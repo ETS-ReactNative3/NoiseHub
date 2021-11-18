@@ -23,7 +23,82 @@ import { DataTable } from 'react-native-paper';
 
 
 export default function HomeScreen({ navigation }) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+    {
+      "device_name": "temp",
+      "location": "temp",
+      "measure_name": "temp",
+      "measure_val_double": "temp",
+      "measure_val_varchar": undefined,
+      "temp": "temp",
+      "time": "temp"
+    },
+  ]);
+
+  console.log(data);
 
   async function getData() {
     let result = [];
@@ -78,18 +153,7 @@ export default function HomeScreen({ navigation }) {
     setData(result);
     console.log(data);
   }
-
-  // getData();
-  // setData([{
-  //   "device_name": "raspberry-pi-1",
-  //   "location": "86 Linden St",
-  //   "measure_name": "temperature",
-  //   "measure_val_double": "69.35",
-  //   "measure_val_varchar": undefined,
-  //   "temp": "69.35",
-  //   "time": "2021-11-16 20:56:57.650000"
-  // }]);
-
+  
   return (
     <View style={styles.container}>
       <DataTable>
@@ -99,19 +163,39 @@ export default function HomeScreen({ navigation }) {
           <DataTable.Title numeric>Time</DataTable.Title>
         </DataTable.Header>
         <DataTable.Row>
-          <DataTable.Cell>d</DataTable.Cell>
-          <DataTable.Cell>d</DataTable.Cell>
-          <DataTable.Cell numeric>d</DataTable.Cell>
+          <DataTable.Cell>{data[0]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[0]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[0]["time"]}</DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>Bob</DataTable.Cell>
-          <DataTable.Cell>test@test.com</DataTable.Cell>
-          <DataTable.Cell numeric>105</DataTable.Cell>
+          <DataTable.Cell>{data[1]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[1]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[1]["time"]}</DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
-          <DataTable.Cell>Mei</DataTable.Cell>
-          <DataTable.Cell>mei@kindacode.com</DataTable.Cell>
-          <DataTable.Cell numeric>23</DataTable.Cell>
+          <DataTable.Cell>{data[2]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[2]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[2]["time"]}</DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell>{data[3]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[3]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[3]["time"]}</DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell>{data[4]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[4]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[4]["time"]}</DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell>{data[5]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[5]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[5]["time"]}</DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell>{data[6]["location"]}</DataTable.Cell>
+          <DataTable.Cell>{data[6]["temp"]}</DataTable.Cell>
+          <DataTable.Cell numeric>{data[6]["time"]}</DataTable.Cell>
         </DataTable.Row>
       </DataTable>
       <View style={styles.buttonsContainer}>
@@ -119,6 +203,12 @@ export default function HomeScreen({ navigation }) {
           <Button_1
             title='Refresh Data' 
             onPress={() => getData()}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button_1
+            title='Show Data in Console' 
+            onPress={() => console.log(data)}
           />
         </View>
       </View>
