@@ -15,7 +15,11 @@ import 'react-native-get-random-values';
 import "react-native-url-polyfill/auto";
 import { v4 as uuidv4 } from 'uuid';
 
+// const [data, setData] = useState([]);
+
+
 async function f0() {
+  let result = [];
   const region = "us-east-2";
   const endpointsQueryClient = new TimestreamQuery({ 
     region,
@@ -43,7 +47,31 @@ async function f0() {
   // console.log(await queryClient.query({ QueryString })); // Also a valid way to query
   const command = new QueryCommand({QueryString: QueryString})
   const data = await queryClient.send(command);
-  console.log(data);
+
+  // console.log(data['Rows'].length)
+
+  for (let i=0; i<data['Rows'].length; i++) {
+    let cur_obj = data['Rows'][i]["Data"]
+    let temp = cur_obj[0]["ScalarValue"];
+    let device_name = cur_obj[1]["ScalarValue"];
+    let location = cur_obj[2]["ScalarValue"];
+    let measure_name = cur_obj[3]["ScalarValue"];
+    let time = cur_obj[4]["ScalarValue"];
+    let measure_val_varchar = cur_obj[5]["ScalarValue"];
+    let measure_val_double = cur_obj[6]["ScalarValue"];
+
+    result.push({
+      "temp": temp,
+      "device_name": device_name,
+      "location": location,
+      "measure_name": measure_name,
+      "time": time,
+      "measure_val_varchar": measure_val_varchar,
+      "measure_val_double": measure_val_double,
+    })
+  }
+
+  console.log(result);
 }
 
 f0();
