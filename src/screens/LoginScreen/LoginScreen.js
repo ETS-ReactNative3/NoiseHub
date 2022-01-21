@@ -6,6 +6,8 @@ import styles from "./styles";
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 import TextInput_1 from '../../components/TextInput_1';
+import Logo_1 from '../../components/Logo_1';
+import Button_2 from '../../components/Button_2';
 
 // Configurations
 import colors from '../../config/colors';
@@ -24,11 +26,12 @@ export default function LoginScreen({ navigation }) {
       } catch (error) {
           console.log('Error signing in - ', error);
       }
-  } 
+  }
 
   return (
     <BlankScreen style={styles.container}>
       <View style={styles.inputsContainer}>
+        <Logo_1></Logo_1>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder='Username'
@@ -44,6 +47,10 @@ export default function LoginScreen({ navigation }) {
           />
         </View>
       </View>
+      <Button_2
+            title='Forgot your Password?' 
+            onPress={() => navigation.navigate('ForgotPassword1')}
+      />
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
           <Button_1
