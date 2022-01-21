@@ -46,7 +46,7 @@ export default StyleSheet.create({
     lineHeight: 36,
   },
   textInput: {
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     fontSize: 22,
     width: '85%'
   },
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     width: '65%',
   },
   dropdownText: {
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     fontSize: 22,
     paddingHorizontal: 10,
     paddingVertical: 16,
@@ -83,6 +83,6 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   dropDownMenuTextSelected: {
-    color: colors.primaryPink
+    color: colors.secondaryBlue
   }
 });

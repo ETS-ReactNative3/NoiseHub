@@ -1,5 +1,6 @@
 export default {
-    primaryBlue: '#26547C',
-    primaryPink: '#EF476F',
+    primaryBlue: '#091F3C',
+    secondaryBlue: '#12556E',
+    tertiaryBlue: '#22BACE',
     primaryWhite: '#FFFFFF'
 }

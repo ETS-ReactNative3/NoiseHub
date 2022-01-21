@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 	textInput: {
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     fontSize: 22,
     width: '85%'
 	},

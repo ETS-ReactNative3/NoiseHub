@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import colors from '../config/colors';
 
-export default function Button_1({ title, onPress, buttonColor = 'primaryPink' }) {
+export default function Button_1({ title, onPress, buttonColor = 'secondaryBlue' }) {
 	return (
 		// <View style={styles.buttonContainer}>
 			<TouchableOpacity style={[ styles.button, { backgroundColor: colors[buttonColor] } ]} onPress={onPress}>
@@ -15,7 +15,7 @@ export default function Button_1({ title, onPress, buttonColor = 'primaryPink' }
 
 const styles = StyleSheet.create({
 	button: {
-		backgroundColor: colors.primaryPink,
+		backgroundColor: colors.secondaryBlue,
 		borderRadius: 48,
 		//Sizing
 		paddingVertical: 16,

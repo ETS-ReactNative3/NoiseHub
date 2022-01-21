@@ -46,7 +46,7 @@ export default StyleSheet.create({
     lineHeight: 36,
   },
   textInput: {
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     fontSize: 22,
     width: '85%'
   },
@@ -55,7 +55,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: 'center',
     fontSize: 50,
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     // marginTop: 20,
   },
   radio: {
@@ -64,7 +64,7 @@ export default StyleSheet.create({
     // marginTop: 30,
   },
   radioButtonActive: {
-    backgroundColor: colors.primaryPink,
+    backgroundColor: colors.secondaryBlue,
     width: 140,
     height: 60,
     justifyContent: 'center',
@@ -86,7 +86,7 @@ export default StyleSheet.create({
   },
   radioButtonTextInactive: {
     fontSize: 24,
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     textAlign: 'center',
   },
   radioTitle: {

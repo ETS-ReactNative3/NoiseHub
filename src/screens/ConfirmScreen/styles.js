@@ -29,7 +29,7 @@ export default StyleSheet.create({
 
   },
   textInput: {
-    color: colors.primaryPink,
+    color: colors.secondaryBlue,
     fontSize: 22,
     width: '85%'
   }
