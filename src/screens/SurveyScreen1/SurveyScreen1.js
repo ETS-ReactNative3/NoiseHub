@@ -12,7 +12,7 @@ import colors from '../../config/colors';
 
 import { Auth } from 'aws-amplify'
 
-export default function LoginScreen({ navigation }) {
+export default function SurveyScreen1({ navigation }) {
   const [userSchool, setSchool] = useState("Select a School");
 
   school_list = [

@@ -10,7 +10,7 @@ import Button_1 from '../../components/Button_1';
 import { createUser } from '../../graphql/mutations'
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 
-export default function LoginScreen({ navigation, route }) {
+export default function SurveyScreen2({ navigation, route }) {
   // SurveyScreen1 Values
   const userSchool = route.params.school;
   // Current Screen Values

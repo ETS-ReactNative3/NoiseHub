@@ -14,7 +14,7 @@ import { createUser } from '../../graphql/mutations'
 
 import { Auth } from 'aws-amplify'
 
-export default function LoginScreen({ navigation, route }) {
+export default function ConfirmScreen({ navigation, route }) {
   const [confirmationCode, setCode] = useState("");
   const username = route.params.user;
   const password = route.params.pass;

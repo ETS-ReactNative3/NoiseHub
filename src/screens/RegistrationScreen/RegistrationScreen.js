@@ -13,7 +13,7 @@ import colors from '../../config/colors';
 
 import { Auth } from 'aws-amplify'
 
-export default function LoginScreen({ navigation }) {
+export default function RegistrationScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
