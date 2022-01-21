@@ -3,113 +3,105 @@ import React, { useState, useEffect, Component } from "react";
 import { TextInput, View, TouchableOpacity, Text, Button } from "react-native";
 import styles from "./styles";
 
-// import firebase from "firebase/app";
-// import firestore from "firebase/firestore";
+// Timestream Query
+import { TimestreamQuery, QueryCommand } from "@aws-sdk/client-timestream-query";
+import { Auth } from 'aws-amplify'
+// Specified here - https://github.com/aws/aws-sdk-js-v3#getting-started - https://github.com/aws/aws-sdk-js-v3/issues/2288
+import "react-native-get-random-values";
+import "react-native-url-polyfill/auto";
+
+// Components
+import BlankScreen from '../../components/BlankScreen';
+import Button_1 from '../../components/Button_1';
 
 export default function HomeScreen({ navigation }) {
-  const [numServings, setNumServings] = useState(1);
-  const [totalCalories, setTotalCalories] = useState(0);
-  const [foodData, setFoodData] = useState([]);
+  const [data, setData] = useState([
+    {
+      "device_name": "",
+      "location": "",
+      "measure_name": "",
+      "measure_val_double": "",
+      "measure_val_varchar": "",
+      "temp": "",
+      "time": "",
+      "dist": ""
+    }]);
 
-  const [recipeName, setRecipeName] = useState("");
-  const [recipeArray, setRecipeArray] = useState([]);
+  async function getData() {
+    let result = [];
+    const region = "us-east-2";
 
-  var foodArray = [];
-  var totalCaloriesTemp = 0;
-
-  // Firestore object
-  // const db = firebase.firestore();
-
-  const incrementServings = () => {
-    setNumServings(numServings + 1);
-    console.log("Servings: " + (numServings + 1));
-  };
-
-  const decrementServings = () => {
-    setNumServings(numServings - 1);
-    if (numServings <= 0) {
-      setNumServings(0);
-    }
-    console.log("Servings: " + (numServings - 1));
-  };
-
-  const dbQuery = () => {
-    console.log("running function");
-    db.collection("Foods")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-          foodArray.push(doc.id + " " + JSON.stringify(doc.data()));
-          totalCaloriesTemp += doc.data().totalCals;
-          setTotalCalories(totalCaloriesTemp);
-        });
-        setFoodData(foodArray);
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
+    Auth.currentCredentials().then(async credentials => {
+      const endpointsQueryClient = new TimestreamQuery({ 
+        region,
+        credentials: credentials,
       });
-  };
 
-  const addRecipe = () => {
-    setRecipeArray([
-      ...recipeName,
-      {
-        id: recipeArray.length,
-        value: recipeName,
-      },
-    ]);
-  };
+      const qClientResponse = await endpointsQueryClient.describeEndpoints({});
 
-  const storeAndNavigate = (numServings) => {
-    db.collection("DATA").doc("numServings").set({ numServings: numServings });
-    navigation.navigate("Barcode");
-  };
+      const queryClient = new TimestreamQuery({
+        region,
+        endpoint: `https://${qClientResponse.Endpoints[0].Address}`,
+        credentials: credentials,
+      });
 
+      const DatabaseName = 'noisehub-timestream';
+      const TableName = 'sensordata';
+      // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 1000000000000000000`;
+      // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 10`;
+      // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" WHERE time between ago(15m) and now() ORDER BY time DESC LIMIT 10`;
+      // console.log(await queryClient.query({ QueryString })); // Also a valid way to query
+      const command = new QueryCommand({QueryString: QueryString})
+      const ts_data = await queryClient.send(command);  
+
+      for (let i=0; i<ts_data['Rows'].length; i++) {
+        let cur_obj = ts_data['Rows'][i]["Data"];
+        let temp = cur_obj[0]["ScalarValue"];
+        let device_name = cur_obj[1]["ScalarValue"];
+        let dist = cur_obj[2]["ScalarValue"];
+        let location = cur_obj[3]["ScalarValue"];
+        let measure_name = cur_obj[4]["ScalarValue"];
+        let time = cur_obj[5]["ScalarValue"];
+        let measure_val_varchar = cur_obj[6]["ScalarValue"];
+        let measure_val_double = cur_obj[7]["ScalarValue"];
+      
+        result.push({
+          "temp": temp,
+          "device_name": device_name,
+          "dist": dist,
+          "location": location,
+          "measure_name": measure_name,
+          "time": time,
+          "measure_val_varchar": measure_val_varchar,
+          "measure_val_double": measure_val_double,
+        })
+      }
+      setData(result);
+    });    
+  }
+  
   return (
     <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 30,
-          marginTop: 50,
-          marginBottom: 50,
-          fontWeight: "bold",
-        }}
-      >
-        Total Calories: {totalCalories}
-      </Text>
-
-      <Text style={{ fontSize: 30, marginBottom: 25, fontWeight: "bold" }}>
-        Add a Food
-      </Text>
-
-      <View style={{ flexDirection: "row" }}>
-        <Text style={{ fontSize: 25, marginBottom: -10 }}>
-          Number of Servings:{" "}
-        </Text>
-        <TouchableOpacity style={styles.button2} onPress={decrementServings}>
-          <Text style={styles.buttonTitle}>-</Text>
-        </TouchableOpacity>
-        <Text style={{ fontSize: 30, marginBottom: -10 }}>{numServings}</Text>
-        <TouchableOpacity style={styles.button2} onPress={incrementServings}>
-          <Text style={styles.buttonTitle}>+</Text>
-        </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonContainer}>
+          <Button_1
+            title='Refresh Data' 
+            onPress={() => getData()}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button_1
+            title='Refresh Data' 
+            onPress={() => getData()}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button_1
+            title='Show Data in Console' 
+            onPress={() => console.log(data)}
+          />
+        </View>
       </View>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => storeAndNavigate(numServings)}
-      >
-        <Text style={styles.buttonTitle}>Add With Barcode</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button} onPress={() => dbQuery()}>
-        <Text style={styles.buttonTitle}>Display Recent Foods</Text>
-      </TouchableOpacity>
-
-      <Text>Recent Foods:</Text>
-      <Text style={styles.DBtext}>{foodData}</Text>
     </View>
   );
 }
