@@ -6,7 +6,8 @@ import {
   LoginScreen,
   HomeScreen,
   RegistrationScreen,
-  ForgotPasswordScreen,
+  ForgotPasswordScreen1,
+  ForgotPasswordScreen2,
   ConfirmScreen,
   SurveyScreen1,
   SurveyScreen2,
@@ -28,10 +29,8 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
-        <Stack.Screen
-          name="ForgotPasswordScreen"
-          component={ForgotPasswordScreen}
-        />
+        <Stack.Screen name="ForgotPassword1" component={ForgotPasswordScreen1}/>
+        <Stack.Screen name="ForgotPassword2" component={ForgotPasswordScreen2}/>
         <Stack.Screen name="Confirm" component={ConfirmScreen} />
         <Stack.Screen name="SurveyScreen1" component={SurveyScreen1} />
         <Stack.Screen name="SurveyScreen2" component={SurveyScreen2} />

@@ -4,7 +4,9 @@ export { default as HomeScreen } from "./HomeScreen/HomeScreen";
 
 export { default as RegistrationScreen } from "./RegistrationScreen/RegistrationScreen";
 
-export { default as ForgotPasswordScreen } from "./ForgotPasswordScreen/ForgotPasswordScreen";
+export { default as ForgotPasswordScreen1 } from "./ForgotPasswordScreen1/ForgotPasswordScreen1";
+
+export { default as ForgotPasswordScreen2 } from "./ForgotPasswordScreen2/ForgotPasswordScreen2";
 
 export { default as ConfirmScreen } from "./ConfirmScreen/ConfirmScreen";
 
