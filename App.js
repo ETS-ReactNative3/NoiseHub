@@ -32,8 +32,8 @@ export default function App() {
         <Stack.Screen name="ForgotPassword1" component={ForgotPasswordScreen1}/>
         <Stack.Screen name="ForgotPassword2" component={ForgotPasswordScreen2}/>
         <Stack.Screen name="Confirm" component={ConfirmScreen} />
-        <Stack.Screen name="SurveyScreen1" component={SurveyScreen1} />
-        <Stack.Screen name="SurveyScreen2" component={SurveyScreen2} />
+        <Stack.Screen name="Survey1" component={SurveyScreen1} />
+        <Stack.Screen name="Survey2" component={SurveyScreen2} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -9,6 +9,9 @@ import TextInput_1 from '../../components/TextInput_1';
 import Logo_1 from '../../components/Logo_1';
 import Button_2 from '../../components/Button_2';
 
+// Functions
+import * as graphql_calls from '../../API/userCalls';
+
 // Configurations
 import colors from '../../config/colors';
 
@@ -21,8 +24,14 @@ export default function LoginScreen({ navigation }) {
   async function signIn() {
       try {
           const user = await Auth.signIn(username, password);
-          global.username = username;
-          navigation.navigate('SurveyScreen1')
+          // Check if user has completed survey
+          console.log(username);
+          const response = await graphql_calls.get_user(username);
+          console.log(response);
+          if (response == null) 
+            navigation.navigate('Survey1');
+          else
+            navigation.navigate('Home');
       } catch (error) {
           console.log('Error signing in - ', error);
       }

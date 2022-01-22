@@ -33,7 +33,7 @@ export default function ConfirmScreen({ navigation, route }) {
           await Auth.confirmSignUp(username, confirmationCode);
           console.log('confirmed');
           signIn(); // Sign in with the new user
-          navigation.navigate('SurveyScreen1');
+          navigation.navigate('Survey1');
       } catch (error) {
           console.log('error confirming sign up', error);
       }

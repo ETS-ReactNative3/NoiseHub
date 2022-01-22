@@ -44,7 +44,7 @@ export default function SurveyScreen1({ navigation }) {
         <View style={styles.buttonContainer}>
           <Button_1
             title='Next' 
-            onPress={() => navigation.navigate('SurveyScreen2', {school: userSchool})}
+            onPress={() => navigation.navigate('Survey2', {school: userSchool})}
           />
         </View>
       </View>

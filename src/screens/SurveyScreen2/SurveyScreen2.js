@@ -69,8 +69,8 @@ export default function SurveyScreen2({ navigation, route }) {
   }
 
   async function onPressAction() {
-    create_user();
-    navigation.navigate('SurveyScreen2', {school: userSchool})
+    await create_user();
+    navigation.navigate('Home', {school: userSchool})
   }
 
   return (
