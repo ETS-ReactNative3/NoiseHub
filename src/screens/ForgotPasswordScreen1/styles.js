@@ -39,7 +39,7 @@ export default StyleSheet.create({
     width: 348,
     // height: 68,
     color: '#ffffff',
-    fontFamily: 'Roboto',
+    // fontFamily: 'Roboto',
     fontSize: 20,
     fontWeight: '400',
     fontStyle: 'normal',
