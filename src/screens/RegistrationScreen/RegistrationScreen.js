@@ -52,7 +52,7 @@ export default function RegistrationScreen({ navigation }) {
           <TextInput
             placeholder='Username'
             style={styles.textInput}
-            onChangeText = {(input) => setUsername(input)}
+            onChangeText = {(input) => setUsername(input.toLowerCase())}
           />
         </View>
         <View style={styles.inputContainer}>

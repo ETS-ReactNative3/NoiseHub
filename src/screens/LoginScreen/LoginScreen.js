@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }) {
           <TextInput
             placeholder='Username'
             style={styles.textInput}
-            onChangeText = {(input) => setUsername(input)}
+            onChangeText = {(input) => setUsername(input.toLowerCase())}
           />
         </View>
         <View style={styles.inputContainer}>
