@@ -9,3 +9,10 @@ npm install or yarn install
 amplify pull --appId d2suojejlgv7v2 --envName dev
 
 amplify add codegen --apiId jlrrmhzoizaelo6eli6dan264q
+
+
+## Credits:
+- FontAwesome - [License](https://fontawesome.com/license)
+  - [Sound Icon](https://fontawesome.com/v5.15/icons/volume-up?style=solid)
+  - [Group Icon](https://fontawesome.com/v5.15/icons/users?style=solid)
+  - [Thermometer Icon](https://fontawesome.com/v5.15/icons/thermometer-half?style=solid)
