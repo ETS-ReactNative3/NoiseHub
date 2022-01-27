@@ -10,7 +10,7 @@ import Logo_1 from '../../components/Logo_1';
 import Button_2 from '../../components/Button_2';
 
 // Functions
-import * as graphql_calls from '../../API/userCalls';
+import * as userCalls from '../../API/userCalls';
 
 // Configurations
 import colors from '../../config/colors';
@@ -23,15 +23,20 @@ export default function LoginScreen({ navigation }) {
 
   async function signIn() {
       try {
-          const user = await Auth.signIn(username, password);
-          // Check if user has completed survey
-          console.log(username);
-          const response = await graphql_calls.get_user(username);
-          console.log(response);
-          if (response == null) 
-            navigation.navigate('Survey1');
-          else
-            navigation.navigate('Home');
+          const response = await Auth.signIn(username, password);
+          // response["username"] is also a method of retreiving the username
+
+          Auth.currentAuthenticatedUser({
+            bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+          }).then(async user => {
+            // Check if user has completed survey
+            const response = await userCalls.get_user(user.username);
+            console.log(response);
+            if (response == null) 
+              navigation.navigate('Survey1');
+            else
+              navigation.navigate('Home');
+          });
       } catch (error) {
           console.log('Error signing in - ', error);
       }
