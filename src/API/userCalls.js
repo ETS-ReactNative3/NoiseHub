@@ -20,7 +20,6 @@ export const create_user = async (user) => {
 export const get_user = async (username) => {
   try {
     const user = await API.graphql(graphqlOperation(getUser, {username: username}));
-    console.log(user);
     return user.data.getUser;
   } catch(error) {
     console.log('Error fetching user data', error);
