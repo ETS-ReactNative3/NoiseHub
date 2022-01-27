@@ -10,8 +10,53 @@ export default StyleSheet.create({
   buttonContainer: {
     alignSelf: 'center',
     flexDirection: 'row',
-    // marginVertical: '2.5%',
     marginBottom: '22.5%',
-    // mar
   },
+  topRow: {
+    // flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: '90%',
+    marginTop: '2%',
+  },
+  name: {
+    flex: 1,
+    color: colors.tertiaryBlue,
+    fontStyle: 'italic',
+    fontWeight: '700',
+    fontSize: 40,
+    textAlign: 'center',
+    marginHorizontal: '2%',
+  },
+  icon: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  dataBar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    // alignItems: 'center',
+    justifyContent: 'center',
+    width: '95%',
+  },
+  dataBarItem: {
+    // alignSelf: 'center',
+    marginVertical: '7.5%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  icon_text: {
+    color: colors.primaryWhite,
+    fontSize: 30,
+    paddingLeft: '10%',
+  },
+  noise_icon_text: {
+    color: colors.primaryWhite,
+    fontSize: 30,
+    paddingLeft: '4%',
+  }
 });

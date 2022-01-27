@@ -11,7 +11,10 @@ import {
 // Solid Icons
 import {
   faArrowAltCircleLeft as fasArrowAltCircleLeft, 
-  faCheckCircle as fasCheckCircle 
+  faCheckCircle as fasCheckCircle,
+  faThermometerHalf,
+  faVolumeUp,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons'
 
 import styles from "./styles";
@@ -28,16 +31,17 @@ import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 
 export default function SpaceScreen({ navigation, route }) {
-  const iconSize = 24;
-  // const spaceID = route.params.spaceID;
-  const spaceID = 'uuid'
-  const [spaceName, setName] = useState("");
+  const iconSize_1 = 48;
+  const iconSize_2 = 30;
+  const spaceID = route.params.spaceID;
+  // const spaceID = 'uuid'
+  const [spaceName, setName] = useState("Study Space");
   const [spaceLocation, setLocation] = useState("");
   const [spaceHours, setHours] = useState("");
   const [spaceAmenities, setAmenities] = useState("");
-  const [noiseLevel, setNoise] = useState("");
-  const [busyLevel, setBusy] = useState("");
-  const [tempLevel, setTemp] = useState("");
+  const [noiseLevel, setNoise] = useState("Low");
+  const [busyLevel, setBusy] = useState("50%");
+  const [tempLevel, setTemp] = useState("68ºF");
   const [userFeedback, setFeedback] = useState("");
 
   async function setSpace() {
@@ -66,18 +70,40 @@ export default function SpaceScreen({ navigation, route }) {
 
   return (
   <BlankScreen style={styles.container}>
-    <ScrollView style={styles.buttonsContainer}>
+    <ScrollView>
+      <View style={styles.topRow}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Home')}
+        >
+          <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_1} icon={farArrowAltCircleLeft} />
+        </TouchableOpacity>
+        <Text numberOfLines={1} style={styles.name}>{spaceName}</Text>
+        <TouchableOpacity
+          onPress={() => console.log("Check-In")}
+        >
+          <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_1} icon={farCheckCircle} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.dataBar}>
+        <View style={styles.dataBarItem}>
+          <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_2} icon={faVolumeUp} />
+          <Text style={styles.icon_text}>{noiseLevel}</Text>
+        </View>
+        <View style={styles.dataBarItem}>
+          <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_2} icon={faUsers} />
+          <Text style={styles.icon_text}>{busyLevel}</Text>
+        </View>
+        <View style={styles.dataBarItem}>
+          <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_2} icon={faThermometerHalf} />
+          <Text style={styles.icon_text, styles.noise_icon_text}>{tempLevel}</Text>
+        </View>
+      </View>
+      {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasArrowAltCircleLeft} /> */}
+      {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} /> */}
       <Text>{spaceName}</Text>
       <Text>{spaceLocation}</Text>
       <Text>{spaceHours}</Text>
       <Text>{spaceAmenities}</Text>
-      <Text>{noiseLevel}</Text>
-      <Text>{busyLevel}</Text>
-      <Text>{tempLevel}</Text>
-      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasArrowAltCircleLeft} />
-      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} />
-      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={farArrowAltCircleLeft} />
-      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={farCheckCircle} />
     </ScrollView>
   </BlankScreen>
   );
