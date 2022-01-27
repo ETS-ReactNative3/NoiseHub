@@ -1,7 +1,22 @@
 import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import React, { useState, useEffect, Component } from "react";
 import { TextInput, View, TouchableOpacity, Text, Button, ScrollView } from "react-native";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+// Regular Icons
+import {
+  faArrowAltCircleLeft as farArrowAltCircleLeft, 
+  faCheckCircle as farCheckCircle
+} from '@fortawesome/free-regular-svg-icons'
+
+// Solid Icons
+import {
+  faArrowAltCircleLeft as fasArrowAltCircleLeft, 
+  faCheckCircle as fasCheckCircle 
+} from '@fortawesome/free-solid-svg-icons'
+
 import styles from "./styles";
+import colors from '../../config/colors';
+
 
 import { Auth } from 'aws-amplify'
 
@@ -13,6 +28,7 @@ import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 
 export default function SpaceScreen({ navigation, route }) {
+  const iconSize = 24;
   // const spaceID = route.params.spaceID;
   const spaceID = 'uuid'
   const [spaceName, setName] = useState("");
@@ -46,7 +62,7 @@ export default function SpaceScreen({ navigation, route }) {
   }
   
   // Get Space Data
-  setSpace();
+  // setSpace();
 
   return (
   <BlankScreen style={styles.container}>
@@ -58,6 +74,10 @@ export default function SpaceScreen({ navigation, route }) {
       <Text>{noiseLevel}</Text>
       <Text>{busyLevel}</Text>
       <Text>{tempLevel}</Text>
+      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasArrowAltCircleLeft} />
+      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} />
+      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={farArrowAltCircleLeft} />
+      <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={farCheckCircle} />
     </ScrollView>
   </BlankScreen>
   );
