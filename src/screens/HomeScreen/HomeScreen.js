@@ -1,6 +1,6 @@
 import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import React, { useState, useEffect, Component } from "react";
-import { TextInput, View, TouchableOpacity, Text, Button } from "react-native";
+import { TextInput, View, TouchableOpacity, Text, Button, ScrollView } from "react-native";
 import styles from "./styles";
 
 // Timestream Query
@@ -13,6 +13,7 @@ import "react-native-url-polyfill/auto";
 // Components
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
+import SpaceCard from "../../components/SpaceCard";
 
 export default function HomeScreen({ navigation }) {
   const [data, setData] = useState([
@@ -81,9 +82,9 @@ export default function HomeScreen({ navigation }) {
   }
   
   return (
-    <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonContainer}>
+    <BlankScreen style={styles.container}>
+      <ScrollView style={styles.buttonsContainer}>
+        {/* <View style={styles.buttonContainer}>
           <Button_1
             title='Refresh Data' 
             onPress={() => getData()}
@@ -100,8 +101,50 @@ export default function HomeScreen({ navigation }) {
             title='Show Data in Console' 
             onPress={() => console.log(data)}
           />
+        </View> */}
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 1'
+            onPress={() => console.log('Go to Space Screen')}
+          />
         </View>
-      </View>
-    </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 2'
+            onPress={() => console.log('Go to Space Screen')}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 3'
+            onPress={() => console.log('Go to Space Screen')}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 4'
+            onPress={() => console.log('Go to Space Screen')}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 5'
+            onPress={() => console.log('Go to Space Screen')}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 6'
+            onPress={() => console.log('Go to Space Screen')}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName='Space 7'
+            onPress={() => console.log('Go to Space Screen')}
+          />
+        </View>
+      </ScrollView>
+    </BlankScreen>
   );
 }
