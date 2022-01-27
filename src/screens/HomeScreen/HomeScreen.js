@@ -105,7 +105,7 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.buttonContainer}>
           <SpaceCard
             spaceName='Space 1'
-            onPress={() => console.log('Go to Space Screen')}
+            onPress={() => navigation.navigate('Space', {spaceID: spaceID})}
           />
         </View>
         <View style={styles.buttonContainer}>

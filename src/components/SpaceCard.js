@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: '5.75%',
         // height: '250%',
-        width: '50%;'
+        width: '50%'
     },
 	text: {
         paddingHorizontal: 12,

@@ -2,6 +2,8 @@ export { default as LoginScreen } from "./LoginScreen/LoginScreen";
 
 export { default as HomeScreen } from "./HomeScreen/HomeScreen";
 
+export { default as SpaceScreen } from "./SpaceScreen/SpaceScreen";
+
 export { default as RegistrationScreen } from "./RegistrationScreen/RegistrationScreen";
 
 export { default as ForgotPasswordScreen1 } from "./ForgotPasswordScreen1/ForgotPasswordScreen1";

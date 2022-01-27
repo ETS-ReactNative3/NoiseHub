@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import {
   LoginScreen,
   HomeScreen,
+  SpaceScreen,
   RegistrationScreen,
   ForgotPasswordScreen1,
   ForgotPasswordScreen2,
@@ -25,8 +26,9 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName="Space" screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Space" component={SpaceScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
         <Stack.Screen name="ForgotPassword1" component={ForgotPasswordScreen1}/>
