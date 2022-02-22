@@ -36,12 +36,13 @@ const styles = StyleSheet.create({
 	card: {
         flex: 1,
         marginHorizontal: '2.5%',
+        // width: '50%',
         marginVertical: '0.5%',
         flexDirection: 'row',
 		backgroundColor: colors.secondaryBlue,
 		borderRadius: 10,
         height: '250%',
-        // width: '95%',
+        // width: '150%',
 	},
     textContainer: {
         // flexDirection: 'row',

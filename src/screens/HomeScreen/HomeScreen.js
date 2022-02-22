@@ -3,6 +3,8 @@ import React, { useState, useEffect, Component } from "react";
 import { TextInput, View, TouchableOpacity, Text, Button, ScrollView } from "react-native";
 import styles from "./styles";
 
+import colors from '../../config/colors';
+
 // Timestream Query
 import { TimestreamQuery, QueryCommand } from "@aws-sdk/client-timestream-query";
 import { Auth } from 'aws-amplify'
@@ -10,23 +12,64 @@ import { Auth } from 'aws-amplify'
 import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
 
+// DynamoDB Scan
+import { DynamoDB, DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
 // Components
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 import SpaceCard from "../../components/SpaceCard";
 
+const iconSize = 32;
+
 export default function HomeScreen({ navigation }) {
+  Auth.signIn('test126', 'Testing123!').then(response => console.log(response["username"]));
+  
   const [data, setData] = useState([
-    {
-      "device_name": "",
-      "location": "",
-      "measure_name": "",
-      "measure_val_double": "",
-      "measure_val_varchar": "",
-      "temp": "",
-      "time": "",
-      "dist": ""
-    }]);
+  {
+    "device_name": "",
+    "location": "",
+    "measure_name": "",
+    "measure_val_double": "",
+    "measure_val_varchar": "",
+    "temp": "",
+    "time": "",
+    "dist": ""
+  }]);
+
+  function spaceSearch(input) {
+    console.log(input);
+
+    Auth.currentCredentials().then(async credentials => {
+      const client = await new DynamoDBClient({
+        region: 'us-east-2', 
+        credentials: credentials 
+      })
+
+      const params = {
+        TableName: 'spaceTable',
+        FilterExpression: 'begins_with(#name, :name)',
+        // KeyConditionExpression: '#name = :name',
+        ExpressionAttributeNames:{
+          "#name": "name",
+          "#NAME": "name"
+        },
+        ExpressionAttributeValues: {
+          ":name": {"S": input},
+        },
+        ProjectionExpression: "#NAME" // name is a reserved keyword so I use an alias
+      }
+
+      const command = new ScanCommand(params);
+      // client.send(command);
+      client.send(command).then(response => console.log(response));
+    })
+  }
+
+  const [search, setSearch] = useState()
 
   async function getData() {
     let result = [];
@@ -102,6 +145,14 @@ export default function HomeScreen({ navigation }) {
             onPress={() => console.log(data)}
           />
         </View> */}
+        <View style={styles.searchBarContainer}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search"
+          onChangeText = {(input) => spaceSearch(input.toLowerCase())}
+        />
+        <FontAwesomeIcon style={styles.searchIcon} color={colors.secondaryBlue} size={iconSize} icon={faSearch} />
+        </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
             spaceName='Space 1'
