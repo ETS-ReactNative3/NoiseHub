@@ -1,6 +1,6 @@
 import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import React, { useState, useEffect, Component } from "react";
-import { TextInput, View, TouchableOpacity, Text, Button, ScrollView } from "react-native";
+import { TextInput, View, TouchableOpacity, Text, Button, ScrollView, Dimensions } from "react-native";
 import styles from "./styles";
 
 import colors from '../../config/colors';
@@ -25,21 +25,40 @@ import SpaceCard from "../../components/SpaceCard";
 
 const iconSize = 32;
 
+let firstCall = true;
+
 export default function HomeScreen({ navigation }) {
-  Auth.signIn('test126', 'Testing123!').then(response => console.log(response["username"]));
-  
-  const [data, setData] = useState([
-  {
-    "device_name": "",
-    "location": "",
-    "measure_name": "",
-    "measure_val_double": "",
-    "measure_val_varchar": "",
-    "temp": "",
-    "time": "",
-    "dist": ""
+
+  let timeout = null;
+
+  function typeTime(input) {
+    clearTimeout(timeout);
+    timeout = setTimeout(function(){spaceSearch(input)},1000); // 1000 represents milliseconds interval for user to stop typing before function executes
+  }
+
+  Auth.currentCredentials().then(async credentials => {
+    if (credentials.authenticated != true) {
+      const user = Auth.signIn('test126', 'Testing123!');
+      console.log("SIGNED IN");
+    } else {
+      // console.log(credentials);
+      console.log("ALREADY SIGNED IN");
+    }
+  })
+
+  const [search, setSearch] = useState();
+
+  const [noiseData, setNoiseData] = useState([{
+    noise: undefined,
+    time: undefined
   }]);
 
+  const [doorData, setDoorData] = useState([{
+    head: undefined,
+    temp: undefined,
+    time: undefined
+  }]);
+  
   function spaceSearch(input) {
     console.log(input);
 
@@ -69,9 +88,35 @@ export default function HomeScreen({ navigation }) {
     })
   }
 
-  const [search, setSearch] = useState()
+  function formatNoiseData(input) {
+    let data = []
+    for (let i=0; i<input['Rows'].length; i++) {
+      let row = input['Rows'][i]['Data'];
+      let obj = {
+        noise: row[0]['ScalarValue'],
+        time: row[2]['ScalarValue']
+      }
+      data.push(obj);
+    }
+    setNoiseData(data);
+  }
+
+  function formatDoorData(input) {
+    let data = []
+    for (let i=0; i<input['Rows'].length; i++) {
+      let row = input['Rows'][i]['Data'];
+      let obj = {
+        head: row[0]['ScalarValue'].replace(/{|}/g, ''),
+        temp: row[1]['ScalarValue'].replace(/{|}/g, ''),
+        time: row[3]['ScalarValue']
+      }
+      data.push(obj);
+    }
+    setDoorData(data);
+  }
 
   async function getData() {
+    console.log("GET DATA");
     let result = [];
     const region = "us-east-2";
 
@@ -90,109 +135,50 @@ export default function HomeScreen({ navigation }) {
       });
 
       const DatabaseName = 'noisehub-timestream';
-      const TableName = 'sensordata';
+      const NoiseTable = 'noise_data';
+      const Doortable = 'door_table'
+      const NoiseQueryString = `SELECT * FROM "${DatabaseName}"."${NoiseTable}" ORDER BY time DESC LIMIT 3`;
+      const DoorQueryString = `SELECT * FROM "${DatabaseName}"."${Doortable}" ORDER BY time DESC LIMIT 3`;
       // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 1000000000000000000`;
-      // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 10`;
       // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" WHERE time between ago(15m) and now() ORDER BY time DESC LIMIT 10`;
       // console.log(await queryClient.query({ QueryString })); // Also a valid way to query
-      const command = new QueryCommand({QueryString: QueryString})
-      const ts_data = await queryClient.send(command);  
+      const NoiseCommand = new QueryCommand({QueryString: NoiseQueryString})
+      const DoorTableCommand = new QueryCommand({QueryString: DoorQueryString})
 
-      for (let i=0; i<ts_data['Rows'].length; i++) {
-        let cur_obj = ts_data['Rows'][i]["Data"];
-        let temp = cur_obj[0]["ScalarValue"];
-        let device_name = cur_obj[1]["ScalarValue"];
-        let dist = cur_obj[2]["ScalarValue"];
-        let location = cur_obj[3]["ScalarValue"];
-        let measure_name = cur_obj[4]["ScalarValue"];
-        let time = cur_obj[5]["ScalarValue"];
-        let measure_val_varchar = cur_obj[6]["ScalarValue"];
-        let measure_val_double = cur_obj[7]["ScalarValue"];
-      
-        result.push({
-          "temp": temp,
-          "device_name": device_name,
-          "dist": dist,
-          "location": location,
-          "measure_name": measure_name,
-          "time": time,
-          "measure_val_varchar": measure_val_varchar,
-          "measure_val_double": measure_val_double,
-        })
-      }
-      setData(result);
+      const NoiseData = await queryClient.send(NoiseCommand);  
+      const DoorData = await queryClient.send(DoorTableCommand);
+
+      formatNoiseData(NoiseData);
+      formatDoorData(DoorData);
+
+      console.log(DoorData);
     });    
+  }
+
+  if (firstCall) {
+    console.log("First Call");
+    getData();
+    firstCall = false;
   }
   
   return (
     <BlankScreen style={styles.container}>
       <ScrollView style={styles.buttonsContainer}>
-        {/* <View style={styles.buttonContainer}>
-          <Button_1
-            title='Refresh Data' 
-            onPress={() => getData()}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button_1
-            title='Refresh Data' 
-            onPress={() => getData()}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button_1
-            title='Show Data in Console' 
-            onPress={() => console.log(data)}
-          />
-        </View> */}
         <View style={styles.searchBarContainer}>
         <TextInput
           style={styles.searchBar}
           placeholder="Search"
-          onChangeText = {(input) => spaceSearch(input.toLowerCase())}
+          onChangeText = {(input) => typeTime(input.toLocaleLowerCase())}
         />
         <FontAwesomeIcon style={styles.searchIcon} color={colors.secondaryBlue} size={iconSize} icon={faSearch} />
         </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
-            spaceName='Space 1'
-            onPress={() => navigation.navigate('Space', {spaceID: 'uuid'})}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName='Space 2'
-            onPress={() => console.log('Go to Space Screen')}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName='Space 3'
-            onPress={() => console.log('Go to Space Screen')}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName='Space 4'
-            onPress={() => console.log('Go to Space Screen')}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName='Space 5'
-            onPress={() => console.log('Go to Space Screen')}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName='Space 6'
-            onPress={() => console.log('Go to Space Screen')}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName='Space 7'
-            onPress={() => console.log('Go to Space Screen')}
+            spaceName='PHO 113'
+            noise={noiseData[0].noise}
+            head={doorData[0].head}
+            temp={doorData[0].temp}
+            onPress={() => navigation.navigate('Space', {spaceID: '113', doorData: doorData, noiseData: noiseData})}
           />
         </View>
       </ScrollView>

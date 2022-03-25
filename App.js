@@ -12,6 +12,7 @@ import {
   ConfirmScreen,
   SurveyScreen1,
   SurveyScreen2,
+  CheckInScreen,
 } from "./src/screens";
 
 import Amplify from 'aws-amplify'
@@ -36,6 +37,7 @@ export default function App() {
         <Stack.Screen name="Confirm" component={ConfirmScreen} />
         <Stack.Screen name="Survey1" component={SurveyScreen1} />
         <Stack.Screen name="Survey2" component={SurveyScreen2} />
+        <Stack.Screen name="CheckIn" component={CheckInScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

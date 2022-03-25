@@ -7,7 +7,7 @@ import colors from '../config/colors';
 
 const iconSize = 32;
 
-export default function SpaceCard({ spaceName, onPress, data, backgroundColor = 'secondaryBlue' }) {
+export default function SpaceCard({ spaceName, noise, head, temp, onPress, data, backgroundColor = 'secondaryBlue' }) {
 	return (
         <TouchableOpacity style={[ styles.card, { backgroundColor: colors[backgroundColor] } ]} onPress={onPress}>
             <View style={styles.textContainer}>
@@ -20,11 +20,11 @@ export default function SpaceCard({ spaceName, onPress, data, backgroundColor = 
                 <View style={styles.bottomRow}>
                     {/* <View style={styles.spaceNoise}> */}
                         <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={faVolumeUp} />
-                        <Text style={styles.text}>Low</Text>
+                        <Text style={styles.text}>{noise}</Text>
                         <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={faUsers} />
-                        <Text style={styles.text}>50%</Text>
+                        <Text style={styles.text}>{head}</Text>
                         <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={faThermometerHalf} />
-                        <Text style={styles.text, styles.thermo}>68ºF</Text>
+                        <Text style={styles.text, styles.thermo}>{temp}</Text>
                     {/* </View> */}
                 </View>
             </View>
