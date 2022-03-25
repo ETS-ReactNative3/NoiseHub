@@ -58,5 +58,9 @@ export default StyleSheet.create({
     color: colors.primaryWhite,
     fontSize: 30,
     paddingLeft: '4%',
+  },
+  texxt: {
+    color: colors.primaryWhite,
+    fontSize: 25
   }
 });

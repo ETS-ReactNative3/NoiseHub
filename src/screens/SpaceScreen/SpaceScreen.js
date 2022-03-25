@@ -34,14 +34,15 @@ export default function SpaceScreen({ navigation, route }) {
   const iconSize_1 = 48;
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
-  // const spaceID = 'uuid'
-  const [spaceName, setName] = useState("Study Space");
+  const spaceData = route.params.data;
+
+  const [spaceName, setName] = useState(spaceData[0].pho_113.location);
   const [spaceLocation, setLocation] = useState("");
-  const [spaceHours, setHours] = useState("");
-  const [spaceAmenities, setAmenities] = useState("");
-  const [noiseLevel, setNoise] = useState("Low");
-  const [busyLevel, setBusy] = useState("50%");
-  const [tempLevel, setTemp] = useState("68ºF");
+  const [spaceHours, setHours] = useState("24/7");
+  const [spaceAmenities, setAmenities] = useState("Solder Stations, Monitors, Eye Wash");
+  const [noiseLevel, setNoise] = useState(spaceData[0].pho_113.noise);
+  const [busyLevel, setBusy] = useState(spaceData[0].pho_113.heads);
+  const [tempLevel, setTemp] = useState(spaceData[0].pho_113.temp);
   const [userFeedback, setFeedback] = useState("");
 
   async function setSpace() {
@@ -79,7 +80,7 @@ export default function SpaceScreen({ navigation, route }) {
         </TouchableOpacity>
         <Text numberOfLines={1} style={styles.name}>{spaceName}</Text>
         <TouchableOpacity
-          onPress={() => console.log("Check-In")}
+          onPress={() => navigation.navigate('CheckIn', {spaceID: '113', data: spaceData})}
         >
           <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_1} icon={farCheckCircle} />
         </TouchableOpacity>
@@ -100,10 +101,10 @@ export default function SpaceScreen({ navigation, route }) {
       </View>
       {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasArrowAltCircleLeft} /> */}
       {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} /> */}
-      <Text>{spaceName}</Text>
-      <Text>{spaceLocation}</Text>
-      <Text>{spaceHours}</Text>
-      <Text>{spaceAmenities}</Text>
+      {/* <Text style={styles.texxt}>{spaceName}</Text> */}
+      {/* <Text style={styles.texxt}>{spaceLocation}</Text> */}
+      <Text style={styles.texxt}>Hours: {spaceHours}</Text>
+      <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text>
     </ScrollView>
   </BlankScreen>
   );
