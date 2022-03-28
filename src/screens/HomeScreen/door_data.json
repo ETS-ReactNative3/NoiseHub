@@ -1,0 +1,213 @@
+Object {
+  "$metadata": Object {
+    "attempts": 1,
+    "cfId": undefined,
+    "extendedRequestId": undefined,
+    "httpStatusCode": 200,
+    "requestId": "OJEASIIVWMFXPYFTEQ73NYLCHA",
+    "totalRetryDelay": 0,
+  },
+  "ColumnInfo": Array [
+    Object {
+      "Name": "headcount",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "VARCHAR",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "temperature",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "VARCHAR",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "measure_name",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "VARCHAR",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "time",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "TIMESTAMP",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "measure_value::bigint",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "BIGINT",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "measure_value::double",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "DOUBLE",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+  ],
+  "NextToken": undefined,
+  "QueryId": "AECACANDEYFWEMVZ5OKSWN4DS2IEPJO3KTESLW6C33TXXBVTEMRG26DHBMT6BYA",
+  "QueryStatus": Object {
+    "CumulativeBytesMetered": 10000000,
+    "CumulativeBytesScanned": 10544,
+    "ProgressPercentage": 100,
+  },
+  "Rows": Array [
+    Object {
+      "Data": Array [
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "{-2}",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "{21.25}",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "temperature",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "2022-03-24 21:58:25.110000000",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": true,
+          "RowValue": undefined,
+          "ScalarValue": undefined,
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "21.25",
+          "TimeSeriesValue": undefined,
+        },
+      ],
+    },
+    Object {
+      "Data": Array [
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "{-2}",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "{21.25}",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "headcount",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "2022-03-24 21:58:25.110000000",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "-2",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": true,
+          "RowValue": undefined,
+          "ScalarValue": undefined,
+          "TimeSeriesValue": undefined,
+        },
+      ],
+    },
+    Object {
+      "Data": Array [
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "{-2}",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "{21.25}",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "temperature",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "2022-03-24 21:55:23.137000000",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": true,
+          "RowValue": undefined,
+          "ScalarValue": undefined,
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "21.25",
+          "TimeSeriesValue": undefined,
+        },
+      ],
+    },
+  ],
+}

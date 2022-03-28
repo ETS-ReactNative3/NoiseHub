@@ -13,7 +13,8 @@ export const create_space = async (space) => {
       noiseLevel: space.noiseLevel,
       busyLevel: space.busyLevel,
       tempLevel: space.tempLevel,
-      userFeedback: space.userFeedback
+      userFeedback: space.userFeedback,
+      graphData: space.graphData
     }}))
     return response;
   } catch (error) {
@@ -41,7 +42,8 @@ export const get_space = async (uuid) => {
 //     noiseLevel: "noiseLevel",
 //     busyLevel: "busyLevel",
 //     tempLevel: "tempLevel",
-//     userFeedback: "userFeedback"
+//     userFeedback: "userFeedback",
+//     graphData: "graphData"
 //   }
 
 //   const response_1 = spaceCalls.create_space(value);

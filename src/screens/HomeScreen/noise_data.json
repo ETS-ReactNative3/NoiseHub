@@ -1,0 +1,153 @@
+Object {
+  "$metadata": Object {
+    "attempts": 1,
+    "cfId": undefined,
+    "extendedRequestId": undefined,
+    "httpStatusCode": 200,
+    "requestId": "KSULI3A4IDJ5HWXKRLL7YHMRRU",
+    "totalRetryDelay": 0,
+  },
+  "ColumnInfo": Array [
+    Object {
+      "Name": "noise",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "VARCHAR",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "measure_name",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "VARCHAR",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "time",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "TIMESTAMP",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+    Object {
+      "Name": "measure_value::bigint",
+      "Type": Object {
+        "ArrayColumnInfo": undefined,
+        "RowColumnInfo": undefined,
+        "ScalarType": "BIGINT",
+        "TimeSeriesMeasureValueColumnInfo": undefined,
+      },
+    },
+  ],
+  "NextToken": undefined,
+  "QueryId": "AECACANDEXY35BG7QYAZK656E7WTXG4XV5MOJQJSMNOYI3HVNOIOVWQSWLRCVXA",
+  "QueryStatus": Object {
+    "CumulativeBytesMetered": 10000000,
+    "CumulativeBytesScanned": 972,
+    "ProgressPercentage": 100,
+  },
+  "Rows": Array [
+    Object {
+      "Data": Array [
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "0",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "noise",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "2022-03-24 20:27:05.564000000",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "0",
+          "TimeSeriesValue": undefined,
+        },
+      ],
+    },
+    Object {
+      "Data": Array [
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "0",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "noise",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "2022-03-24 20:24:03.712000000",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "0",
+          "TimeSeriesValue": undefined,
+        },
+      ],
+    },
+    Object {
+      "Data": Array [
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "1",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "noise",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "2022-03-24 20:21:01.814000000",
+          "TimeSeriesValue": undefined,
+        },
+        Object {
+          "ArrayValue": undefined,
+          "NullValue": undefined,
+          "RowValue": undefined,
+          "ScalarValue": "1",
+          "TimeSeriesValue": undefined,
+        },
+      ],
+    },
+  ],
+}

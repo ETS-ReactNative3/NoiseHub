@@ -1,6 +1,6 @@
 import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import React, { useState, useEffect, Component } from "react";
-import { TextInput, View, TouchableOpacity, Text, Button, ScrollView, Dimensions } from "react-native";
+import { TextInput, View, TouchableOpacity, Text, Button, ScrollView } from "react-native";
 import styles from "./styles";
 
 import colors from '../../config/colors';
@@ -22,6 +22,9 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 import SpaceCard from "../../components/SpaceCard";
+
+// Functions
+import * as spaceCalls from '../../API/spaceCalls';
 
 const iconSize = 32;
 
@@ -178,7 +181,9 @@ export default function HomeScreen({ navigation }) {
             noise={noiseData[0].noise}
             head={doorData[0].head}
             temp={doorData[0].temp}
-            onPress={() => navigation.navigate('Space', {spaceID: '113', doorData: doorData, noiseData: noiseData})}
+            onPress={() => {
+              spaceCalls.get_space('113').then((response) => navigation.navigate('Space', {spaceID: '113', spaceData: response, doorData: doorData, noiseData: noiseData}))
+            }}
           />
         </View>
       </ScrollView>
