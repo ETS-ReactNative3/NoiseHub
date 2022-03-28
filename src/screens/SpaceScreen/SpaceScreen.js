@@ -1,6 +1,6 @@
 import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import React, { useState, useEffect, Component } from "react";
-import { TextInput, View, TouchableOpacity, Text, Button, ScrollView } from "react-native";
+import { TextInput, View, TouchableOpacity, Text, Button, ScrollView, Dimensions } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // Regular Icons
 import {
@@ -20,6 +20,8 @@ import {
 import styles from "./styles";
 import colors from '../../config/colors';
 
+// Graphing
+import { LineChart } from "react-native-chart-kit";
 
 import { Auth } from 'aws-amplify'
 
@@ -34,40 +36,20 @@ export default function SpaceScreen({ navigation, route }) {
   const iconSize_1 = 48;
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
-  const spaceData = route.params.data;
+  const spaceData = route.params.spaceData;
+  const noiseData = route.params.noiseData;
+  const doorData = route.params.doorData;
 
-  const [spaceName, setName] = useState(spaceData[0].pho_113.location);
-  const [spaceLocation, setLocation] = useState("");
+  console.log(spaceData);
+
+  const [spaceName, setName] = useState(spaceData["name"]);
+  const [spaceLocation, setLocation] = useState(spaceData["location"]);
   const [spaceHours, setHours] = useState("24/7");
-  const [spaceAmenities, setAmenities] = useState("Solder Stations, Monitors, Eye Wash");
-  const [noiseLevel, setNoise] = useState(spaceData[0].pho_113.noise);
-  const [busyLevel, setBusy] = useState(spaceData[0].pho_113.heads);
-  const [tempLevel, setTemp] = useState(spaceData[0].pho_113.temp);
-  const [userFeedback, setFeedback] = useState("");
-
-  async function setSpace() {
-    // const response = await Auth.signIn("Test126", "Testing123!");
-
-    const response = await spaceCalls.get_space(spaceID);
-    console.log(response);
-    setName(response["name"]);
-    setLocation(response["location"]);
-    setHours(response["hours"]);
-    setAmenities(response["amenities"]);
-    setNoise(response["noiseLevel"]);
-    setBusy(response["busyLevel"]);
-    setTemp(response["setTemp"]);
-    setFeedback(response["userFeedback"]);
-
-    // Auth.currentAuthenticatedUser({
-    //   bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    // }).then(async user => {
-    //   console.log(user.username);
-    // });
-  }
-  
-  // Get Space Data
-  // setSpace();
+  const [spaceAmenities, setAmenities] = useState(spaceData["amenities"]);
+  const [noiseLevel, setNoise] = useState(noiseData[0].noise);
+  const [busyLevel, setBusy] = useState(doorData[0].head);
+  const [tempLevel, setTemp] = useState(doorData[0].head);
+  const [userFeedback, setFeedback] = useState(spaceData["userFeedback"]);
 
   return (
   <BlankScreen style={styles.container}>
@@ -98,6 +80,52 @@ export default function SpaceScreen({ navigation, route }) {
           <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_2} icon={faThermometerHalf} />
           <Text style={styles.icon_text, styles.noise_icon_text}>{tempLevel}</Text>
         </View>
+      </View>
+      <View>
+        <Text>Bezier Line Chart</Text>
+        <LineChart
+          data={{
+            labels: ["January", "February", "March", "April", "May", "June"],
+            datasets: [
+              {
+                data: [
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100
+                ]
+              }
+            ]
+          }}
+          width={Dimensions.get("window").width} // from react-native
+          height={220}
+          yAxisLabel="$"
+          yAxisSuffix="k"
+          yAxisInterval={1} // optional, defaults to 1
+          chartConfig={{
+            backgroundColor: "#e26a00",
+            backgroundGradientFrom: "#fb8c00",
+            backgroundGradientTo: "#ffa726",
+            decimalPlaces: 2, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16
+            },
+            propsForDots: {
+              r: "6",
+              strokeWidth: "2",
+              stroke: "#ffa726"
+            }
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+        />
       </View>
       {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasArrowAltCircleLeft} /> */}
       {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} /> */}
