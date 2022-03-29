@@ -25,9 +25,6 @@ import { LineChart } from "react-native-chart-kit";
 
 import { Auth } from 'aws-amplify'
 
-// Functions
-import * as spaceCalls from '../../API/spaceCalls';
-
 // Components
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
@@ -62,7 +59,7 @@ export default function SpaceScreen({ navigation, route }) {
         </TouchableOpacity>
         <Text numberOfLines={1} style={styles.name}>{spaceName}</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CheckIn', {spaceID: '113', data: spaceData})}
+          onPress={() => navigation.navigate('CheckIn', {spaceID: '113', spaceData: spaceData, doorData: doorData })}
         >
           <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_1} icon={farCheckCircle} />
         </TouchableOpacity>
@@ -78,7 +75,7 @@ export default function SpaceScreen({ navigation, route }) {
         </View>
         <View style={styles.dataBarItem}>
           <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_2} icon={faThermometerHalf} />
-          <Text style={styles.icon_text, styles.noise_icon_text}>{tempLevel}</Text>
+          <Text style={[styles.icon_text, styles.noise_icon_text]}>{tempLevel}</Text>
         </View>
       </View>
       <View>

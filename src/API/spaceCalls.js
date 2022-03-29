@@ -14,7 +14,31 @@ export const create_space = async (space) => {
       busyLevel: space.busyLevel,
       tempLevel: space.tempLevel,
       userFeedback: space.userFeedback,
-      graphData: space.graphData
+      graphData: space.graphData,
+      correction: space.correction,
+      headRange: space.headRange
+    }}))
+    return response;
+  } catch (error) {
+    console.log('Error creating space', error);
+  }
+}
+
+export const update_space  = async (space) => {
+  try {
+    const response = await API.graphql(graphqlOperation(updateSpace, { input: {
+      uuid: space.uuid,
+      name: space.name,
+      location: space.location,
+      hours: space.hours,
+      amenities: space.amenities,
+      noiseLevel: space.noiseLevel,
+      busyLevel: space.busyLevel,
+      tempLevel: space.tempLevel,
+      userFeedback: space.userFeedback,
+      graphData: space.graphData,
+      correction: space.correction,
+      headRange: space.headRange
     }}))
     return response;
   } catch (error) {
@@ -30,6 +54,7 @@ export const get_space = async (uuid) => {
     console.log('Error fetching user data', error);
   }
 }
+
 
 
 // Example

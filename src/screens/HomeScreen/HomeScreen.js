@@ -154,7 +154,7 @@ export default function HomeScreen({ navigation }) {
       formatNoiseData(NoiseData);
       formatDoorData(DoorData);
 
-      console.log(DoorData);
+      // console.log(DoorData);
     });    
   }
 

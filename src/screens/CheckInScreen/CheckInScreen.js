@@ -15,13 +15,23 @@ import colors from '../../config/colors';
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 
+// Functions
+import * as spaceCalls from '../../API/spaceCalls';
+
 export default function CheckInScreen({ navigation, route }) {
   const iconSize_1 = 48;
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
-  const spaceData = route.params.data;
+  const spaceData = route.params.spaceData;
+  const doorData = route.params.doorData;
 
-  const [spaceName, setName] = useState(spaceData[0].pho_113.location);
+  const space.userFeedback = JSON.parse(spaceData["userFeedback"]);
+  console.log(JSON.parse(spaceData["graphData"]))
+
+  const [spaceName, setName] = useState(spaceData['name']);
+  
+  const headRange = spaceData['headRange'];
+  const curr_correction = spaceData['correction'];
 
   const [radio1, setRadio1] = useState({button1: false, button2: false, button3: false});
 
@@ -48,6 +58,28 @@ export default function CheckInScreen({ navigation, route }) {
       })
     }
   };
+
+  function submitFeedback() {
+    const secondsSinceEpoch = Math.round(Date.now() / 1000);
+
+    // spaceData.userFeedback = []
+
+    // spaceCalls.update_space({
+    //   uuid: spaceData.uuid,
+    //   name: spaceData.name,
+    //   location: spaceData.location,
+    //   hours: spaceData.hours,
+    //   amenities: spaceData.amenities,
+    //   noiseLevel: spaceData.noiseLevel,
+    //   busyLevel: spaceData.busyLevel,
+    //   tempLevel: spaceData.tempLevel,
+    //   userFeedback: spaceData.userFeedback,
+    //   graphData: spaceData.graphData,
+    //   correction: spaceData.correction,
+    //   headRange: spaceData.headRange
+    // })
+    
+  }
 
   return (
   <BlankScreen style={styles.container}>
@@ -85,7 +117,7 @@ export default function CheckInScreen({ navigation, route }) {
         <View style={styles.buttonContainer}>
           <Button_1
             title='Next' 
-            onPress={() => onPressAction()}
+            onPress={() => submitFeedback()}
           />
         </View>
       </View>
