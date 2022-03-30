@@ -25,15 +25,19 @@ export default function CheckInScreen({ navigation, route }) {
   const spaceData = route.params.spaceData;
   const doorData = route.params.doorData;
 
-  const space.userFeedback = JSON.parse(spaceData["userFeedback"]);
-  console.log(JSON.parse(spaceData["graphData"]))
+  console.log(spaceData["userFeedback"]);
 
   const [spaceName, setName] = useState(spaceData['name']);
   
   const headRange = spaceData['headRange'];
   const curr_correction = spaceData['correction'];
+  let userFeedbackJSON = JSON.parse(spaceData["userFeedback"]);
+  // let userFeedbackJSON = [];
+
+  // console.log(spaceData["headRange"]);
 
   const [radio1, setRadio1] = useState({button1: false, button2: false, button3: false});
+  const [radio1SelectedButton, setRadio1SelectedButton] = useState();
 
   function setRadio(button) {
     if (button == 1) {
@@ -41,44 +45,80 @@ export default function CheckInScreen({ navigation, route }) {
         button1: true,
         button2: false,
         button3: false,
-      })
+      });
+      setRadio1SelectedButton('low');
     }
     else if (button == 2) {
       setRadio1({
         button1: false,
         button2: true,
         button3: false,
-      })
+      });
+      setRadio1SelectedButton('med');
     }
     else if (button == 3) {
       setRadio1({
         button1: false,
         button2: false,
         button3: true,
-      })
+      });
+      setRadio1SelectedButton('high');
     }
   };
 
   function submitFeedback() {
+    // Current epoch time
     const secondsSinceEpoch = Math.round(Date.now() / 1000);
 
-    // spaceData.userFeedback = []
+    // Interval
+    let staleLife = 20 * 60;
 
-    // spaceCalls.update_space({
-    //   uuid: spaceData.uuid,
-    //   name: spaceData.name,
-    //   location: spaceData.location,
-    //   hours: spaceData.hours,
-    //   amenities: spaceData.amenities,
-    //   noiseLevel: spaceData.noiseLevel,
-    //   busyLevel: spaceData.busyLevel,
-    //   tempLevel: spaceData.tempLevel,
-    //   userFeedback: spaceData.userFeedback,
-    //   graphData: spaceData.graphData,
-    //   correction: spaceData.correction,
-    //   headRange: spaceData.headRange
-    // })
-    
+    let lowCount = 0;
+    let medCount = 0;
+    let highCount = 0;
+
+    // User Feedback: Clean, Append, Send
+    for (let i=0; i<userFeedbackJSON.length; i++) {
+      // console.log(userFeedbackJSON[i]);
+      if ((secondsSinceEpoch - userFeedbackJSON[i]["time"]) > 1200) {
+        console.log("OLD");
+        userFeedbackJSON.splice(i,1); // Remove stale feedback
+      }
+      else {
+        if (userFeedbackJSON[i]["value"] == "low") {
+          lowCount++;
+        }
+        else if (userFeedbackJSON[i]["value"] == "med") {
+          medCount++;
+        }
+        else if (userFeedbackJSON[i]["value"] == "high") {
+          highCount++;
+        }
+      }
+    }
+    // Add new feedback
+    userFeedbackJSON.push({"time": String(secondsSinceEpoch), "value": radio1SelectedButton});
+
+    // Calculate correction
+    let heads_ts = doorData[0]["head"];
+    let maxHeads = spaceData["headRange"];
+    let newCorrection = parseInt(heads_ts - (((lowCount*0.165)+(medCount*0.5)+(highCount*0.835)) * maxHeads));
+
+    // Update data in dynamo
+    spaceCalls.update_space({
+      uuid: spaceData.uuid,
+      name: spaceData.name,
+      location: spaceData.location,
+      hours: spaceData.hours,
+      amenities: spaceData.amenities,
+      noiseLevel: spaceData.noiseLevel,
+      busyLevel: spaceData.busyLevel,
+      tempLevel: spaceData.tempLevel,
+      userFeedback: JSON.stringify(userFeedbackJSON),
+      graphData: spaceData.graphData,
+      correction: newCorrection,
+      headRange: spaceData.headRange
+    });
   }
 
   return (

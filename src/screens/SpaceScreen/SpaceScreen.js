@@ -37,7 +37,7 @@ export default function SpaceScreen({ navigation, route }) {
   const noiseData = route.params.noiseData;
   const doorData = route.params.doorData;
 
-  console.log(spaceData);
+  // console.log(spaceData);
 
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
