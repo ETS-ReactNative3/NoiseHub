@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   ScrollView,
+  RefreshControl
 } from "react-native";
 import styles from "./styles";
 
@@ -115,6 +116,8 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
+  const [refreshing, setRefreshing] = useState(false);
+
   async function getData() {
     console.log("GET DATA");
     spaceCalls.get_space("113").then((response) => {
@@ -131,6 +134,7 @@ export default function HomeScreen({ navigation }) {
       }
       // set_busy_level(parseInt(dict.head_data.slice(-1)));
       set_temp_level(dict.temp_data.slice(-1) + "°");
+      // var dict = JSON.parse(response.graphData);
       setSpaceData(response);
 
       const ts_heads = parseInt(dict.head_data.slice(-1));
@@ -149,8 +153,19 @@ export default function HomeScreen({ navigation }) {
       }
     });
     let data = await timestreamCalls.getTimeStreamData();
+
     setNoiseData(data["noise"]);
     setDoorData(data["door"]);
+
+    if (data["noise"][0]["noise"] == "0") {
+      set_audio_level("Low");
+    } else if (data["noise"][0]["noise"] == "1") {
+      set_audio_level("Medium");
+    } else if (data["noise"][0]["noise"] == "2") {
+      set_audio_level("High");
+    }
+    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
+    set_busy_level(data["door"][0]["head"]);
   }
 
   if (firstCall) {
@@ -159,9 +174,19 @@ export default function HomeScreen({ navigation }) {
     firstCall = false;
   }
 
+
+  // useEffect(() => {
+  //   getData();
+  // }, [])
+
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView style={styles.buttonsContainer}>
+      <ScrollView style={styles.buttonsContainer} refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={getData}
+        />
+      }>
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchBar}
