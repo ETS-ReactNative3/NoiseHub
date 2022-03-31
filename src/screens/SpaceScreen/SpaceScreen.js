@@ -53,6 +53,8 @@ export default function SpaceScreen({ navigation, route }) {
 
   console.log("Space Screen!");
 
+  const [headCount, setHeadCount] = useState();
+
   const [noiseData, setNoiseData] = useState([
     {
       noise: undefined,
@@ -101,10 +103,25 @@ export default function SpaceScreen({ navigation, route }) {
   for (var i = 0; i < temp_y_str.length; i++)
     temp_y.push(parseFloat(temp_y_str[i]));
 
+  const ts_heads = head_y.slice(-1);
+  const correction = spaceData["correction"];
+  const estimated_heads = ts_heads + correction;
+  const maxHeads = spaceData["headRange"];
+  
   if (firstCall) {
     console.log("First Call");
     getData();
     firstCall = false;
+
+    if (estimated_heads < maxHeads*0.34) {
+      setHeadCount("Low");
+    }
+    else if (estimated_heads < maxHeads * 0.67) {
+      setHeadCount("Med");
+    }
+    else {
+      setHeadCount("High");
+    }
   }
 
   const [spaceName, setName] = useState(spaceData["name"]);
@@ -166,7 +183,7 @@ export default function SpaceScreen({ navigation, route }) {
               size={iconSize_2}
               icon={faUsers}
             />
-            <Text style={styles.icon_text}>{head_y.slice(-1)}</Text>
+            <Text style={styles.icon_text}>{headCount}</Text>
           </View>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon

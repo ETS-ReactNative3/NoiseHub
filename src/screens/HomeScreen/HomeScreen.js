@@ -118,6 +118,7 @@ export default function HomeScreen({ navigation }) {
   async function getData() {
     console.log("GET DATA");
     spaceCalls.get_space("113").then((response) => {
+      console.log(response);
       var dict = JSON.parse(response.graphData);
       var noise_y = dict.noise_data;
 
@@ -128,9 +129,24 @@ export default function HomeScreen({ navigation }) {
       } else {
         set_audio_level("High");
       }
-      set_busy_level(parseInt(dict.head_data.slice(-1)));
+      // set_busy_level(parseInt(dict.head_data.slice(-1)));
       set_temp_level(dict.temp_data.slice(-1) + "°");
       setSpaceData(response);
+
+      const ts_heads = parseInt(dict.head_data.slice(-1));
+      const correction = response["correction"];
+      const estimated_heads = ts_heads + correction;
+      const maxHeads = response["headRange"];
+
+      if (estimated_heads < maxHeads*0.34) {
+        set_busy_level("Low");
+      }
+      else if (estimated_heads < maxHeads * 0.67) {
+        set_busy_level("Med");
+      }
+      else {
+        set_busy_level("High");
+      }
     });
     let data = await timestreamCalls.getTimeStreamData();
     setNoiseData(data["noise"]);
