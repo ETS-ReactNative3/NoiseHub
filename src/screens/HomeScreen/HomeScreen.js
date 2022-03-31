@@ -125,15 +125,15 @@ export default function HomeScreen({ navigation }) {
       var dict = JSON.parse(response.graphData);
       var noise_y = dict.noise_data;
 
-      if (noise_y.slice(-1) == 0) {
-        set_audio_level("Low");
-      } else if (noise_y.slice(-1) == 1) {
-        set_audio_level("Medium");
-      } else {
-        set_audio_level("High");
-      }
+      // if (noise_y.slice(-1) == 0) {
+      //   set_audio_level("Low");
+      // } else if (noise_y.slice(-1) == 1) {
+      //   set_audio_level("Medium");
+      // } else {
+      //   set_audio_level("High");
+      // }
       // set_busy_level(parseInt(dict.head_data.slice(-1)));
-      set_temp_level(dict.temp_data.slice(-1) + "°");
+      // set_temp_level(dict.temp_data.slice(-1) + "°");
       // var dict = JSON.parse(response.graphData);
       setSpaceData(response);
 
@@ -142,7 +142,7 @@ export default function HomeScreen({ navigation }) {
       const estimated_heads = ts_heads - correction;
       const maxHeads = response["headRange"];
 
-      if (estimated_heads < maxHeads*0.34) {
+      if (estimated_heads < maxHeads * 0.34) {
         set_busy_level("Low");
       }
       else if (estimated_heads < maxHeads * 0.67) {
@@ -197,6 +197,7 @@ export default function HomeScreen({ navigation }) {
       getData();
     });
     firstCall = false;
+
   }
 
   return (
