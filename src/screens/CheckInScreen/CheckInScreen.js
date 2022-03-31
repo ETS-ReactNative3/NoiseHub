@@ -32,9 +32,6 @@ export default function CheckInScreen({ navigation, route }) {
   const headRange = spaceData['headRange'];
   const curr_correction = spaceData['correction'];
   let userFeedbackJSON = JSON.parse(spaceData["userFeedback"]);
-  // let userFeedbackJSON = [];
-
-  // console.log(spaceData["headRange"]);
 
   const [radio1, setRadio1] = useState({button1: false, button2: false, button3: false});
   const [radio1SelectedButton, setRadio1SelectedButton] = useState();
@@ -79,8 +76,7 @@ export default function CheckInScreen({ navigation, route }) {
 
     // User Feedback: Clean, Append, Send
     for (let i=0; i<userFeedbackJSON.length; i++) {
-      // console.log(userFeedbackJSON[i]);
-      if ((secondsSinceEpoch - userFeedbackJSON[i]["time"]) > 1200) {
+      if ((secondsSinceEpoch - userFeedbackJSON[i]["time"]) > staleLife) {
         console.log("OLD");
         userFeedbackJSON.splice(i,1); // Remove stale feedback
       }
@@ -102,8 +98,8 @@ export default function CheckInScreen({ navigation, route }) {
     // Calculate correction
     let heads_ts = doorData[0]["head"];
     let maxHeads = spaceData["headRange"];
-    let newCorrection = parseInt(heads_ts - (((lowCount*0.165)+(medCount*0.5)+(highCount*0.835)) * maxHeads));
-
+    let newCorrection = parseInt(heads_ts - ((((lowCount*0.165)+(medCount*0.5)+(highCount*0.835)) / userFeedbackJSON.length) * maxHeads));
+    console.log("NEW CORRECTION: " + newCorrection);
     // Update data in dynamo
     spaceCalls.update_space({
       uuid: spaceData.uuid,
@@ -119,6 +115,10 @@ export default function CheckInScreen({ navigation, route }) {
       correction: newCorrection,
       headRange: spaceData.headRange
     });
+
+    spaceCalls.get_space('113').then((response) => {
+      spaceCalls.get_space('113').then((response) => navigation.navigate('Space', {spaceID: spaceID, spaceData: response}))
+    })
   }
 
   return (
