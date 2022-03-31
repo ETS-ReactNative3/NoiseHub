@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   ScrollView,
+  RefreshControl
 } from "react-native";
 import styles from "./styles";
 
@@ -115,24 +116,36 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
+  const [refreshing, setRefreshing] = useState(false);
+
   async function getData() {
     console.log("GET DATA");
     spaceCalls.get_space("113").then((response) => {
       var dict = JSON.parse(response.graphData);
       var noise_y = dict.noise_data;
 
-      if (noise_y.slice(-1) == 0) {
+      // if (noise_y.slice(-1) == 0) {
+      //   set_audio_level("Low");
+      // } else if (noise_y.slice(-1) == 1) {
+      //   set_audio_level("Medium");
+      // } else {
+      //   set_audio_level("High");
+      // }
+      // set_busy_level(parseInt(dict.head_data.slice(-1)));
+      // set_temp_level(dict.temp_data.slice(-1) + "°");
+      if (noiseData[0]["noise"] == "0") {
         set_audio_level("Low");
-      } else if (noise_y.slice(-1) == 1) {
+      } else if (noiseData[0]["noise"] == "1") {
         set_audio_level("Medium");
       } else {
         set_audio_level("High");
       }
-      set_busy_level(parseInt(dict.head_data.slice(-1)));
-      set_temp_level(dict.temp_data.slice(-1) + "°");
+      set_temp_level((doorData[0]["temp"] * 1.8 + 32).toFixed(2));
+      set_busy_level(doorData[0]["head"]);
       setSpaceData(response);
     });
     let data = await timestreamCalls.getTimeStreamData();
+    console.log(doorData[0])
     setNoiseData(data["noise"]);
     setDoorData(data["door"]);
   }
@@ -143,9 +156,18 @@ export default function HomeScreen({ navigation }) {
     firstCall = false;
   }
 
+  async function onRefresh() {
+    set_audio_level("High");
+  }
+
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView style={styles.buttonsContainer}>
+      <ScrollView style={styles.buttonsContainer} refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={getData}
+        />
+      }>
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchBar}
