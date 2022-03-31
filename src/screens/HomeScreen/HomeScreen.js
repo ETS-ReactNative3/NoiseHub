@@ -25,6 +25,7 @@ import SpaceCard from "../../components/SpaceCard";
 
 // Functions
 import * as spaceCalls from '../../API/spaceCalls';
+import * as timestreamCalls from '../../API/timestreamCalls';
 
 const iconSize = 32;
 
@@ -91,71 +92,11 @@ export default function HomeScreen({ navigation }) {
     })
   }
 
-  function formatNoiseData(input) {
-    let data = []
-    for (let i=0; i<input['Rows'].length; i++) {
-      let row = input['Rows'][i]['Data'];
-      let obj = {
-        noise: row[0]['ScalarValue'],
-        time: row[2]['ScalarValue']
-      }
-      data.push(obj);
-    }
-    setNoiseData(data);
-  }
-
-  function formatDoorData(input) {
-    let data = []
-    for (let i=0; i<input['Rows'].length; i++) {
-      let row = input['Rows'][i]['Data'];
-      let obj = {
-        head: row[0]['ScalarValue'].replace(/{|}/g, ''),
-        temp: row[1]['ScalarValue'].replace(/{|}/g, ''),
-        time: row[3]['ScalarValue']
-      }
-      data.push(obj);
-    }
-    setDoorData(data);
-  }
-
   async function getData() {
     console.log("GET DATA");
-    let result = [];
-    const region = "us-east-2";
-
-    Auth.currentCredentials().then(async credentials => {
-      const endpointsQueryClient = new TimestreamQuery({ 
-        region,
-        credentials: credentials,
-      });
-
-      const qClientResponse = await endpointsQueryClient.describeEndpoints({});
-
-      const queryClient = new TimestreamQuery({
-        region,
-        endpoint: `https://${qClientResponse.Endpoints[0].Address}`,
-        credentials: credentials,
-      });
-
-      const DatabaseName = 'noisehub-timestream';
-      const NoiseTable = 'noise_data';
-      const Doortable = 'door_table'
-      const NoiseQueryString = `SELECT * FROM "${DatabaseName}"."${NoiseTable}" ORDER BY time DESC LIMIT 3`;
-      const DoorQueryString = `SELECT * FROM "${DatabaseName}"."${Doortable}" ORDER BY time DESC LIMIT 3`;
-      // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 1000000000000000000`;
-      // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" WHERE time between ago(15m) and now() ORDER BY time DESC LIMIT 10`;
-      // console.log(await queryClient.query({ QueryString })); // Also a valid way to query
-      const NoiseCommand = new QueryCommand({QueryString: NoiseQueryString})
-      const DoorTableCommand = new QueryCommand({QueryString: DoorQueryString})
-
-      const NoiseData = await queryClient.send(NoiseCommand);  
-      const DoorData = await queryClient.send(DoorTableCommand);
-
-      formatNoiseData(NoiseData);
-      formatDoorData(DoorData);
-
-      // console.log(DoorData);
-    });    
+    let data = await timestreamCalls.getTimeStreamData();
+    setNoiseData(data["noise"]);
+    setDoorData(data["door"]);
   }
 
   if (firstCall) {
@@ -182,7 +123,7 @@ export default function HomeScreen({ navigation }) {
             head={doorData[0].head}
             temp={doorData[0].temp}
             onPress={() => {
-              spaceCalls.get_space('113').then((response) => navigation.navigate('Space', {spaceID: '113', spaceData: response, doorData: doorData, noiseData: noiseData}))
+              spaceCalls.get_space('113').then((response) => navigation.navigate('Space', {spaceID: '113', spaceData: response}))
             }}
           />
         </View>
