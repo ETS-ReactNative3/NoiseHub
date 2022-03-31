@@ -29,16 +29,42 @@ import { Auth } from 'aws-amplify'
 import BlankScreen from '../../components/BlankScreen';
 import Button_1 from '../../components/Button_1';
 
+import * as timestreamCalls from '../../API/timestreamCalls';
+
+let firstCall = true;
+
 export default function SpaceScreen({ navigation, route }) {
   const iconSize_1 = 48;
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
   const spaceData = route.params.spaceData;
-  const noiseData = route.params.noiseData;
-  const doorData = route.params.doorData;
 
-  // console.log(spaceData);
+  console.log("Space Screen!");
 
+  const [noiseData, setNoiseData] = useState([{
+    noise: undefined,
+    time: undefined
+  }]);
+
+  const [doorData, setDoorData] = useState([{
+    head: undefined,
+    temp: undefined,
+    time: undefined
+  }]);
+
+  async function getData() {
+    console.log("GET DATA");
+    let data = await timestreamCalls.getTimeStreamData();
+    setNoiseData(data["noise"]);
+    setDoorData(data["door"]);
+  }
+
+  if (firstCall) {
+    console.log("First Call");
+    getData();
+    firstCall = false;
+  }
+  
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
   const [spaceHours, setHours] = useState("24/7");
@@ -59,7 +85,7 @@ export default function SpaceScreen({ navigation, route }) {
         </TouchableOpacity>
         <Text numberOfLines={1} style={styles.name}>{spaceName}</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CheckIn', {spaceID: '113', spaceData: spaceData, doorData: doorData })}
+          onPress={() => navigation.navigate('CheckIn', {spaceID: spaceID, spaceData: spaceData, doorData: doorData })}
         >
           <FontAwesomeIcon style={styles.icon} color={colors.primaryWhite} size={iconSize_1} icon={farCheckCircle} />
         </TouchableOpacity>
