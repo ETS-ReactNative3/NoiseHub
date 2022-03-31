@@ -8,6 +8,7 @@ import {
   Button,
   ScrollView,
   Dimensions,
+  RefreshControl
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // Regular Icons
@@ -23,6 +24,10 @@ import {
   faThermometerHalf,
   faVolumeUp,
   faUsers,
+  faBolt,
+  faDesktop,
+  faEye,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./styles";
@@ -53,6 +58,8 @@ export default function SpaceScreen({ navigation, route }) {
 
   console.log("Space Screen!");
 
+  const [headCount, setHeadCount] = useState();
+
   const [noiseData, setNoiseData] = useState([
     {
       noise: undefined,
@@ -67,12 +74,41 @@ export default function SpaceScreen({ navigation, route }) {
       time: undefined,
     },
   ]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [audio_level, set_audio_level] = useState();
+  const [busy_level, set_busy_level] = useState();
+  const [temp_level, set_temp_level] = useState();
 
   async function getData() {
-    console.log("GET DATA");
+    console.log("GET DATA in SPACE SCREEN");
     let data = await timestreamCalls.getTimeStreamData();
     setNoiseData(data["noise"]);
     setDoorData(data["door"]);
+
+    if (data["noise"][0]["noise"] == "0") {
+      set_audio_level("Low");
+    } else if (data["noise"][0]["noise"] == "1") {
+      set_audio_level("Medium");
+    } else if (data["noise"][0]["noise"] == "2") {
+      set_audio_level("High");
+    }
+    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
+    // set_busy_level(data["door"][0]["head"]);
+
+    const ts_heads = data["door"][0]["head"];
+    const correction = spaceData["correction"];
+    const estimated_heads = ts_heads - correction;
+    const maxHeads = spaceData["headRange"];
+
+    if (estimated_heads < maxHeads*0.34) {
+      setHeadCount("Low");
+    }
+    else if (estimated_heads < maxHeads * 0.67) {
+      setHeadCount("Med");
+    }
+    else {
+      setHeadCount("High");
+    }
   }
 
   var dict = JSON.parse(spaceData.graphData);
@@ -82,15 +118,15 @@ export default function SpaceScreen({ navigation, route }) {
   var head_y_str = dict.head_data;
   var head_y = [];
 
-  var audio_level = "";
+  // var audio_level = "";
 
-  if (noise_y.slice(-1) == 0) {
-    audio_level = "Low";
-  } else if (noise_y.slice(-1) == 1) {
-    audio_level = "Medium";
-  } else {
-    audio_level = "High";
-  }
+  // if (noise_y.slice(-1) == 0) {
+  //   audio_level = "Low";
+  // } else if (noise_y.slice(-1) == 1) {
+  //   audio_level = "Medium";
+  // } else {
+  //   audio_level = "High";
+  // }
 
   for (var i = 0; i < head_y_str.length; i++)
     head_y.push(parseInt(head_y_str[i]));
@@ -101,11 +137,29 @@ export default function SpaceScreen({ navigation, route }) {
   for (var i = 0; i < temp_y_str.length; i++)
     temp_y.push(parseFloat(temp_y_str[i]));
 
+  const ts_heads = head_y.slice(-1);
+  const correction = spaceData["correction"];
+  const estimated_heads = ts_heads + correction;
+  const maxHeads = spaceData["headRange"];
+
   if (firstCall) {
     console.log("First Call");
     getData();
     firstCall = false;
+
+    if (estimated_heads < maxHeads * 0.34) {
+      setHeadCount("Low");
+    }
+    else if (estimated_heads < maxHeads * 0.67) {
+      setHeadCount("Med");
+    }
+    else {
+      setHeadCount("High");
+    }
   }
+  useEffect(() => {
+    getData();
+  }, [])
 
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
@@ -119,7 +173,12 @@ export default function SpaceScreen({ navigation, route }) {
   const yLabelIterator = yLabel();
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.buttonsContainer} refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={getData}
+        />
+      }>
         <View style={styles.topRow}>
           <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <FontAwesomeIcon
@@ -149,6 +208,9 @@ export default function SpaceScreen({ navigation, route }) {
             />
           </TouchableOpacity>
         </View>
+        <Text numberOfLines={1} style={styles.title}>
+          Current Data
+        </Text>
         <View style={styles.dataBar}>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon
@@ -166,7 +228,7 @@ export default function SpaceScreen({ navigation, route }) {
               size={iconSize_2}
               icon={faUsers}
             />
-            <Text style={styles.icon_text}>{head_y.slice(-1)}</Text>
+            <Text style={styles.icon_text}>{headCount}</Text>
           </View>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon
@@ -176,13 +238,13 @@ export default function SpaceScreen({ navigation, route }) {
               icon={faThermometerHalf}
             />
             <Text style={[styles.icon_text, styles.noise_icon_text]}>
-              {temp_y.slice(-1)}
+              {temp_level}
             </Text>
           </View>
         </View>
         <View>
-          <Text numberOfLines={1} style={styles.title}>
-            History
+          <Text numberOfLines={1} style={styles.texxt}>
+            Noise
           </Text>
           <LineChart
             data={{
@@ -194,7 +256,7 @@ export default function SpaceScreen({ navigation, route }) {
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
-            height={190}
+            height={175}
             yAxisLabel=""
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
@@ -223,6 +285,9 @@ export default function SpaceScreen({ navigation, route }) {
               borderRadius: 16,
             }}
           />
+          <Text numberOfLines={1} style={styles.texxt}>
+            Occupancy
+          </Text>
           <LineChart
             data={{
               labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
@@ -233,7 +298,7 @@ export default function SpaceScreen({ navigation, route }) {
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
-            height={190}
+            height={175}
             yAxisLabel=""
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
@@ -260,6 +325,9 @@ export default function SpaceScreen({ navigation, route }) {
               borderRadius: 16,
             }}
           />
+          <Text numberOfLines={1} style={styles.texxt}>
+            Temperature
+          </Text>
           <LineChart
             data={{
               labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
@@ -270,7 +338,7 @@ export default function SpaceScreen({ navigation, route }) {
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
-            height={190}
+            height={175}
             yAxisLabel=""
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
@@ -302,8 +370,75 @@ export default function SpaceScreen({ navigation, route }) {
         {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} /> */}
         {/* <Text style={styles.texxt}>{spaceName}</Text> */}
         {/* <Text style={styles.texxt}>{spaceLocation}</Text> */}
-        <Text style={styles.texxt}>Hours: {spaceHours}</Text>
-        <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            marginTop: 20,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faClock}
+            />
+            <Text style={styles.texxt}>{spaceHours}</Text>
+          </View>
+          {/* <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text> */}
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon2}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faBolt}
+            />
+            <Text style={styles.texxt}>Solder Station</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faDesktop}
+            />
+            <Text style={styles.texxt}>Monitors</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faEye}
+            />
+            <Text style={styles.texxt}>Eye Wash</Text>
+          </View>
+        </View>
       </ScrollView>
     </BlankScreen>
   );

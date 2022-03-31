@@ -33,6 +33,7 @@ export default StyleSheet.create({
   icon: {
     flex: 1,
     flexDirection: "row",
+    marginBottom: "4%",
   },
   dataBar: {
     flex: 1,
@@ -63,6 +64,7 @@ export default StyleSheet.create({
   texxt: {
     color: colors.primaryWhite,
     fontSize: 25,
+    paddingLeft: 10,
   },
   title: {
     flex: 1,

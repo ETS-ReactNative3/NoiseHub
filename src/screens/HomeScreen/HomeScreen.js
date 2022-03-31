@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   ScrollView,
+  RefreshControl
 } from "react-native";
 import styles from "./styles";
 
@@ -18,6 +19,7 @@ import {
   QueryCommand,
 } from "@aws-sdk/client-timestream-query";
 import { Auth } from "aws-amplify";
+import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 // Specified here - https://github.com/aws/aws-sdk-js-v3#getting-started - https://github.com/aws/aws-sdk-js-v3/issues/2288
 import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
@@ -115,37 +117,97 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
+  const [refreshing, setRefreshing] = useState(false);
+
   async function getData() {
     console.log("GET DATA");
     spaceCalls.get_space("113").then((response) => {
       var dict = JSON.parse(response.graphData);
       var noise_y = dict.noise_data;
 
-      if (noise_y.slice(-1) == 0) {
-        set_audio_level("Low");
-      } else if (noise_y.slice(-1) == 1) {
-        set_audio_level("Medium");
-      } else {
-        set_audio_level("High");
-      }
-      set_busy_level(parseInt(dict.head_data.slice(-1)));
-      set_temp_level(dict.temp_data.slice(-1) + "°");
+      // if (noise_y.slice(-1) == 0) {
+      //   set_audio_level("Low");
+      // } else if (noise_y.slice(-1) == 1) {
+      //   set_audio_level("Medium");
+      // } else {
+      //   set_audio_level("High");
+      // }
+      // set_busy_level(parseInt(dict.head_data.slice(-1)));
+      // set_temp_level(dict.temp_data.slice(-1) + "°");
+      // var dict = JSON.parse(response.graphData);
       setSpaceData(response);
+
+      const ts_heads = parseInt(dict.head_data.slice(-1));
+      const correction = response["correction"];
+      const estimated_heads = ts_heads - correction;
+      const maxHeads = response["headRange"];
+
+      if (estimated_heads < maxHeads * 0.34) {
+        set_busy_level("Low");
+      }
+      else if (estimated_heads < maxHeads * 0.67) {
+        set_busy_level("Med");
+      }
+      else {
+        set_busy_level("High");
+      }
     });
     let data = await timestreamCalls.getTimeStreamData();
+
     setNoiseData(data["noise"]);
     setDoorData(data["door"]);
+
+    if (data["noise"][0]["noise"] == "0") {
+      set_audio_level("Low");
+    } else if (data["noise"][0]["noise"] == "1") {
+      set_audio_level("Medium");
+    } else if (data["noise"][0]["noise"] == "2") {
+      set_audio_level("High");
+    }
+    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
+    // set_busy_level(data["door"][0]["head"]);
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  function invoke_lambda() {
+    console.log("INVOKING LAMBDA");
+    Auth.currentCredentials().then(async credentials => {
+      const params = {
+        FunctionName: "noisehub_data_analysis",
+        InvocationType: "RequestResponse",
+        LogType: "None",
+        Payload: ''
+      }
+      const REGION = 'us-east-2'
+      const client = new LambdaClient({ 
+        region: REGION, 
+        credentials: credentials 
+      });
+      const response = await client.send(new InvokeCommand(params));
+    })
   }
 
   if (firstCall) {
     console.log("First Call");
-    getData();
+    invoke_lambda();
+    sleep(4000).then(() => {
+      getData();
+    });
     firstCall = false;
+
   }
 
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView style={styles.buttonsContainer}>
+      <ScrollView style={styles.buttonsContainer} refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={getData}
+        />
+      }>
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchBar}
@@ -166,14 +228,6 @@ export default function HomeScreen({ navigation }) {
             head={busy_level}
             temp={temp_level}
             onPress={() => {
-              // spaceCalls
-              //   .get_space("113")
-              //   .then((response) =>
-              //     navigation.navigate("Space", {
-              //       spaceID: "113",
-              //       spaceData: response,
-              //     })
-              //   );
               navigation.navigate("Space", {
                 spaceID: "113",
                 spaceData: spaceData,

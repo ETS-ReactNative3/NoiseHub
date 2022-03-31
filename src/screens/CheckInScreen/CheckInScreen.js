@@ -25,13 +25,19 @@ export default function CheckInScreen({ navigation, route }) {
   const spaceData = route.params.spaceData;
   const doorData = route.params.doorData;
 
-  console.log(spaceData["userFeedback"]);
+  console.log("USERFEEDBACK: \n" + spaceData["userFeedback"]);
 
   const [spaceName, setName] = useState(spaceData['name']);
   
-  const headRange = spaceData['headRange'];
-  const curr_correction = spaceData['correction'];
+  // const headRange = spaceData['headRange'];
+  // const curr_correction = spaceData['correction'];
   let userFeedbackJSON = JSON.parse(spaceData["userFeedback"]);
+
+  if (userFeedbackJSON == "null") {
+    userFeedbackJSON = []
+  }
+
+  console.log("USERFEEDBACKJSON: \n" + userFeedbackJSON);
 
   const [radio1, setRadio1] = useState({button1: false, button2: false, button3: false});
   const [radio1SelectedButton, setRadio1SelectedButton] = useState();
@@ -74,6 +80,9 @@ export default function CheckInScreen({ navigation, route }) {
     let medCount = 0;
     let highCount = 0;
 
+    // Add new feedback
+    userFeedbackJSON.push({"time": String(secondsSinceEpoch), "value": radio1SelectedButton});
+
     // User Feedback: Clean, Append, Send
     for (let i=0; i<userFeedbackJSON.length; i++) {
       if ((secondsSinceEpoch - userFeedbackJSON[i]["time"]) > staleLife) {
@@ -89,16 +98,29 @@ export default function CheckInScreen({ navigation, route }) {
         }
         else if (userFeedbackJSON[i]["value"] == "high") {
           highCount++;
+          console.log("HERE: " + highCount)
         }
       }
     }
-    // Add new feedback
-    userFeedbackJSON.push({"time": String(secondsSinceEpoch), "value": radio1SelectedButton});
-
+    
     // Calculate correction
     let heads_ts = doorData[0]["head"];
     let maxHeads = spaceData["headRange"];
-    let newCorrection = parseInt(heads_ts - ((((lowCount*0.165)+(medCount*0.5)+(highCount*0.835)) / userFeedbackJSON.length) * maxHeads));
+    let oldCorrection = spaceData['correction'];
+    let estimatedHeads = ((lowCount*0.165 + medCount*0.5 + highCount*0.835) / userFeedbackJSON.length) * maxHeads;
+    let newCorrection = parseInt(heads_ts - estimatedHeads);
+    console.log(
+      "Low Count: " + lowCount + "\n" +
+      "Med Count: " + medCount + "\n" +
+      "High Count: " + highCount + "\n" +
+      "Userfeedback Length: " + userFeedbackJSON.length + "\n" +
+      "TS Heads Value: " + heads_ts + "\n" +
+      "Estimated Heads: " + estimatedHeads + "\n" +
+      "Max Heads: " + maxHeads + "\n" +
+      "Old Correction: " + oldCorrection + "\n" +
+      "New Correction: " + newCorrection + "\n"
+    )
+    
     console.log("NEW CORRECTION: " + newCorrection);
     // Update data in dynamo
     spaceCalls.update_space({
@@ -119,6 +141,11 @@ export default function CheckInScreen({ navigation, route }) {
     spaceCalls.get_space('113').then((response) => {
       spaceCalls.get_space('113').then((response) => navigation.navigate('Space', {spaceID: spaceID, spaceData: response}))
     })
+
+    // navigation.navigate("Space", {
+    //   spaceID: "113",
+    //   spaceData: spaceData,
+    // })
   }
 
   return (
