@@ -19,6 +19,7 @@ import {
   QueryCommand,
 } from "@aws-sdk/client-timestream-query";
 import { Auth } from "aws-amplify";
+import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 // Specified here - https://github.com/aws/aws-sdk-js-v3#getting-started - https://github.com/aws/aws-sdk-js-v3/issues/2288
 import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
@@ -121,7 +122,6 @@ export default function HomeScreen({ navigation }) {
   async function getData() {
     console.log("GET DATA");
     spaceCalls.get_space("113").then((response) => {
-      console.log(response);
       var dict = JSON.parse(response.graphData);
       var noise_y = dict.noise_data;
 
@@ -139,7 +139,7 @@ export default function HomeScreen({ navigation }) {
 
       const ts_heads = parseInt(dict.head_data.slice(-1));
       const correction = response["correction"];
-      const estimated_heads = ts_heads + correction;
+      const estimated_heads = ts_heads - correction;
       const maxHeads = response["headRange"];
 
       if (estimated_heads < maxHeads*0.34) {
@@ -165,19 +165,39 @@ export default function HomeScreen({ navigation }) {
       set_audio_level("High");
     }
     set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
-    set_busy_level(data["door"][0]["head"]);
+    // set_busy_level(data["door"][0]["head"]);
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  function invoke_lambda() {
+    console.log("INVOKING LAMBDA");
+    Auth.currentCredentials().then(async credentials => {
+      const params = {
+        FunctionName: "noisehub_data_analysis",
+        InvocationType: "RequestResponse",
+        LogType: "None",
+        Payload: ''
+      }
+      const REGION = 'us-east-2'
+      const client = new LambdaClient({ 
+        region: REGION, 
+        credentials: credentials 
+      });
+      const response = await client.send(new InvokeCommand(params));
+    })
   }
 
   if (firstCall) {
     console.log("First Call");
-    getData();
+    invoke_lambda();
+    sleep(4000).then(() => {
+      getData();
+    });
     firstCall = false;
   }
-
-
-  // useEffect(() => {
-  //   getData();
-  // }, [])
 
   return (
     <BlankScreen style={styles.container}>
@@ -207,14 +227,6 @@ export default function HomeScreen({ navigation }) {
             head={busy_level}
             temp={temp_level}
             onPress={() => {
-              // spaceCalls
-              //   .get_space("113")
-              //   .then((response) =>
-              //     navigation.navigate("Space", {
-              //       spaceID: "113",
-              //       spaceData: response,
-              //     })
-              //   );
               navigation.navigate("Space", {
                 spaceID: "113",
                 spaceData: spaceData,
