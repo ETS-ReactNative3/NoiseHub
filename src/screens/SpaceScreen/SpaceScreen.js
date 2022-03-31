@@ -23,6 +23,10 @@ import {
   faThermometerHalf,
   faVolumeUp,
   faUsers,
+  faBolt,
+  faDesktop,
+  faEye,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./styles";
@@ -149,6 +153,9 @@ export default function SpaceScreen({ navigation, route }) {
             />
           </TouchableOpacity>
         </View>
+        <Text numberOfLines={1} style={styles.title}>
+          Current Data
+        </Text>
         <View style={styles.dataBar}>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon
@@ -181,8 +188,8 @@ export default function SpaceScreen({ navigation, route }) {
           </View>
         </View>
         <View>
-          <Text numberOfLines={1} style={styles.title}>
-            History
+          <Text numberOfLines={1} style={styles.texxt}>
+            Noise
           </Text>
           <LineChart
             data={{
@@ -194,7 +201,7 @@ export default function SpaceScreen({ navigation, route }) {
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
-            height={190}
+            height={175}
             yAxisLabel=""
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
@@ -223,6 +230,9 @@ export default function SpaceScreen({ navigation, route }) {
               borderRadius: 16,
             }}
           />
+          <Text numberOfLines={1} style={styles.texxt}>
+            Occupancy
+          </Text>
           <LineChart
             data={{
               labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
@@ -233,7 +243,7 @@ export default function SpaceScreen({ navigation, route }) {
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
-            height={190}
+            height={175}
             yAxisLabel=""
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
@@ -260,6 +270,9 @@ export default function SpaceScreen({ navigation, route }) {
               borderRadius: 16,
             }}
           />
+          <Text numberOfLines={1} style={styles.texxt}>
+            Temperature
+          </Text>
           <LineChart
             data={{
               labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
@@ -270,7 +283,7 @@ export default function SpaceScreen({ navigation, route }) {
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
-            height={190}
+            height={175}
             yAxisLabel=""
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
@@ -302,8 +315,75 @@ export default function SpaceScreen({ navigation, route }) {
         {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} /> */}
         {/* <Text style={styles.texxt}>{spaceName}</Text> */}
         {/* <Text style={styles.texxt}>{spaceLocation}</Text> */}
-        <Text style={styles.texxt}>Hours: {spaceHours}</Text>
-        <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            marginTop: 20,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faClock}
+            />
+            <Text style={styles.texxt}>{spaceHours}</Text>
+          </View>
+          {/* <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text> */}
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon2}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faBolt}
+            />
+            <Text style={styles.texxt}>Solder Station</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faDesktop}
+            />
+            <Text style={styles.texxt}>Monitors</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <FontAwesomeIcon
+              style={styles.icon}
+              color={colors.primaryWhite}
+              size={30}
+              icon={faEye}
+            />
+            <Text style={styles.texxt}>Eye Wash</Text>
+          </View>
+        </View>
       </ScrollView>
     </BlankScreen>
   );
