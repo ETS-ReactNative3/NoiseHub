@@ -68,8 +68,8 @@ export const getTimeStreamData = async () => {
   const DatabaseName = 'noisehub-timestream';
   const NoiseTable = 'noise_data';
   const Doortable = 'door_table'
-  const NoiseQueryString = `SELECT * FROM "${DatabaseName}"."${NoiseTable}" ORDER BY time DESC LIMIT 3`;
-  const DoorQueryString = `SELECT * FROM "${DatabaseName}"."${Doortable}" ORDER BY time DESC LIMIT 3`;
+  const NoiseQueryString = `SELECT * FROM "${DatabaseName}"."${NoiseTable}" ORDER BY time DESC LIMIT 1`;
+  const DoorQueryString = `SELECT * FROM "${DatabaseName}"."${Doortable}" ORDER BY time DESC LIMIT 1`;
   // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" ORDER BY time DESC LIMIT 1000000000000000000`;
   // const QueryString = `SELECT * FROM "${DatabaseName}"."${TableName}" WHERE time between ago(15m) and now() ORDER BY time DESC LIMIT 10`;
   // console.log(await queryClient.query({ QueryString })); // Also a valid way to query
