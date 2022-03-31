@@ -89,7 +89,7 @@ export default function SpaceScreen({ navigation, route }) {
       set_audio_level("High");
     }
     set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
-    set_busy_level(data["door"][0]["head"]);
+    // set_busy_level(data["door"][0]["head"]);
 
   }
 
@@ -123,13 +123,13 @@ export default function SpaceScreen({ navigation, route }) {
   const correction = spaceData["correction"];
   const estimated_heads = ts_heads + correction;
   const maxHeads = spaceData["headRange"];
-  
+
   if (firstCall) {
     console.log("First Call");
     getData();
     firstCall = false;
 
-    if (estimated_heads < maxHeads*0.34) {
+    if (estimated_heads < maxHeads * 0.34) {
       setHeadCount("Low");
     }
     else if (estimated_heads < maxHeads * 0.67) {
@@ -139,9 +139,9 @@ export default function SpaceScreen({ navigation, route }) {
       setHeadCount("High");
     }
   }
-  // useEffect(() => {
-  //   getData();
-  // }, [])
+  useEffect(() => {
+    getData();
+  }, [])
 
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
