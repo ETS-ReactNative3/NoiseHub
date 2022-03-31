@@ -41,7 +41,7 @@ function* yLabel() {
   yield* ["Low", "Med", "High"];
 }
 
-import * as timestreamCalls from '../../API/timestreamCalls';
+import * as timestreamCalls from "../../API/timestreamCalls";
 
 let firstCall = true;
 
@@ -53,16 +53,20 @@ export default function SpaceScreen({ navigation, route }) {
 
   console.log("Space Screen!");
 
-  const [noiseData, setNoiseData] = useState([{
-    noise: undefined,
-    time: undefined
-  }]);
+  const [noiseData, setNoiseData] = useState([
+    {
+      noise: undefined,
+      time: undefined,
+    },
+  ]);
 
-  const [doorData, setDoorData] = useState([{
-    head: undefined,
-    temp: undefined,
-    time: undefined
-  }]);
+  const [doorData, setDoorData] = useState([
+    {
+      head: undefined,
+      temp: undefined,
+      time: undefined,
+    },
+  ]);
 
   async function getData() {
     console.log("GET DATA");
@@ -102,7 +106,7 @@ export default function SpaceScreen({ navigation, route }) {
     getData();
     firstCall = false;
   }
-  
+
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
   const [spaceHours, setHours] = useState("24/7");
@@ -177,6 +181,9 @@ export default function SpaceScreen({ navigation, route }) {
           </View>
         </View>
         <View>
+          <Text numberOfLines={1} style={styles.title}>
+            History
+          </Text>
           <LineChart
             data={{
               labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
