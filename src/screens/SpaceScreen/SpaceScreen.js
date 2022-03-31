@@ -8,6 +8,7 @@ import {
   Button,
   ScrollView,
   Dimensions,
+  RefreshControl
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // Regular Icons
@@ -67,12 +68,27 @@ export default function SpaceScreen({ navigation, route }) {
       time: undefined,
     },
   ]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [audio_level, set_audio_level] = useState();
+  const [busy_level, set_busy_level] = useState();
+  const [temp_level, set_temp_level] = useState();
 
   async function getData() {
-    console.log("GET DATA");
+    console.log("GET DATA in SPACE SCREEN");
     let data = await timestreamCalls.getTimeStreamData();
     setNoiseData(data["noise"]);
     setDoorData(data["door"]);
+
+    if (data["noise"][0]["noise"] == "0") {
+      set_audio_level("Low");
+    } else if (data["noise"][0]["noise"] == "1") {
+      set_audio_level("Medium");
+    } else if (data["noise"][0]["noise"] == "2") {
+      set_audio_level("High");
+    }
+    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
+    set_busy_level(data["door"][0]["head"]);
+
   }
 
   var dict = JSON.parse(spaceData.graphData);
@@ -82,15 +98,15 @@ export default function SpaceScreen({ navigation, route }) {
   var head_y_str = dict.head_data;
   var head_y = [];
 
-  var audio_level = "";
+  // var audio_level = "";
 
-  if (noise_y.slice(-1) == 0) {
-    audio_level = "Low";
-  } else if (noise_y.slice(-1) == 1) {
-    audio_level = "Medium";
-  } else {
-    audio_level = "High";
-  }
+  // if (noise_y.slice(-1) == 0) {
+  //   audio_level = "Low";
+  // } else if (noise_y.slice(-1) == 1) {
+  //   audio_level = "Medium";
+  // } else {
+  //   audio_level = "High";
+  // }
 
   for (var i = 0; i < head_y_str.length; i++)
     head_y.push(parseInt(head_y_str[i]));
@@ -106,6 +122,9 @@ export default function SpaceScreen({ navigation, route }) {
     getData();
     firstCall = false;
   }
+  // useEffect(() => {
+  //   getData();
+  // }, [])
 
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
@@ -119,7 +138,12 @@ export default function SpaceScreen({ navigation, route }) {
   const yLabelIterator = yLabel();
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.buttonsContainer} refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={getData}
+        />
+      }>
         <View style={styles.topRow}>
           <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <FontAwesomeIcon
@@ -166,7 +190,7 @@ export default function SpaceScreen({ navigation, route }) {
               size={iconSize_2}
               icon={faUsers}
             />
-            <Text style={styles.icon_text}>{head_y.slice(-1)}</Text>
+            <Text style={styles.icon_text}>{busy_level}</Text>
           </View>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon
@@ -176,7 +200,7 @@ export default function SpaceScreen({ navigation, route }) {
               icon={faThermometerHalf}
             />
             <Text style={[styles.icon_text, styles.noise_icon_text]}>
-              {temp_y.slice(-1)}
+              {temp_level}
             </Text>
           </View>
         </View>
