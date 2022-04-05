@@ -160,7 +160,7 @@ export default function HomeScreen({ navigation }) {
     if (data["noise"][0]["noise"] == "0") {
       set_audio_level("Low");
     } else if (data["noise"][0]["noise"] == "1") {
-      set_audio_level("Medium");
+      set_audio_level("Med");
     } else if (data["noise"][0]["noise"] == "2") {
       set_audio_level("High");
     }
@@ -232,6 +232,61 @@ export default function HomeScreen({ navigation }) {
                 spaceID: "113",
                 spaceData: spaceData,
               });
+            }}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName="Work in Progress"
+            noise="--"
+            head="--"
+            temp="--"
+            onPress={() => {
+              console.log("Work in progress");
+            }}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName="Work in Progress"
+            noise="--"
+            head="--"
+            temp="--"
+            onPress={() => {
+              console.log("Work in progress");
+            }}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName="Work in Progress"
+            noise="--"
+            head="--"
+            temp="--"
+            onPress={() => {
+              console.log("Work in progress");
+            }}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName="Work in Progress"
+            noise="--"
+            head="--"
+            temp="--"
+            onPress={() => {
+              console.log("Work in progress");
+            }}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <SpaceCard
+            spaceName="Work in Progress"
+            noise="--"
+            head="--"
+            temp="--"
+            onPress={() => {
+              console.log("Work in progress");
             }}
           />
         </View>
