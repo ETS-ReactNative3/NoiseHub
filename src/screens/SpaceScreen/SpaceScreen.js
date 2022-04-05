@@ -88,7 +88,7 @@ export default function SpaceScreen({ navigation, route }) {
     if (data["noise"][0]["noise"] == "0") {
       set_audio_level("Low");
     } else if (data["noise"][0]["noise"] == "1") {
-      set_audio_level("Medium");
+      set_audio_level("Med");
     } else if (data["noise"][0]["noise"] == "2") {
       set_audio_level("High");
     }
