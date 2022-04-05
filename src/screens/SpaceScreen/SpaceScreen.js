@@ -8,7 +8,7 @@ import {
   Button,
   ScrollView,
   Dimensions,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // Regular Icons
@@ -47,6 +47,8 @@ function* yLabel() {
 }
 
 import * as timestreamCalls from "../../API/timestreamCalls";
+import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
+import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 
 let firstCall = true;
 
@@ -100,13 +102,11 @@ export default function SpaceScreen({ navigation, route }) {
     const estimated_heads = ts_heads - correction;
     const maxHeads = spaceData["headRange"];
 
-    if (estimated_heads < maxHeads*0.34) {
+    if (estimated_heads < maxHeads * 0.34) {
       setHeadCount("Low");
-    }
-    else if (estimated_heads < maxHeads * 0.67) {
+    } else if (estimated_heads < maxHeads * 0.67) {
       setHeadCount("Med");
-    }
-    else {
+    } else {
       setHeadCount("High");
     }
   }
@@ -117,6 +117,7 @@ export default function SpaceScreen({ navigation, route }) {
   var noise_y = dict.noise_data;
   var head_y_str = dict.head_data;
   var head_y = [];
+  const [headY, setHead] = useState();
 
   // var audio_level = "";
 
@@ -149,17 +150,23 @@ export default function SpaceScreen({ navigation, route }) {
 
     if (estimated_heads < maxHeads * 0.34) {
       setHeadCount("Low");
-    }
-    else if (estimated_heads < maxHeads * 0.67) {
+    } else if (estimated_heads < maxHeads * 0.67) {
       setHeadCount("Med");
-    }
-    else {
+    } else {
       setHeadCount("High");
     }
+
+    for (var i = head_y.length - 1; i >= 400; i--) {
+      head_y[i] -= correction;
+      console.log(head_y.length);
+      console.log("running");
+    }
+
+    setHead(head_y);
   }
   useEffect(() => {
     getData();
-  }, [])
+  }, []);
 
   const [spaceName, setName] = useState(spaceData["name"]);
   const [spaceLocation, setLocation] = useState(spaceData["location"]);
@@ -171,14 +178,15 @@ export default function SpaceScreen({ navigation, route }) {
   const [userFeedback, setFeedback] = useState(spaceData["userFeedback"]);
 
   const yLabelIterator = yLabel();
+
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView style={styles.buttonsContainer} refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={getData}
-        />
-      }>
+      <ScrollView
+        style={styles.buttonsContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getData} />
+        }
+      >
         <View style={styles.topRow}>
           <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <FontAwesomeIcon
@@ -293,7 +301,7 @@ export default function SpaceScreen({ navigation, route }) {
               labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
               datasets: [
                 {
-                  data: head_y,
+                  data: headY,
                 },
               ],
             }}
