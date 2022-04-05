@@ -237,10 +237,10 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
-            spaceName="Work in Progress"
-            noise="--"
-            head="--"
-            temp="--"
+            spaceName="Ingalls"
+            noise="Med"
+            head="High"
+            temp="72.8"
             onPress={() => {
               console.log("Work in progress");
             }}
@@ -248,10 +248,10 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
-            spaceName="Work in Progress"
-            noise="--"
-            head="--"
-            temp="--"
+            spaceName="Bat Cave"
+            noise="Low"
+            head="Low"
+            temp="64.1"
             onPress={() => {
               console.log("Work in progress");
             }}
@@ -259,10 +259,10 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
-            spaceName="Work in Progress"
-            noise="--"
-            head="--"
-            temp="--"
+            spaceName="EPIC Workshop"
+            noise="High"
+            head="Med"
+            temp="77.4"
             onPress={() => {
               console.log("Work in progress");
             }}
@@ -270,10 +270,10 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
-            spaceName="Work in Progress"
-            noise="--"
-            head="--"
-            temp="--"
+            spaceName="Tavern in the Square"
+            noise="High"
+            head="High"
+            temp="74.9"
             onPress={() => {
               console.log("Work in progress");
             }}
@@ -281,10 +281,10 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View style={styles.buttonContainer}>
           <SpaceCard
-            spaceName="Work in Progress"
-            noise="--"
-            head="--"
-            temp="--"
+            spaceName="Fitrec Recreation Pool"
+            noise="Med"
+            head="Low"
+            temp="75.6"
             onPress={() => {
               console.log("Work in progress");
             }}
