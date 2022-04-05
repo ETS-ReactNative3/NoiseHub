@@ -200,6 +200,15 @@ export default function HomeScreen({ navigation }) {
 
   }
 
+  const createOneButtonAlert = () =>
+    Alert.alert(
+      "Unavailable",
+      "Oops! It looks like we can't access that space right now.",
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+
   return (
     <BlankScreen style={styles.container}>
       <ScrollView style={styles.buttonsContainer} refreshControl={
@@ -241,9 +250,7 @@ export default function HomeScreen({ navigation }) {
             noise="Med"
             head="High"
             temp="72.8"
-            onPress={() => {
-              console.log("Work in progress");
-            }}
+            onPress={createOneButtonAlert}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -252,9 +259,7 @@ export default function HomeScreen({ navigation }) {
             noise="Low"
             head="Low"
             temp="64.1"
-            onPress={() => {
-              console.log("Work in progress");
-            }}
+            onPress={createOneButtonAlert}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -263,9 +268,7 @@ export default function HomeScreen({ navigation }) {
             noise="High"
             head="Med"
             temp="77.4"
-            onPress={() => {
-              console.log("Work in progress");
-            }}
+            onPress={createOneButtonAlert}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -274,9 +277,7 @@ export default function HomeScreen({ navigation }) {
             noise="High"
             head="High"
             temp="74.9"
-            onPress={() => {
-              console.log("Work in progress");
-            }}
+            onPress={createOneButtonAlert}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -285,9 +286,7 @@ export default function HomeScreen({ navigation }) {
             noise="Med"
             head="Low"
             temp="75.6"
-            onPress={() => {
-              console.log("Work in progress");
-            }}
+            onPress={createOneButtonAlert}
           />
         </View>
       </ScrollView>
