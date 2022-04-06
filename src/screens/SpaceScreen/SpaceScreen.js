@@ -60,69 +60,78 @@ export default function SpaceScreen({ navigation, route }) {
 
   console.log("Space Screen!");
 
-  const [headCount, setHeadCount] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
-  const [noiseData, setNoiseData] = useState([
-    {
+  const [stateData, setData] = useState({
+    noiseData: {
       noise: undefined,
       time: undefined,
     },
-  ]);
-
-  const [doorData, setDoorData] = useState([
-    {
+    doorData: {
       head: undefined,
       temp: undefined,
       time: undefined,
     },
-  ]);
-  const [refreshing, setRefreshing] = useState(false);
-  const [audio_level, set_audio_level] = useState();
-  const [busy_level, set_busy_level] = useState();
-  const [temp_level, set_temp_level] = useState();
-  const [spaceData, setSpaceData] = useState(route.params.spaceData);
+    audio_level: undefined,
+    temp_level: undefined,
+    headCount: undefined,
+    headY: [0, 0, 0, 0, 0, 0, 0],
+    spaceData: route.params.spaceData
+  });
 
   async function getData() {
     console.log("GET DATA in SPACE SCREEN");
-    let data = await timestreamCalls.getTimeStreamData();
-    setNoiseData(data["noise"]);
-    setDoorData(data["door"]);
+    let temp_data = {
+      doorData: {
+        head: undefined,
+        temp: undefined,
+        time: undefined,
+      },
+      audio_level: undefined,
+      temp_level: undefined,
+      headCount: undefined,
+      headY: [0, 0, 0, 0, 0, 0, 0],
+      spaceData: undefined
+    };
+    let ts_data = await timestreamCalls.getTimeStreamData();
+    temp_data.doorData = ts_data["door"];
 
-    if (data["noise"][0]["noise"] == "0") {
-      set_audio_level("Low");
-    } else if (data["noise"][0]["noise"] == "1") {
-      set_audio_level("Med");
-    } else if (data["noise"][0]["noise"] == "2") {
-      set_audio_level("High");
+    if (ts_data["noise"][0]["noise"] == "0") {
+      temp_data.audio_level = "Low";
+    } else if (ts_data["noise"][0]["noise"] == "1") {
+      temp_data.audio_level = "Med";
+    } else if (ts_data["noise"][0]["noise"] == "2") {
+      temp_data.audio_level = "High";
     }
-    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(1));
-    // set_busy_level(data["door"][0]["head"]);
+    temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
 
-    spaceCalls.get_space("113").then((space_Data) => {
-      setSpaceData(space_Data);
-      const ts_heads = data["door"][0]["head"];
-      const correction = space_Data["correction"];
+    spaceCalls.get_space("113").then((response) => {
+      temp_data.spaceData = response;
+      const ts_heads = ts_data["door"][0]["head"];
+      const correction = response["correction"];
       const estimated_heads = ts_heads - correction;
-      const maxHeads = space_Data["headRange"];
+      const maxHeads = response["headRange"];
 
       if (estimated_heads < maxHeads * 0.34) {
-        setHeadCount("Low");
+        temp_data.headCount = "Low";
       } else if (estimated_heads < maxHeads * 0.67) {
-        setHeadCount("Med");
+        temp_data.headCount = "Med";
       } else {
-        setHeadCount("High");
+        temp_data.headCount = "High";
       }
 
       for (var i = head_y.length - 1; i >= 800; i--) {
-        head_y[i] -= space_Data["correction"];
+        head_y[i] -= response["correction"];
         // console.log(head_y.length);
         // console.log("running");
       }
-      setHead(head_y);
+      temp_data.headY = head_y
+      setData(temp_data);
+      // console.log(stateData);
     });
   }
 
-  var dict = JSON.parse(spaceData.graphData);
+  var dict = JSON.parse(stateData.spaceData.graphData);
   // console.log(dict.head_data);
   var noise_x = dict.noise_timestamp;
   var noise_y = dict.noise_data;
@@ -218,7 +227,7 @@ export default function SpaceScreen({ navigation, route }) {
     }
   }
   // console.log(x_label);
-  const [headY, setHead] = useState([0, 0, 0, 0, 0, 0, 0]);
+  // const [headY, setHeadY] = useState([0, 0, 0, 0, 0, 0, 0]);
 
   // var audio_level = "";
 
@@ -240,33 +249,24 @@ export default function SpaceScreen({ navigation, route }) {
     temp_y.push(parseFloat(temp_y_str[i]));
 
   const ts_heads = head_y.slice(-1);
-  const correction = spaceData["correction"];
+  const correction = stateData.spaceData["correction"];
   const estimated_heads = ts_heads + correction;
-  const maxHeads = spaceData["headRange"];
+  const maxHeads = stateData.spaceData["headRange"];
 
   if (firstCall) {
+    firstCall = false;
     console.log("First Call");
     getData();
-    firstCall = false;
   }
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const [spaceName, setName] = useState(spaceData["name"]);
-  const [spaceLocation, setLocation] = useState(spaceData["location"]);
-  const [spaceHours, setHours] = useState("24/7");
-  const [spaceAmenities, setAmenities] = useState(spaceData["amenities"]);
-  const [noiseLevel, setNoise] = useState(noiseData[0].noise);
-  const [busyLevel, setBusy] = useState(doorData[0].head);
-  const [tempLevel, setTemp] = useState(doorData[0].head);
-  const [userFeedback, setFeedback] = useState(spaceData["userFeedback"]);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   const yLabelIterator = yLabel();
 
   // Peak value data arrays for graphing
   const peak_noise = Array(noise_y.length).fill(max_loud);
-  const peak_head = Array(headY.length).fill(max_head);
+  const peak_head = Array(stateData.headY.length).fill(max_head);
   const peak_temp = Array(temp_y.length).fill(max_temp);
   return (
     <BlankScreen style={styles.container}>
@@ -286,13 +286,13 @@ export default function SpaceScreen({ navigation, route }) {
             />
           </TouchableOpacity>
           <Text numberOfLines={1} style={styles.name}>
-            {spaceName}
+            {stateData.spaceData["name"]}
           </Text>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("CheckIn", {
                 spaceID: "113",
-                spaceData: spaceData,
+                spaceData: stateData.spaceData,
                 doorData: doorData,
               })
             }
@@ -316,7 +316,7 @@ export default function SpaceScreen({ navigation, route }) {
               size={iconSize_2}
               icon={faVolumeUp}
             />
-            <Text style={styles.icon_text}>{audio_level}</Text>
+            <Text style={styles.icon_text}>{stateData.audio_level}</Text>
           </View>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon
@@ -325,7 +325,7 @@ export default function SpaceScreen({ navigation, route }) {
               size={iconSize_2}
               icon={faUsers}
             />
-            <Text style={styles.icon_text}>{headCount}</Text>
+            <Text style={styles.icon_text}>{stateData.headCount}</Text>
           </View>
           <View style={styles.dataBarItem}>
             <FontAwesomeIcon
@@ -335,7 +335,7 @@ export default function SpaceScreen({ navigation, route }) {
               icon={faThermometerHalf}
             />
             <Text style={[styles.icon_text, styles.noise_icon_text]}>
-              {temp_level}°
+              {stateData.temp_level}°
             </Text>
           </View>
         </View>
@@ -401,7 +401,7 @@ export default function SpaceScreen({ navigation, route }) {
                   color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
                 },
                 {
-                  data: headY,
+                  data: stateData.headY,
                 },
               ],
               legend: [`Busiest at ${max_head_timestamp}`],
@@ -503,7 +503,7 @@ export default function SpaceScreen({ navigation, route }) {
               size={30}
               icon={faClock}
             />
-            <Text style={styles.texxt}>{spaceHours}</Text>
+            <Text style={styles.texxt}>{stateData.spaceData["hours"]}</Text>
           </View>
           {/* <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text> */}
           <View

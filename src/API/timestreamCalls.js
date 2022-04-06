@@ -46,7 +46,6 @@ async function formatDoorData(input) {
 }
 
 export const getTimeStreamData = async () => {
-  console.log("GET DATA");
   let result = {};
   const region = "us-east-2";
 

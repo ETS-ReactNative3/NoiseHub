@@ -69,25 +69,12 @@ export default function HomeScreen({ navigation }) {
   });
 
   const [search, setSearch] = useState();
-
-  const [spaceData, setSpaceData] = useState();
-  const [audio_level, set_audio_level] = useState();
-  const [busy_level, set_busy_level] = useState();
-  const [temp_level, set_temp_level] = useState();
-  const [noiseData, setNoiseData] = useState([
-    {
-      noise: undefined,
-      time: undefined,
-    },
-  ]);
-
-  const [doorData, setDoorData] = useState([
-    {
-      head: undefined,
-      temp: undefined,
-      time: undefined,
-    },
-  ]);
+  // const [spaceData, setSpaceData] = useState();
+  const [stateData, setData] = useState({
+    audio_level: undefined,
+    temp_level: undefined,
+    headCount: undefined,
+  });
 
   function spaceSearch(input) {
     console.log(input);
@@ -121,22 +108,29 @@ export default function HomeScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   async function getData() {
-    console.log("GET DATA");
+    console.log("GET DATA in HOME SCREEN");
+    let temp_data = {
+      spaceData: undefined,
+      audio_level: undefined,
+      temp_level: undefined,
+      headCount: undefined,
+    };
+
+    let ts_data = await timestreamCalls.getTimeStreamData();
+
+    if (ts_data["noise"][0]["noise"] == "0") {
+      temp_data.audio_level = "Low";
+    } else if (ts_data["noise"][0]["noise"] == "1") {
+      temp_data.audio_level = "Med";
+    } else if (ts_data["noise"][0]["noise"] == "2") {
+      temp_data.audio_level = "High";
+    }
+    temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
+
     spaceCalls.get_space("113").then((response) => {
+      temp_data.spaceData = response;
       var dict = JSON.parse(response.graphData);
       var noise_y = dict.noise_data;
-
-      // if (noise_y.slice(-1) == 0) {
-      //   set_audio_level("Low");
-      // } else if (noise_y.slice(-1) == 1) {
-      //   set_audio_level("Medium");
-      // } else {
-      //   set_audio_level("High");
-      // }
-      // set_busy_level(parseInt(dict.head_data.slice(-1)));
-      // set_temp_level(dict.temp_data.slice(-1) + "°");
-      // var dict = JSON.parse(response.graphData);
-      setSpaceData(response);
 
       const ts_heads = parseInt(dict.head_data.slice(-1));
       const correction = response["correction"];
@@ -144,27 +138,14 @@ export default function HomeScreen({ navigation }) {
       const maxHeads = response["headRange"];
 
       if (estimated_heads < maxHeads * 0.34) {
-        set_busy_level("Low");
+        temp_data.headCount = "Low";
       } else if (estimated_heads < maxHeads * 0.67) {
-        set_busy_level("Med");
+        temp_data.headCount = "Med";
       } else {
-        set_busy_level("High");
+        temp_data.headCount = "High";
       }
+      setData(temp_data);
     });
-    let data = await timestreamCalls.getTimeStreamData();
-
-    setNoiseData(data["noise"]);
-    setDoorData(data["door"]);
-
-    if (data["noise"][0]["noise"] == "0") {
-      set_audio_level("Low");
-    } else if (data["noise"][0]["noise"] == "1") {
-      set_audio_level("Med");
-    } else if (data["noise"][0]["noise"] == "2") {
-      set_audio_level("High");
-    }
-    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(1));
-    // set_busy_level(data["door"][0]["head"]);
   }
 
   function sleep(ms) {
@@ -190,12 +171,12 @@ export default function HomeScreen({ navigation }) {
   }
 
   if (firstCall) {
+    firstCall = false;
     console.log("First Call");
     invoke_lambda();
     sleep(4000).then(() => {
       getData();
     });
-    firstCall = false;
   }
 
   const createOneButtonAlert = () =>
@@ -229,13 +210,13 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.buttonContainer}>
           <SpaceCard
             spaceName="PHO 113"
-            noise={audio_level}
-            head={busy_level}
-            temp={temp_level}
+            noise={stateData.audio_level}
+            head={stateData.headCount}
+            temp={stateData.temp_level}
             onPress={() => {
               navigation.navigate("Space", {
                 spaceID: "113",
-                spaceData: spaceData,
+                spaceData: stateData.spaceData,
               });
             }}
           />
