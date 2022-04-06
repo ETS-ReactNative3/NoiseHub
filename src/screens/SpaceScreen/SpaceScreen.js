@@ -291,7 +291,7 @@ export default function SpaceScreen({ navigation, route }) {
               navigation.navigate("CheckIn", {
                 spaceID: "113",
                 spaceData: stateData.spaceData,
-                doorData: doorData,
+                doorData: stateData.doorData,
               })
             }
           >
