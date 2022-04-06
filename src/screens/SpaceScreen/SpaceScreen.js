@@ -134,10 +134,10 @@ export default function SpaceScreen({ navigation, route }) {
   var x_label=[];
   for (var i=0; i < 8; i++){
     if (last_time > 12){
-      x_label.unshift((last_time-12).toString() + " pm");
+      x_label.unshift((last_time-12).toString() + "pm");
     }
     else{
-      x_label.unshift(last_time.toString() + " am");
+      x_label.unshift(last_time.toString() + "am");
     }
     
     if (last_time >= 3){
