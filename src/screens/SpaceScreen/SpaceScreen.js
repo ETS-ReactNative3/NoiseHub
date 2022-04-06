@@ -129,27 +129,97 @@ export default function SpaceScreen({ navigation, route }) {
   var noise_y = dict.noise_data;
   var head_y_str = dict.head_data;
   var head_y = [];
-  var last_time = parseInt(noise_x.slice(-1)[0].slice(11,-13));
-  console.log("LAST TIME IS", last_time);
-  var x_label=[];
-  for (var i=0; i <  9; i++){
-    if (last_time > 12){
-      x_label.unshift((last_time-12).toString() + "pm");
+
+  // Peak values and timestamps
+  var max_loud = dict.max_loud_value;
+  var max_head = dict.max_head_value;
+  var max_temp = dict.max_temp_value;
+
+  var max_loud_timestamp = parseInt(dict.max_loud_timestamp.slice(11, -13)) - 4;
+  var max_loud_minutes = parseInt(dict.max_loud_timestamp.slice(14, 16));
+  if (max_loud_timestamp == 12) {
+    if (max_loud_timestamp > 12) {
+      max_loud_timestamp -= 12;
     }
-    else{
+    max_loud_timestamp =
+      max_loud_timestamp.toString() + ":" + max_loud_minutes.toString() + "pm";
+  } else if (max_loud_timestamp > 12 && max_loud_timestamp < 24) {
+    if (max_loud_timestamp > 12) {
+      max_loud_timestamp -= 12;
+    }
+    max_loud_timestamp =
+      max_loud_timestamp.toString() + ":" + max_loud_minutes.toString() + "pm";
+  } else {
+    if (max_loud_timestamp > 12) {
+      max_loud_timestamp -= 12;
+    }
+    max_loud_timestamp =
+      max_loud_timestamp.toString() + ":" + max_loud_minutes.toString() + "am";
+  }
+
+  var max_head_timestamp = parseInt(dict.max_head_timestamp.slice(11, -13)) - 4;
+  var max_head_minutes = parseInt(dict.max_head_timestamp.slice(14, 16));
+  if (max_head_timestamp == 12) {
+    if (max_head_timestamp > 12) {
+      max_head_timestamp -= 12;
+    }
+    max_head_timestamp =
+      max_head_timestamp.toString() + ":" + max_head_minutes.toString() + "pm";
+  } else if (max_head_timestamp > 12 && max_head_timestamp < 24) {
+    if (max_head_timestamp > 12) {
+      max_head_timestamp -= 12;
+    }
+    max_head_timestamp =
+      max_head_timestamp.toString() + ":" + max_head_minutes.toString() + "pm";
+  } else {
+    if (max_head_timestamp > 12) {
+      max_head_timestamp -= 12;
+    }
+    max_head_timestamp =
+      max_head_timestamp.toString() + ":" + max_head_minutes.toString() + "am";
+  }
+
+  var max_temp_timestamp = parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
+  var max_temp_minutes = parseInt(dict.max_temp_timestamp.slice(14, 16));
+  if (max_temp_timestamp == 12) {
+    if (max_temp_timestamp > 12) {
+      max_temp_timestamp -= 12;
+    }
+    max_temp_timestamp =
+      max_temp_timestamp.toString() + ":" + max_temp_minutes.toString() + "pm";
+  } else if (max_temp_timestamp > 12 && max_temp_timestamp < 24) {
+    if (max_temp_timestamp > 12) {
+      max_temp_timestamp -= 12;
+    }
+    max_temp_timestamp =
+      max_temp_timestamp.toString() + ":" + max_temp_minutes.toString() + "pm";
+  } else {
+    if (max_temp_timestamp > 12) {
+      max_temp_timestamp -= 12;
+    }
+    max_temp_timestamp =
+      max_temp_timestamp.toString() + ":" + max_temp_minutes.toString() + "am";
+  }
+
+  var last_time = parseInt(noise_x.slice(-1)[0].slice(11, -13)) - 4;
+  // console.log("LAST TIME IS", last_time);
+  var x_label = [];
+  for (var i = 0; i < 9; i++) {
+    if (last_time == 12) {
+      x_label.unshift(last_time.toString() + "pm");
+    } else if (last_time > 12 && last_time < 24) {
+      x_label.unshift((last_time - 12).toString() + "pm");
+    } else {
       x_label.unshift(last_time.toString() + "am");
     }
-    
-    if (last_time >= 3){
-      last_time -= 3;
-    }
-    else{
-      last_time = 24 + last_time - 3;
+
+    last_time -= 3;
+    if (last_time < 0) {
+      last_time += 24;
     }
   }
-  console.log(x_label);
-  const [headY, setHead] = useState([0,0,0,0,0,0,0]);
-
+  // console.log(x_label);
+  const [headY, setHead] = useState([0, 0, 0, 0, 0, 0, 0]);
 
   // var audio_level = "";
 
@@ -195,6 +265,10 @@ export default function SpaceScreen({ navigation, route }) {
 
   const yLabelIterator = yLabel();
 
+  // Peak value data arrays for graphing
+  const peak_noise = Array(noise_y.length).fill(max_loud);
+  const peak_head = Array(headY.length).fill(max_head);
+  const peak_temp = Array(temp_y.length).fill(max_temp);
   return (
     <BlankScreen style={styles.container}>
       <ScrollView
@@ -275,9 +349,15 @@ export default function SpaceScreen({ navigation, route }) {
               labels: x_label,
               datasets: [
                 {
+                  data: peak_noise,
+                  strokeWidth: 10,
+                  color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
+                },
+                {
                   data: noise_y,
                 },
               ],
+              legend: [`Loudest at ${max_loud_timestamp}`],
             }}
             width={Dimensions.get("window").width} // from react-native
             height={175}
@@ -317,9 +397,15 @@ export default function SpaceScreen({ navigation, route }) {
               labels: x_label,
               datasets: [
                 {
+                  data: peak_head,
+                  strokeWidth: 10,
+                  color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
+                },
+                {
                   data: headY,
                 },
               ],
+              legend: [`Busiest at ${max_head_timestamp}`],
             }}
             width={Dimensions.get("window").width} // from react-native
             height={175}
@@ -357,9 +443,15 @@ export default function SpaceScreen({ navigation, route }) {
               labels: x_label,
               datasets: [
                 {
+                  data: peak_temp,
+                  strokeWidth: 10,
+                  color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
+                },
+                {
                   data: temp_y,
                 },
               ],
+              legend: [`Hottest at ${max_temp_timestamp} 🥵`],
             }}
             width={Dimensions.get("window").width} // from react-native
             height={175}
