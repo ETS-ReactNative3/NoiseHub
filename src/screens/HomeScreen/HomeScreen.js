@@ -7,7 +7,8 @@ import {
   Text,
   Button,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  Alert
 } from "react-native";
 import styles from "./styles";
 
@@ -203,7 +204,7 @@ export default function HomeScreen({ navigation }) {
   const createOneButtonAlert = () =>
     Alert.alert(
       "Unavailable",
-      "Oops! It looks like we can't access that space right now.",
+      "Golly gee, you're a fast one! This space is still a work in progress, pardon us.",
       [
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ]

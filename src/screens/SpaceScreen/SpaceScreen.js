@@ -49,6 +49,7 @@ function* yLabel() {
 import * as timestreamCalls from "../../API/timestreamCalls";
 import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+import * as spaceCalls from "../../API/spaceCalls";
 
 let firstCall = true;
 
@@ -56,7 +57,7 @@ export default function SpaceScreen({ navigation, route }) {
   const iconSize_1 = 48;
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
-  const spaceData = route.params.spaceData;
+  // let dont_use_this_pls_remove = route.params.spaceData;
 
   console.log("Space Screen!");
 
@@ -80,6 +81,7 @@ export default function SpaceScreen({ navigation, route }) {
   const [audio_level, set_audio_level] = useState();
   const [busy_level, set_busy_level] = useState();
   const [temp_level, set_temp_level] = useState();
+  const [spaceData, setSpaceData] = useState(route.params.spaceData);
 
   async function getData() {
     console.log("GET DATA in SPACE SCREEN");
@@ -97,18 +99,28 @@ export default function SpaceScreen({ navigation, route }) {
     set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
     // set_busy_level(data["door"][0]["head"]);
 
-    const ts_heads = data["door"][0]["head"];
-    const correction = spaceData["correction"];
-    const estimated_heads = ts_heads - correction;
-    const maxHeads = spaceData["headRange"];
+    spaceCalls.get_space("113").then((space_Data) => {
+      setSpaceData(space_Data);
+      const ts_heads = data["door"][0]["head"];
+      const correction = space_Data["correction"];
+      const estimated_heads = ts_heads - correction;
+      const maxHeads = space_Data["headRange"];
 
-    if (estimated_heads < maxHeads * 0.34) {
-      setHeadCount("Low");
-    } else if (estimated_heads < maxHeads * 0.67) {
-      setHeadCount("Med");
-    } else {
-      setHeadCount("High");
-    }
+      if (estimated_heads < maxHeads * 0.34) {
+        setHeadCount("Low");
+      } else if (estimated_heads < maxHeads * 0.67) {
+        setHeadCount("Med");
+      } else {
+        setHeadCount("High");
+      }
+
+      for (var i = head_y.length - 1; i >= 400; i--) {
+        head_y[i] -= space_Data["correction"];
+        // console.log(head_y.length);
+        // console.log("running");
+      }
+      setHead(head_y);
+    });
   }
 
   var dict = JSON.parse(spaceData.graphData);
@@ -117,7 +129,7 @@ export default function SpaceScreen({ navigation, route }) {
   var noise_y = dict.noise_data;
   var head_y_str = dict.head_data;
   var head_y = [];
-  const [headY, setHead] = useState();
+  const [headY, setHead] = useState([0,0,0,0,0,0,0]);
 
   // var audio_level = "";
 
@@ -143,26 +155,11 @@ export default function SpaceScreen({ navigation, route }) {
   const estimated_heads = ts_heads + correction;
   const maxHeads = spaceData["headRange"];
 
+
   if (firstCall) {
     console.log("First Call");
     getData();
     firstCall = false;
-
-    if (estimated_heads < maxHeads * 0.34) {
-      setHeadCount("Low");
-    } else if (estimated_heads < maxHeads * 0.67) {
-      setHeadCount("Med");
-    } else {
-      setHeadCount("High");
-    }
-
-    for (var i = head_y.length - 1; i >= 400; i--) {
-      head_y[i] -= correction;
-      console.log(head_y.length);
-      console.log("running");
-    }
-
-    setHead(head_y);
   }
   useEffect(() => {
     getData();
