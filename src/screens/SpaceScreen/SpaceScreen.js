@@ -275,7 +275,10 @@ export default function SpaceScreen({ navigation, route }) {
         }
       >
         <View style={styles.topRow}>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <TouchableOpacity onPress={() => {
+              firstCall = true;
+              navigation.navigate("Home")
+            }}>
             <FontAwesomeIcon
               style={styles.icon}
               color={colors.primaryWhite}
@@ -287,13 +290,14 @@ export default function SpaceScreen({ navigation, route }) {
             {stateData.spaceData["name"]}
           </Text>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              firstCall = true;
               navigation.navigate("CheckIn", {
                 spaceID: "113",
                 spaceData: stateData.spaceData,
                 doorData: stateData.doorData,
               })
-            }
+            }}
           >
             <FontAwesomeIcon
               style={styles.icon}
