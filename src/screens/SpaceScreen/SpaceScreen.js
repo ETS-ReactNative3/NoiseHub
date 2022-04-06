@@ -58,6 +58,12 @@ export default function SpaceScreen({ navigation, route }) {
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
 
+  const audio_value_map = {
+    "0": "Low",
+    "1": "Med",
+    "2": "High"
+  }
+
   console.log("Space Screen!");
 
   const [refreshing, setRefreshing] = useState(false);
@@ -96,13 +102,8 @@ export default function SpaceScreen({ navigation, route }) {
     let ts_data = await timestreamCalls.getTimeStreamData();
     temp_data.doorData = ts_data["door"];
 
-    if (ts_data["noise"][0]["noise"] == "0") {
-      temp_data.audio_level = "Low";
-    } else if (ts_data["noise"][0]["noise"] == "1") {
-      temp_data.audio_level = "Med";
-    } else if (ts_data["noise"][0]["noise"] == "2") {
-      temp_data.audio_level = "High";
-    }
+    temp_data.audio_level = audio_value_map[ts_data["noise"][0]["noise"]];
+
     temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
 
     spaceCalls.get_space("113").then((response) => {
@@ -258,9 +259,6 @@ export default function SpaceScreen({ navigation, route }) {
     console.log("First Call");
     getData();
   }
-  // useEffect(() => {
-  //   getData();
-  // }, []);
 
   const yLabelIterator = yLabel();
 

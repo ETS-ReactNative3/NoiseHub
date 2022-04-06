@@ -51,6 +51,12 @@ let firstCall = true;
 export default function HomeScreen({ navigation }) {
   let timeout = null;
 
+  const audio_value_map = {
+    "0": "Low",
+    "1": "Med",
+    "2": "High"
+  }
+
   function typeTime(input) {
     clearTimeout(timeout);
     timeout = setTimeout(function () {
@@ -118,13 +124,8 @@ export default function HomeScreen({ navigation }) {
 
     let ts_data = await timestreamCalls.getTimeStreamData();
 
-    if (ts_data["noise"][0]["noise"] == "0") {
-      temp_data.audio_level = "Low";
-    } else if (ts_data["noise"][0]["noise"] == "1") {
-      temp_data.audio_level = "Med";
-    } else if (ts_data["noise"][0]["noise"] == "2") {
-      temp_data.audio_level = "High";
-    }
+    temp_data.audio_level = audio_value_map[ts_data["noise"][0]["noise"]];
+    
     temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
 
     spaceCalls.get_space("113").then((response) => {
