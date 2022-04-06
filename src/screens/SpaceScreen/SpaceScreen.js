@@ -59,14 +59,26 @@ export default function SpaceScreen({ navigation, route }) {
   const spaceID = route.params.spaceID;
 
   const audio_value_map = {
-    "0": "Low",
-    "1": "Med",
-    "2": "High"
-  }
+    0: "Low",
+    1: "Med",
+    2: "High",
+  };
 
   console.log("Space Screen!");
 
   const [refreshing, setRefreshing] = useState(false);
+
+  const temp_spaceData = route.params.spaceData;
+
+  var dict = JSON.parse(temp_spaceData.graphData);
+  var noise_x = dict.noise_timestamp;
+  var noise_y = dict.noise_data;
+  var head_y_str = dict.head_data;
+  var head_y = [];
+
+  // Peak values
+  var max_loud = dict.max_loud_value;
+  var max_temp = dict.max_temp_value;
 
   const [stateData, setData] = useState({
     noiseData: {
@@ -81,8 +93,9 @@ export default function SpaceScreen({ navigation, route }) {
     audio_level: undefined,
     temp_level: undefined,
     headCount: undefined,
+    max_head: dict.max_head_value,
     headY: [0, 0, 0, 0, 0, 0, 0],
-    spaceData: route.params.spaceData
+    spaceData: temp_spaceData,
   });
 
   async function getData() {
@@ -96,15 +109,16 @@ export default function SpaceScreen({ navigation, route }) {
       audio_level: undefined,
       temp_level: undefined,
       headCount: undefined,
+      max_head: dict.max_head_value,
       headY: [0, 0, 0, 0, 0, 0, 0],
-      spaceData: undefined
+      spaceData: undefined,
     };
     let ts_data = await timestreamCalls.getTimeStreamData();
     temp_data.doorData = ts_data["door"];
 
     temp_data.audio_level = audio_value_map[ts_data["noise"][0]["noise"]];
 
-    temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
+    temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1);
 
     spaceCalls.get_space("113").then((response) => {
       temp_data.spaceData = response;
@@ -122,92 +136,75 @@ export default function SpaceScreen({ navigation, route }) {
       }
 
       for (var i = head_y.length - 1; i >= 800; i--) {
+        if (head_y[i] == temp_data.max_head) {
+          temp_data.max_head -= response["correction"];
+        }
         head_y[i] -= response["correction"];
         // console.log(head_y.length);
         // console.log("running");
       }
-      temp_data.headY = head_y
+      temp_data.headY = head_y;
+      // console.log(temp_data.max_head);
       setData(temp_data);
       // console.log(stateData);
     });
   }
 
-  var dict = JSON.parse(stateData.spaceData.graphData);
-  // console.log(dict.head_data);
-  var noise_x = dict.noise_timestamp;
-  var noise_y = dict.noise_data;
-  var head_y_str = dict.head_data;
-  var head_y = [];
-
-  // Peak values and timestamps
-  var max_loud = dict.max_loud_value;
-  var max_head = dict.max_head_value;
-  var max_temp = dict.max_temp_value;
+  // Peak value timestamps
 
   var max_loud_timestamp = parseInt(dict.max_loud_timestamp.slice(11, -13)) - 4;
-  var max_loud_minutes = parseInt(dict.max_loud_timestamp.slice(14, 16));
+  var max_loud_minutes = dict.max_loud_timestamp.slice(14, 16);
   if (max_loud_timestamp == 12) {
-    if (max_loud_timestamp > 12) {
-      max_loud_timestamp -= 12;
-    }
+    max_loud_timestamp -= 12;
     max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes.toString() + "pm";
+      max_loud_timestamp.toString() + ":" + max_loud_minutes + "pm";
   } else if (max_loud_timestamp > 12 && max_loud_timestamp < 24) {
-    if (max_loud_timestamp > 12) {
-      max_loud_timestamp -= 12;
-    }
+    max_loud_timestamp -= 12;
     max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes.toString() + "pm";
+      max_loud_timestamp.toString() + ":" + max_loud_minutes + "pm";
   } else {
-    if (max_loud_timestamp > 12) {
+    if (max_loud_timestamp == 24) {
       max_loud_timestamp -= 12;
     }
     max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes.toString() + "am";
+      max_loud_timestamp.toString() + ":" + max_loud_minutes + "am";
   }
 
   var max_head_timestamp = parseInt(dict.max_head_timestamp.slice(11, -13)) - 4;
-  var max_head_minutes = parseInt(dict.max_head_timestamp.slice(14, 16));
+  var max_head_minutes = dict.max_head_timestamp.slice(14, 16);
+
   if (max_head_timestamp == 12) {
-    if (max_head_timestamp > 12) {
-      max_head_timestamp -= 12;
-    }
+    max_head_timestamp -= 12;
     max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes.toString() + "pm";
+      max_head_timestamp.toString() + ":" + max_head_minutes + "pm";
   } else if (max_head_timestamp > 12 && max_head_timestamp < 24) {
-    if (max_head_timestamp > 12) {
-      max_head_timestamp -= 12;
-    }
+    max_head_timestamp -= 12;
     max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes.toString() + "pm";
+      max_head_timestamp.toString() + ":" + max_head_minutes + "pm";
   } else {
-    if (max_head_timestamp > 12) {
+    if (max_head_timestamp == 24) {
       max_head_timestamp -= 12;
     }
     max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes.toString() + "am";
+      max_head_timestamp.toString() + ":" + max_head_minutes + "am";
   }
 
   var max_temp_timestamp = parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
-  var max_temp_minutes = parseInt(dict.max_temp_timestamp.slice(14, 16));
+  var max_temp_minutes = dict.max_temp_timestamp.slice(14, 16);
+
   if (max_temp_timestamp == 12) {
-    if (max_temp_timestamp > 12) {
-      max_temp_timestamp -= 12;
-    }
     max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes.toString() + "pm";
+      max_temp_timestamp.toString() + ":" + max_temp_minutes + "pm";
   } else if (max_temp_timestamp > 12 && max_temp_timestamp < 24) {
-    if (max_temp_timestamp > 12) {
-      max_temp_timestamp -= 12;
-    }
+    max_temp_timestamp -= 12;
     max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes.toString() + "pm";
+      max_temp_timestamp.toString() + ":" + max_temp_minutes + "pm";
   } else {
-    if (max_temp_timestamp > 12) {
+    if (max_temp_timestamp == 24) {
       max_temp_timestamp -= 12;
     }
     max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes.toString() + "am";
+      max_temp_timestamp.toString() + ":" + max_temp_minutes + "am";
   }
 
   var last_time = parseInt(noise_x.slice(-1)[0].slice(11, -13)) - 4;
@@ -264,7 +261,8 @@ export default function SpaceScreen({ navigation, route }) {
 
   // Peak value data arrays for graphing
   const peak_noise = Array(noise_y.length).fill(max_loud);
-  const peak_head = Array(stateData.headY.length).fill(max_head);
+  const peak_head = Array(stateData.headY.length).fill(stateData.max_head);
+  // const peak_head = Array(stateData.headY.length).fill(16);
   const peak_temp = Array(temp_y.length).fill(max_temp);
   return (
     <BlankScreen style={styles.container}>
@@ -275,10 +273,12 @@ export default function SpaceScreen({ navigation, route }) {
         }
       >
         <View style={styles.topRow}>
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
               firstCall = true;
-              navigation.navigate("Home")
-            }}>
+              navigation.navigate("Home");
+            }}
+          >
             <FontAwesomeIcon
               style={styles.icon}
               color={colors.primaryWhite}
@@ -296,7 +296,7 @@ export default function SpaceScreen({ navigation, route }) {
                 spaceID: "113",
                 spaceData: stateData.spaceData,
                 doorData: stateData.doorData,
-              })
+              });
             }}
           >
             <FontAwesomeIcon
