@@ -132,7 +132,7 @@ export default function SpaceScreen({ navigation, route }) {
   var last_time = parseInt(noise_x.slice(-1)[0].slice(11,-13));
   console.log("LAST TIME IS", last_time);
   var x_label=[];
-  for (var i=0; i < 8; i++){
+  for (var i=0; i <  9; i++){
     if (last_time > 12){
       x_label.unshift((last_time-12).toString() + "pm");
     }
