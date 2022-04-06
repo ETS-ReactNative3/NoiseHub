@@ -129,7 +129,27 @@ export default function SpaceScreen({ navigation, route }) {
   var noise_y = dict.noise_data;
   var head_y_str = dict.head_data;
   var head_y = [];
-  const [headY, setHead] = useState([0, 0, 0, 0, 0, 0, 0]);
+  var last_time = parseInt(noise_x.slice(-1)[0].slice(11,-13));
+  console.log("LAST TIME IS", last_time);
+  var x_label=[];
+  for (var i=0; i < 8; i++){
+    if (last_time > 12){
+      x_label.unshift((last_time-12).toString() + "pm");
+    }
+    else{
+      x_label.unshift(last_time.toString() + "am");
+    }
+    
+    if (last_time >= 3){
+      last_time -= 3;
+    }
+    else{
+      last_time = 24 + last_time - 3;
+    }
+  }
+  console.log(x_label);
+  const [headY, setHead] = useState([0,0,0,0,0,0,0]);
+
 
   // var audio_level = "";
 
@@ -252,7 +272,7 @@ export default function SpaceScreen({ navigation, route }) {
           </Text>
           <LineChart
             data={{
-              labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
+              labels: x_label,
               datasets: [
                 {
                   data: noise_y,
@@ -294,7 +314,7 @@ export default function SpaceScreen({ navigation, route }) {
           </Text>
           <LineChart
             data={{
-              labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
+              labels: x_label,
               datasets: [
                 {
                   data: headY,
@@ -334,7 +354,7 @@ export default function SpaceScreen({ navigation, route }) {
           </Text>
           <LineChart
             data={{
-              labels: ["-24h", "-20h", "-16h", "-12h", "-8h", "-4h", "0h"],
+              labels: x_label,
               datasets: [
                 {
                   data: temp_y,
