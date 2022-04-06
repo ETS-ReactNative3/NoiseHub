@@ -96,7 +96,7 @@ export default function SpaceScreen({ navigation, route }) {
     } else if (data["noise"][0]["noise"] == "2") {
       set_audio_level("High");
     }
-    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
+    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(1));
     // set_busy_level(data["door"][0]["head"]);
 
     spaceCalls.get_space("113").then((space_Data) => {
@@ -336,7 +336,7 @@ export default function SpaceScreen({ navigation, route }) {
               icon={faThermometerHalf}
             />
             <Text style={[styles.icon_text, styles.noise_icon_text]}>
-              {temp_level}
+              {temp_level}°
             </Text>
           </View>
         </View>

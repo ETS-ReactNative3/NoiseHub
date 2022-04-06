@@ -8,7 +8,7 @@ import {
   Button,
   ScrollView,
   RefreshControl,
-  Alert
+  Alert,
 } from "react-native";
 import styles from "./styles";
 
@@ -145,11 +145,9 @@ export default function HomeScreen({ navigation }) {
 
       if (estimated_heads < maxHeads * 0.34) {
         set_busy_level("Low");
-      }
-      else if (estimated_heads < maxHeads * 0.67) {
+      } else if (estimated_heads < maxHeads * 0.67) {
         set_busy_level("Med");
-      }
-      else {
+      } else {
         set_busy_level("High");
       }
     });
@@ -165,30 +163,30 @@ export default function HomeScreen({ navigation }) {
     } else if (data["noise"][0]["noise"] == "2") {
       set_audio_level("High");
     }
-    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(2));
+    set_temp_level((data["door"][0]["temp"] * 1.8 + 32).toFixed(1));
     // set_busy_level(data["door"][0]["head"]);
   }
 
   function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   function invoke_lambda() {
     console.log("INVOKING LAMBDA");
-    Auth.currentCredentials().then(async credentials => {
+    Auth.currentCredentials().then(async (credentials) => {
       const params = {
         FunctionName: "noisehub_data_analysis",
         InvocationType: "RequestResponse",
         LogType: "None",
-        Payload: ''
-      }
-      const REGION = 'us-east-2'
-      const client = new LambdaClient({ 
-        region: REGION, 
-        credentials: credentials 
+        Payload: "",
+      };
+      const REGION = "us-east-2";
+      const client = new LambdaClient({
+        region: REGION,
+        credentials: credentials,
       });
       const response = await client.send(new InvokeCommand(params));
-    })
+    });
   }
 
   if (firstCall) {
@@ -198,26 +196,23 @@ export default function HomeScreen({ navigation }) {
       getData();
     });
     firstCall = false;
-
   }
 
   const createOneButtonAlert = () =>
     Alert.alert(
       "Unavailable",
       "Golly gee, you're a fast one! This space is still a work in progress, pardon us.",
-      [
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ]
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
     );
 
   return (
     <BlankScreen style={styles.container}>
-      <ScrollView style={styles.buttonsContainer} refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={getData}
-        />
-      }>
+      <ScrollView
+        style={styles.buttonsContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getData} />
+        }
+      >
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchBar}
