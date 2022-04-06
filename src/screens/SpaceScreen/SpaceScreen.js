@@ -57,7 +57,6 @@ export default function SpaceScreen({ navigation, route }) {
   const iconSize_1 = 48;
   const iconSize_2 = 30;
   const spaceID = route.params.spaceID;
-  // let dont_use_this_pls_remove = route.params.spaceData;
 
   console.log("Space Screen!");
 
