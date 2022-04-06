@@ -139,13 +139,10 @@ export default function CheckInScreen({ navigation, route }) {
     });
 
     spaceCalls.get_space('113').then((response) => {
+      // navigation.goBack();
+      // navigation.navigate('Space');
       spaceCalls.get_space('113').then((response) => navigation.navigate('Space', {spaceID: spaceID, spaceData: response}))
     })
-
-    // navigation.navigate("Space", {
-    //   spaceID: "113",
-    //   spaceData: spaceData,
-    // })
   }
 
   return (
