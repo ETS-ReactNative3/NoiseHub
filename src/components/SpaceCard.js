@@ -59,7 +59,7 @@ export default function SpaceCard({
             size={iconSize}
             icon={faThermometerHalf}
           />
-          <Text style={(styles.text, styles.thermo)}>{temp}</Text>
+          <Text style={(styles.text, styles.thermo)}>{temp}°</Text>
           {/* </View> */}
         </View>
       </View>
