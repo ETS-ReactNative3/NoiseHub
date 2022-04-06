@@ -114,7 +114,7 @@ export default function SpaceScreen({ navigation, route }) {
         setHeadCount("High");
       }
 
-      for (var i = head_y.length - 1; i >= 400; i--) {
+      for (var i = head_y.length - 1; i >= 800; i--) {
         head_y[i] -= space_Data["correction"];
         // console.log(head_y.length);
         // console.log("running");
@@ -129,7 +129,7 @@ export default function SpaceScreen({ navigation, route }) {
   var noise_y = dict.noise_data;
   var head_y_str = dict.head_data;
   var head_y = [];
-  const [headY, setHead] = useState([0,0,0,0,0,0,0]);
+  const [headY, setHead] = useState([0, 0, 0, 0, 0, 0, 0]);
 
   // var audio_level = "";
 
@@ -154,7 +154,6 @@ export default function SpaceScreen({ navigation, route }) {
   const correction = spaceData["correction"];
   const estimated_heads = ts_heads + correction;
   const maxHeads = spaceData["headRange"];
-
 
   if (firstCall) {
     console.log("First Call");
