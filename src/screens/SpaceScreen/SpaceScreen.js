@@ -136,13 +136,25 @@ export default function SpaceScreen({ navigation, route }) {
       }
 
       for (var i = head_y.length - 1; i >= 800; i--) {
-        if (head_y[i] == temp_data.max_head) {
-          temp_data.max_head -= response["correction"];
-        }
-        head_y[i] -= response["correction"];
+        // if (Math.sign(correction) == 1) {
+        //   if (temp_data.max_head == head_y[i]) {
+        //     temp_data.max_head -= correction;
+        //   }
+        // } else if (Math.sign(correction) == -1) {
+        //   if (temp_data.max_head == head_y[i]) {
+        //     temp_data.max_head = head_y[i] - correction;
+        //     break;
+        //   }
+        //   if (head_y[i] > temp_data.max_head) {
+        //     temp_data.max_head = head_y[i];
+        //   }
+        // }
+        head_y[i] -= correction;
+
         // console.log(head_y.length);
         // console.log("running");
       }
+      temp_data.max_head = Math.max(...head_y);
       temp_data.headY = head_y;
       // console.log(temp_data.max_head);
       setData(temp_data);
@@ -170,6 +182,10 @@ export default function SpaceScreen({ navigation, route }) {
       max_loud_timestamp.toString() + ":" + max_loud_minutes + "am";
   }
 
+  // console.log(``)
+  // var new_max_head_timestamp_index = head_y.indexOf(stateData.max_head);
+  // console.log(new_max_head_timestamp_index);
+  // console.log(head_x[new_max_head_timestamp_index]);
   var max_head_timestamp = parseInt(dict.max_head_timestamp.slice(11, -13)) - 4;
   var max_head_minutes = dict.max_head_timestamp.slice(14, 16);
 
@@ -213,8 +229,12 @@ export default function SpaceScreen({ navigation, route }) {
   for (var i = 0; i < 9; i++) {
     if (last_time == 12) {
       x_label.unshift(last_time.toString() + "pm");
+    } else if (last_time == 0) {
+      x_label.unshift((last_time + 12).toString() + "am");
     } else if (last_time > 12 && last_time < 24) {
       x_label.unshift((last_time - 12).toString() + "pm");
+    } else if (last_time < 0) {
+      x_label.unshift((last_time + 12).toString() + "pm");
     } else {
       x_label.unshift(last_time.toString() + "am");
     }
@@ -261,7 +281,9 @@ export default function SpaceScreen({ navigation, route }) {
 
   // Peak value data arrays for graphing
   const peak_noise = Array(noise_y.length).fill(max_loud);
+  // console.log(stateData.max_head);
   const peak_head = Array(stateData.headY.length).fill(stateData.max_head);
+  // console.log(peak_head);
   // const peak_head = Array(stateData.headY.length).fill(16);
   const peak_temp = Array(temp_y.length).fill(max_temp);
   return (
