@@ -202,7 +202,7 @@ export default function SpaceScreen({ navigation, route }) {
     parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
   // }
   // var max_head_timestamp = parseInt(dict.max_head_timestamp.slice(11, -13)) - 4;
-  var max_head_minutes = dict.max_head_timestamp.slice(14, 16);
+  var max_head_minutes = head_x[new_max_head_timestamp_index].slice(14, 16);
 
   if (max_head_timestamp == 12) {
     max_head_timestamp =
@@ -226,7 +226,6 @@ export default function SpaceScreen({ navigation, route }) {
 
   var max_temp_timestamp = parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
   var max_temp_minutes = dict.max_temp_timestamp.slice(14, 16);
-  console.log(max_temp_timestamp);
 
   if (max_temp_timestamp == 12) {
     max_temp_timestamp =
@@ -302,7 +301,7 @@ export default function SpaceScreen({ navigation, route }) {
   const yLabelIterator = yLabel();
 
   // Peak value data arrays for graphing
-  const peak_noise = Array(noise_y.length).fill(max_loud);
+  const peak_noise = Array(noise_y.length).fill(2);
   // console.log(stateData.max_head);
   const peak_head = Array(stateData.headY.length).fill(stateData.max_head);
   // console.log(peak_head);
