@@ -41,6 +41,9 @@ import { Auth } from "aws-amplify";
 // Components
 import BlankScreen from "../../components/BlankScreen";
 import Button_1 from "../../components/Button_1";
+import Chart_Noise from "../../components/Chart_Noise"
+import Chart_Head from "../../components/Chart_Head"
+import Chart_Temp from "../../components/Chart_Temp"
 
 function* yLabel() {
   yield* ["Low", "Med", "High"];
@@ -388,148 +391,31 @@ export default function SpaceScreen({ navigation, route }) {
           <Text numberOfLines={1} style={styles.texxt}>
             Noise
           </Text>
-          <LineChart
-            data={{
-              labels: x_label,
-              datasets: [
-                {
-                  data: peak_noise,
-                  strokeWidth: 10,
-                  color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
-                },
-                {
-                  data: noise_y,
-                },
-              ],
-              legend: [`Loudest at ${max_loud_timestamp}`],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={175}
-            yAxisLabel=""
-            yAxisSuffix=""
-            yAxisInterval={1} // optional, defaults to 1
-            formatYLabel={() => yLabelIterator.next().value}
-            segments={2}
-            chartConfig={{
-              backgroundColor: "#0a5274",
-              backgroundGradientFrom: "#0a5255",
-              backgroundGradientTo: "#0a5274",
-              decimalPlaces: 1, // optional, defaults to 2dp
-              // color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: "0",
-                strokeWidth: "0",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
+          <Chart_Noise 
+            x_label={x_label}
+            peak_noise={peak_noise}
+            noise_y={noise_y}
+            max_loud_timestamp={max_loud_timestamp}
           />
           <Text numberOfLines={1} style={styles.texxt}>
             Occupancy
           </Text>
-          <LineChart
-            data={{
-              labels: x_label,
-              datasets: [
-                {
-                  data: peak_head,
-                  strokeWidth: 10,
-                  color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
-                },
-                {
-                  data: stateData.headY,
-                },
-              ],
-              legend: [`Busiest at ${max_head_timestamp}`],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={175}
-            yAxisLabel=""
-            yAxisSuffix=""
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#0a5274",
-              backgroundGradientFrom: "#0a5255",
-              backgroundGradientTo: "#0a5274",
-              decimalPlaces: 1, // optional, defaults to 2dp
-              // color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: "0",
-                strokeWidth: "0",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
+          <Chart_Head
+            x_label={x_label}
+            peak_head={peak_head}
+            headY={stateData.headY}
+            max_head_timestamp={max_head_timestamp}
           />
           <Text numberOfLines={1} style={styles.texxt}>
             Temperature
           </Text>
-          <LineChart
-            data={{
-              labels: x_label,
-              datasets: [
-                {
-                  data: peak_temp,
-                  strokeWidth: 10,
-                  color: (opacity = 1) => `rgba(252, 140, 3,${opacity})`, // optional
-                },
-                {
-                  data: temp_y,
-                },
-              ],
-              legend: [`Hottest at ${max_temp_timestamp} 🥵`],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={175}
-            yAxisLabel=""
-            yAxisSuffix=""
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#0a5274",
-              backgroundGradientFrom: "#0a5255",
-              backgroundGradientTo: "#0a5274",
-              decimalPlaces: 1, // optional, defaults to 2dp
-              // color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: "0",
-                strokeWidth: "0",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
+          <Chart_Temp
+            x_label={x_label}
+            peak_temp={peak_temp}
+            temp_y={temp_y}
+            max_temp_timestamp={max_temp_timestamp}
           />
         </View>
-        {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasArrowAltCircleLeft} /> */}
-        {/* <FontAwesomeIcon color={colors.primaryWhite} size={iconSize} icon={fasCheckCircle} /> */}
-        {/* <Text style={styles.texxt}>{spaceName}</Text> */}
-        {/* <Text style={styles.texxt}>{spaceLocation}</Text> */}
         <View
           style={{
             flexDirection: "row",
@@ -550,7 +436,6 @@ export default function SpaceScreen({ navigation, route }) {
             />
             <Text style={styles.texxt}>{stateData.spaceData["hours"]}</Text>
           </View>
-          {/* <Text style={styles.texxt}>Amenities: {spaceAmenities}</Text> */}
           <View
             style={{
               flexDirection: "row",
