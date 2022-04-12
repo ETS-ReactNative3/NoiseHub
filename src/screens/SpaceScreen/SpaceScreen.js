@@ -36,7 +36,7 @@ import colors from "../../config/colors";
 // Graphing
 import { LineChart } from "react-native-chart-kit";
 
-import { Auth } from "aws-amplify";
+import { a, Auth } from "aws-amplify";
 
 // Components
 import BlankScreen from "../../components/BlankScreen";
@@ -101,6 +101,25 @@ export default function SpaceScreen({ navigation, route }) {
     headY: dict.head_data,
     spaceData: temp_spaceData,
   });
+
+  function timestamp_calc(max_timestamp, max_minutes) {
+    console.log("Time Stamp Calculation");
+    if (max_timestamp == 12) {
+      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
+    } else if (max_timestamp == 0) {
+      max_timestamp += 12;
+      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "am";
+    } else if (max_timestamp > 12 && max_timestamp < 24) {
+      max_timestamp -= 12;
+      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
+    } else if (a < 0) {
+      max_timestamp += 12;
+      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
+    } else {
+      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "am";
+    }
+    return max_timestamp;
+  }
 
   async function getData() {
     console.log("GET DATA in SPACE SCREEN");
@@ -167,89 +186,26 @@ export default function SpaceScreen({ navigation, route }) {
   }
 
   // Peak value timestamps
-
+  // Noise
   var max_loud_timestamp = parseInt(dict.max_loud_timestamp.slice(11, -13)) - 4;
   var max_loud_minutes = dict.max_loud_timestamp.slice(14, 16);
-  if (max_loud_timestamp == 12) {
-    max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes + "pm";
-  } else if (max_loud_timestamp == 0) {
-    max_loud_timestamp += 12;
-    max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes + "am";
-  } else if (max_loud_timestamp > 12 && max_loud_timestamp < 24) {
-    max_loud_timestamp -= 12;
-    max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes + "pm";
-  } else if (max_loud_timestamp < 0) {
-    max_loud_timestamp += 12;
-    max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes + "pm";
-  } else {
-    max_loud_timestamp =
-      max_loud_timestamp.toString() + ":" + max_loud_minutes + "am";
-  }
+  max_loud_timestamp = timestamp_calc(max_loud_timestamp, max_loud_minutes);
 
+  // Head
   for (var i = 0; i < head_y_str.length; i++)
     head_y.push(parseInt(head_y_str[i]));
-  // console.log(`max_head: ${stateData.max_head}`);
   var new_max_head_timestamp_index = stateData.headY.indexOf(
     stateData.max_head
   );
-  // console.log(new_max_head_timestamp_index);
-  // console.log(head_x[new_max_head_timestamp_index]);
-  // if (new_max_head_timestamp_index == -1) {
-  //   var max_head_timestamp = parseInt(head_x[0].slice(11, -13)) - 4;
-  // } else {
-  var max_head_timestamp =
-    parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
-  // }
-  // var max_head_timestamp = parseInt(dict.max_head_timestamp.slice(11, -13)) - 4;
+  var max_head_timestamp = parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
   var max_head_minutes = head_x[new_max_head_timestamp_index].slice(14, 16);
+  max_head_timestamp = timestamp_calc(max_head_timestamp, max_head_minutes);
 
-  if (max_head_timestamp == 12) {
-    max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes + "pm";
-  } else if (max_head_timestamp == 0) {
-    max_head_timestamp += 12;
-    max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes + "am";
-  } else if (max_head_timestamp > 12 && max_head_timestamp < 24) {
-    max_head_timestamp -= 12;
-    max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes + "pm";
-  } else if (max_head_timestamp < 0) {
-    max_head_timestamp += 12;
-    max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes + "pm";
-  } else {
-    max_head_timestamp =
-      max_head_timestamp.toString() + ":" + max_head_minutes + "am";
-  }
-
+  // Temperature
   var max_temp_timestamp = parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
   var max_temp_minutes = dict.max_temp_timestamp.slice(14, 16);
-
-  if (max_temp_timestamp == 12) {
-    max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes + "pm";
-  } else if (max_temp_timestamp == 0) {
-    max_temp_timestamp += 12;
-    max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes + "am";
-  } else if (max_temp_timestamp > 12 && max_temp_timestamp < 24) {
-    max_temp_timestamp -= 12;
-    max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes + "pm";
-  } else if (max_temp_timestamp < 0) {
-    max_temp_timestamp += 12;
-    max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes + "pm";
-  } else {
-    max_temp_timestamp =
-      max_temp_timestamp.toString() + ":" + max_temp_minutes + "am";
-  }
-
+  max_temp_timestamp = timestamp_calc(max_temp_timestamp, max_temp_minutes);
+  
   var last_time = parseInt(noise_x.slice(-1)[0].slice(11, -13)) - 4;
   // console.log("LAST TIME IS", last_time);
   var x_label = [];
