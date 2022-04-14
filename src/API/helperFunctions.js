@@ -11,3 +11,22 @@ export const createOneButtonAlert = () => {
     [{ text: "OK", onPress: () => console.log("OK Pressed") }]
   );
 }
+
+export const timestamp_calc = (max_timestamp, max_minutes) => {
+  console.log("Time Stamp Calculation");
+  if (max_timestamp == 12) {
+    max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
+  } else if (max_timestamp == 0) {
+    max_timestamp += 12;
+    max_timestamp = max_timestamp.toString() + ":" + max_minutes + "am";
+  } else if (max_timestamp > 12 && max_timestamp < 24) {
+    max_timestamp -= 12;
+    max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
+  } else if (max_timestamp < 0) {
+    max_timestamp += 12;
+    max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
+  } else {
+    max_timestamp = max_timestamp.toString() + ":" + max_minutes + "am";
+  }
+  return max_timestamp;
+}

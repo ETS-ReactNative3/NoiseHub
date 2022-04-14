@@ -1,16 +1,11 @@
-import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
-import React, { useState, useEffect, Component } from "react";
-import {
-  TextInput,
-  View,
-  TouchableOpacity,
-  Text,
-  Button,
-  ScrollView,
-  Dimensions,
-  RefreshControl,
-} from "react-native";
+import React, { useState } from "react";
+import { View, TouchableOpacity, Text, ScrollView, RefreshControl } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
+// Styling
+import styles from "./styles";
+import colors from "../../config/colors";
+
 // Regular Icons
 import {
   faArrowAltCircleLeft as farArrowAltCircleLeft,
@@ -19,8 +14,6 @@ import {
 
 // Solid Icons
 import {
-  faArrowAltCircleLeft as fasArrowAltCircleLeft,
-  faCheckCircle as fasCheckCircle,
   faThermometerHalf,
   faVolumeUp,
   faUsers,
@@ -30,29 +23,23 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
-import styles from "./styles";
-import colors from "../../config/colors";
-
-// Graphing
-import { LineChart } from "react-native-chart-kit";
-
-import { a, Auth } from "aws-amplify";
-
 // Components
 import BlankScreen from "../../components/BlankScreen";
-import Button_1 from "../../components/Button_1";
 import Chart_Noise from "../../components/Chart_Noise"
 import Chart_Head from "../../components/Chart_Head"
 import Chart_Temp from "../../components/Chart_Temp"
+
+// Functions
+import * as spaceCalls from "../../API/spaceCalls";
+import * as timestreamCalls from "../../API/timestreamCalls";
+import * as helperFunctions from "../../API/helperFunctions";
 
 function* yLabel() {
   yield* ["Low", "Med", "High"];
 }
 
-import * as timestreamCalls from "../../API/timestreamCalls";
 import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
-import * as spaceCalls from "../../API/spaceCalls";
 
 let firstCall = true;
 
@@ -102,25 +89,6 @@ export default function SpaceScreen({ navigation, route }) {
     spaceData: temp_spaceData,
   });
 
-  function timestamp_calc(max_timestamp, max_minutes) {
-    console.log("Time Stamp Calculation");
-    if (max_timestamp == 12) {
-      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
-    } else if (max_timestamp == 0) {
-      max_timestamp += 12;
-      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "am";
-    } else if (max_timestamp > 12 && max_timestamp < 24) {
-      max_timestamp -= 12;
-      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
-    } else if (a < 0) {
-      max_timestamp += 12;
-      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "pm";
-    } else {
-      max_timestamp = max_timestamp.toString() + ":" + max_minutes + "am";
-    }
-    return max_timestamp;
-  }
-
   async function getData() {
     console.log("GET DATA in SPACE SCREEN");
     let temp_data = {
@@ -139,9 +107,9 @@ export default function SpaceScreen({ navigation, route }) {
     let ts_data = await timestreamCalls.getTimeStreamData();
     temp_data.doorData = ts_data["door"];
 
-    temp_data.audio_level = audio_value_map[ts_data["noise"][0]["noise"]];
+    temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
 
-    temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1);
+    temp_data.temp_level = (ts_data["noise_temp"][0]["temp"] * 1.8 + 32).toFixed(1);
 
     spaceCalls.get_space("113").then((response) => {
       temp_data.spaceData = response;
@@ -186,12 +154,12 @@ export default function SpaceScreen({ navigation, route }) {
   }
 
   // Peak value timestamps
-  // Noise
+  //// Noise
   var max_loud_timestamp = parseInt(dict.max_loud_timestamp.slice(11, -13)) - 4;
   var max_loud_minutes = dict.max_loud_timestamp.slice(14, 16);
-  max_loud_timestamp = timestamp_calc(max_loud_timestamp, max_loud_minutes);
+  max_loud_timestamp = helperFunctions.timestamp_calc(max_loud_timestamp, max_loud_minutes);
 
-  // Head
+  //// Head
   for (var i = 0; i < head_y_str.length; i++)
     head_y.push(parseInt(head_y_str[i]));
   var new_max_head_timestamp_index = stateData.headY.indexOf(
@@ -199,12 +167,12 @@ export default function SpaceScreen({ navigation, route }) {
   );
   var max_head_timestamp = parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
   var max_head_minutes = head_x[new_max_head_timestamp_index].slice(14, 16);
-  max_head_timestamp = timestamp_calc(max_head_timestamp, max_head_minutes);
+  max_head_timestamp = helperFunctions.timestamp_calc(max_head_timestamp, max_head_minutes);
 
-  // Temperature
+  //// Temperature
   var max_temp_timestamp = parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
   var max_temp_minutes = dict.max_temp_timestamp.slice(14, 16);
-  max_temp_timestamp = timestamp_calc(max_temp_timestamp, max_temp_minutes);
+  max_temp_timestamp = helperFunctions.timestamp_calc(max_temp_timestamp, max_temp_minutes);
   
   var last_time = parseInt(noise_x.slice(-1)[0].slice(11, -13)) - 4;
   // console.log("LAST TIME IS", last_time);

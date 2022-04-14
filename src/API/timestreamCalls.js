@@ -5,7 +5,6 @@ import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
 
 async function formatNoiseData(input) {
-  // console.log(input);
   let data = []
   for (let i=0; i<input['Rows'].length; i++) {
     let row = input['Rows'][i]['Data'];
@@ -34,7 +33,7 @@ async function formatDoorData(input) {
 }
 
 export const getTimeStreamData = async () => {
-  console.log("HERE");
+  console.log("QUERYING TIMESTREAM");
   let result = {};
   const region = "us-east-2";
 
