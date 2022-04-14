@@ -1,34 +1,21 @@
-import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
-import React, { useState, useEffect, Component } from "react";
-import {
-  TextInput,
-  View,
-  TouchableOpacity,
-  Text,
-  Button,
-  ScrollView,
-  RefreshControl,
-  Alert,
-} from "react-native";
-import styles from "./styles";
+import React, { useState } from "react";
+import { TextInput, View, ScrollView, RefreshControl, Alert } from "react-native";
 
+// Styling + Icons
+import styles, { search_iconSize } from "./styles";
 import colors from "../../config/colors";
-
-import { Auth } from "aws-amplify";
-
-// DynamoDB Scan
-import {
-  DynamoDBClient,
-  ScanCommand,
-} from "@aws-sdk/client-dynamodb";
-
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 import BlankScreen from "../../components/BlankScreen";
-import Button_1 from "../../components/Button_1";
 import SpaceCard from "../../components/SpaceCard";
+
+// Amplify
+import { Auth } from "aws-amplify";
+
+// DynamoDB Scan Operation (For Search Functionality)
+import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 
 // Functions
 import * as spaceCalls from "../../API/spaceCalls";
@@ -36,26 +23,11 @@ import * as timestreamCalls from "../../API/timestreamCalls";
 import * as lambdaCalls from "../../API/lambdaCalls";
 import * as helperFunctions from "../../API/helperFunctions";
 
-const iconSize = 32;
-
+// Global Variables
 let firstCall = true;
 
 export default function HomeScreen({ navigation }) {
-  let timeout = null;
-
-  const audio_value_map = {
-    "0": "Low",
-    "1": "Med",
-    "2": "High"
-  }
-
-  function typeTime(input) {
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      spaceSearch(input);
-    }, 1000); // 1000 represents milliseconds interval for user to stop typing before function executes
-  }
-
+  // Debug
   Auth.currentCredentials().then(async (credentials) => {
     if (credentials.authenticated != true) {
       const user = Auth.signIn("test126", "Testing123!");
@@ -66,12 +38,30 @@ export default function HomeScreen({ navigation }) {
     }
   });
 
-  const [search, setSearch] = useState();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const audio_value_map = {
+    "0": "Low",
+    "1": "Med",
+    "2": "High"
+  }
+
   const [stateData, setData] = useState({
     audio_level: undefined,
     temp_level: undefined,
     headCount: undefined,
   });
+
+  const [search, setSearch] = useState();
+
+  let timeout = null;
+  function typeTime(input) {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      spaceSearch(input);
+    }, 1000); // 1000 represents milliseconds interval for user to stop typing before function executes
+  }
 
   function spaceSearch(input) {
     console.log(input);
@@ -102,8 +92,6 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
-  const [refreshing, setRefreshing] = useState(false);
-
   async function getData() {
     console.log("GET DATA in HOME SCREEN");
     let temp_data = {
@@ -114,19 +102,6 @@ export default function HomeScreen({ navigation }) {
     };
 
     let ts_data = await timestreamCalls.getTimeStreamData();
-    // ts_data Format:
-    // {
-    //   noise_temp: [{
-    //     temp: #,
-    //     noise: #,
-    //     time: #
-    //   }]
-    //   door: [{
-    //     head: #,
-    //     temp: #,
-    //     time: #
-    //   }]
-    // }
 
     temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
     
@@ -189,7 +164,7 @@ export default function HomeScreen({ navigation }) {
           <FontAwesomeIcon
             style={styles.searchIcon}
             color={colors.secondaryBlue}
-            size={iconSize}
+            size={search_iconSize}
             icon={faSearch}
           />
         </View>

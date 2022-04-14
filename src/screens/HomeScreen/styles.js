@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native";
 import { color } from "react-native-reanimated";
 import colors from '../../config/colors'
 
+export const search_iconSize = 32;
+
 export default StyleSheet.create({
   container: {
     flex: 1,

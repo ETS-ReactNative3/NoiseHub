@@ -72,3 +72,18 @@ export const getTimeStreamData = async () => {
 
   return {noise_temp: noiseTempData, door: doorData};
 }
+
+/* ts_data Format
+{
+  noise_temp: [{
+    temp: #,
+    noise: #,
+    time: #
+  }]
+  door: [{
+    head: #,
+    temp: #,
+    time: #
+  }]
+}
+*/
