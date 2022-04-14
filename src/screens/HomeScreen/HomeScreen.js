@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { TextInput, View, ScrollView, RefreshControl, Alert } from "react-native";
+import { TextInput, View, ScrollView, RefreshControl } from "react-native";
 
 // Styling + Icons
-import styles, { search_iconSize } from "./styles";
+import styles, { search_iconSize, placeholder_spaces } from "./styles";
 import colors from "../../config/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -138,15 +138,6 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
-  const createOneButtonAlert = () =>
-    Alert.alert(
-      "Unavailable",
-      "Golly gee, you're a fast one! This space is still a work in progress, pardon us.",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-    );
-
-  
-
   return (
     <BlankScreen style={styles.container}>
       <ScrollView
@@ -182,50 +173,20 @@ export default function HomeScreen({ navigation }) {
             }}
           />
         </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName="Ingalls"
-            noise="Med"
-            head="High"
-            temp="72.8"
-            onPress={createOneButtonAlert}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName="Bat Cave"
-            noise="Low"
-            head="Low"
-            temp="64.1"
-            onPress={createOneButtonAlert}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName="EPIC Workshop"
-            noise="High"
-            head="Med"
-            temp="77.4"
-            onPress={createOneButtonAlert}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName="Tavern in the Square"
-            noise="High"
-            head="High"
-            temp="74.9"
-            onPress={createOneButtonAlert}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName="Fitrec Recreation Pool"
-            noise="Med"
-            head="Low"
-            temp="75.6"
-            onPress={createOneButtonAlert}
-          />
+        <View>
+          {placeholder_spaces.map((space, index) => {
+            return (
+              <View key = {index} style={styles.buttonContainer}>
+                <SpaceCard
+                  spaceName={space.spaceName}
+                  noise={space.noise}
+                  head={space.head}
+                  temp={space.temp}
+                  onPress={helperFunctions.createOneButtonAlert}
+                />
+              </View>
+            )
+          })}
         </View>
       </ScrollView>
     </BlankScreen>

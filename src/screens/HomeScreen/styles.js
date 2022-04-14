@@ -5,6 +5,39 @@ import colors from '../../config/colors'
 
 export const search_iconSize = 32;
 
+export const placeholder_spaces = [
+  {
+    spaceName: "Ingalls",
+    noise: "Med",
+    head: "High",
+    temp: "72.8"
+  },
+  {
+    spaceName: "Bat Cave",
+    noise: "Low",
+    head: "Low",
+    temp: "64.1"
+  },
+  {
+    spaceName: "EPIC Workshop",
+    noise: "High",
+    head: "Med",
+    temp: "77.4"
+  },
+  {
+    spaceName: "Tavern in the Square",
+    noise: "High",
+    head: "High",
+    temp: "74.9"
+  },
+  {
+    spaceName: "Fitrec Recreation Pool",
+    noise: "Med",
+    head: "Low",
+    temp: "75.6"
+  }
+]
+
 export default StyleSheet.create({
   container: {
     flex: 1,
