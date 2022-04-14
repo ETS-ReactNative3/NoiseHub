@@ -14,20 +14,10 @@ import styles from "./styles";
 
 import colors from "../../config/colors";
 
-// Timestream Query
-import {
-  TimestreamQuery,
-  QueryCommand,
-} from "@aws-sdk/client-timestream-query";
 import { Auth } from "aws-amplify";
-import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
-// Specified here - https://github.com/aws/aws-sdk-js-v3#getting-started - https://github.com/aws/aws-sdk-js-v3/issues/2288
-import "react-native-get-random-values";
-import "react-native-url-polyfill/auto";
 
 // DynamoDB Scan
 import {
-  DynamoDB,
   DynamoDBClient,
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
@@ -43,6 +33,8 @@ import SpaceCard from "../../components/SpaceCard";
 // Functions
 import * as spaceCalls from "../../API/spaceCalls";
 import * as timestreamCalls from "../../API/timestreamCalls";
+import * as lambdaCalls from "../../API/lambdaCalls";
+import * as helperFunctions from "../../API/helperFunctions";
 
 const iconSize = 32;
 
@@ -75,7 +67,6 @@ export default function HomeScreen({ navigation }) {
   });
 
   const [search, setSearch] = useState();
-  // const [spaceData, setSpaceData] = useState();
   const [stateData, setData] = useState({
     audio_level: undefined,
     temp_level: undefined,
@@ -123,10 +114,24 @@ export default function HomeScreen({ navigation }) {
     };
 
     let ts_data = await timestreamCalls.getTimeStreamData();
+    // ts_data Format:
+    // {
+    //   noise_temp: [{
+    //     temp: #,
+    //     noise: #,
+    //     time: #
+    //   }]
+    //   door: [{
+    //     head: #,
+    //     temp: #,
+    //     time: #
+    //   }]
+    // }
 
-    temp_data.audio_level = audio_value_map[ts_data["noise"][0]["noise"]];
+    temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
     
-    temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
+    // temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
+    temp_data.temp_level = (ts_data["noise_temp"][0]["temp"] * 1.8 + 32).toFixed(1)
 
     spaceCalls.get_space("113").then((response) => {
       temp_data.spaceData = response;
@@ -149,33 +154,11 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  function invoke_lambda() {
-    console.log("INVOKING LAMBDA");
-    Auth.currentCredentials().then(async (credentials) => {
-      const params = {
-        FunctionName: "noisehub_data_analysis",
-        InvocationType: "RequestResponse",
-        LogType: "None",
-        Payload: "",
-      };
-      const REGION = "us-east-2";
-      const client = new LambdaClient({
-        region: REGION,
-        credentials: credentials,
-      });
-      const response = await client.send(new InvokeCommand(params));
-    });
-  }
-
   if (firstCall) {
     firstCall = false;
     console.log("First Call");
-    invoke_lambda();
-    sleep(4000).then(() => {
+    lambdaCalls.invokeLambda();
+    helperFunctions.sleep(4000).then(() => {
       getData();
     });
   }
@@ -186,6 +169,8 @@ export default function HomeScreen({ navigation }) {
       "Golly gee, you're a fast one! This space is still a work in progress, pardon us.",
       [{ text: "OK", onPress: () => console.log("OK Pressed") }]
     );
+
+  
 
   return (
     <BlankScreen style={styles.container}>
