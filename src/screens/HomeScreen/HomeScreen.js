@@ -10,6 +10,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 // Components
 import BlankScreen from "../../components/BlankScreen";
 import SpaceCard from "../../components/SpaceCard";
+import LoadingScreen from "../../components/LoadingScreen"
 
 // Amplify
 import { Auth } from "aws-amplify";
@@ -38,8 +39,9 @@ export default function HomeScreen({ navigation }) {
     }
   });
 
-
   const [refreshing, setRefreshing] = useState(false);
+
+  const [doneLoading, setLoading] = useState(false);
 
   const audio_value_map = {
     "0": "Low",
@@ -87,7 +89,6 @@ export default function HomeScreen({ navigation }) {
       };
 
       const command = new ScanCommand(params);
-      // client.send(command);
       client.send(command).then((response) => console.log(response));
     });
   }
@@ -105,27 +106,16 @@ export default function HomeScreen({ navigation }) {
 
     temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
     
-    // temp_data.temp_level = (ts_data["door"][0]["temp"] * 1.8 + 32).toFixed(1)
     temp_data.temp_level = (ts_data["noise_temp"][0]["temp"] * 1.8 + 32).toFixed(1)
 
     spaceCalls.get_space("113").then((response) => {
       temp_data.spaceData = response;
-      var dict = JSON.parse(response.graphData);
-      var noise_y = dict.noise_data;
 
-      const ts_heads = parseInt(dict.head_data.slice(-1));
-      const correction = response["correction"];
-      const estimated_heads = ts_heads - correction;
-      const maxHeads = response["headRange"];
-
-      if (estimated_heads < maxHeads * 0.34) {
-        temp_data.headCount = "Low";
-      } else if (estimated_heads < maxHeads * 0.67) {
-        temp_data.headCount = "Med";
-      } else {
-        temp_data.headCount = "High";
-      }
+      temp_data.headCount = helperFunctions.head_estimation(response);
+      
       setData(temp_data);
+
+      setLoading(true);
     });
   }
 
@@ -138,57 +128,64 @@ export default function HomeScreen({ navigation }) {
     });
   }
 
-  return (
-    <BlankScreen style={styles.container}>
-      <ScrollView
-        style={styles.buttonsContainer}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={getData} />
-        }
-      >
-        <View style={styles.searchBarContainer}>
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Search"
-            onChangeText={(input) => typeTime(input.toLocaleLowerCase())}
-          />
-          <FontAwesomeIcon
-            style={styles.searchIcon}
-            color={colors.secondaryBlue}
-            size={search_iconSize}
-            icon={faSearch}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <SpaceCard
-            spaceName="PHO 113"
-            noise={stateData.audio_level}
-            head={stateData.headCount}
-            temp={stateData.temp_level}
-            onPress={() => {
-              navigation.navigate("Space", {
-                spaceID: "113",
-                spaceData: stateData.spaceData,
-              });
-            }}
-          />
-        </View>
-        <View>
-          {placeholder_spaces.map((space, index) => {
-            return (
-              <View key = {index} style={styles.buttonContainer}>
-                <SpaceCard
-                  spaceName={space.spaceName}
-                  noise={space.noise}
-                  head={space.head}
-                  temp={space.temp}
-                  onPress={helperFunctions.createOneButtonAlert}
-                />
-              </View>
-            )
-          })}
-        </View>
-      </ScrollView>
-    </BlankScreen>
-  );
+  if (doneLoading) {
+    return (
+      <BlankScreen style={styles.container}>
+        <ScrollView
+          style={styles.buttonsContainer}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={getData} />
+          }
+        >
+          <View style={styles.searchBarContainer}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Search"
+              onChangeText={(input) => typeTime(input.toLocaleLowerCase())}
+            />
+            <FontAwesomeIcon
+              style={styles.searchIcon}
+              color={colors.secondaryBlue}
+              size={search_iconSize}
+              icon={faSearch}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <SpaceCard
+              spaceName="PHO 113"
+              noise={stateData.audio_level}
+              head={stateData.headCount}
+              temp={stateData.temp_level}
+              onPress={() => {
+                navigation.navigate("Space", {
+                  spaceID: "113",
+                  spaceData: stateData.spaceData,
+                });
+              }}
+            />
+          </View>
+          <View>
+            {placeholder_spaces.map((space, index) => {
+              return (
+                <View key = {index} style={styles.buttonContainer}>
+                  <SpaceCard
+                    spaceName={space.spaceName}
+                    noise={space.noise}
+                    head={space.head}
+                    temp={space.temp}
+                    onPress={helperFunctions.createOneButtonAlert}
+                  />
+                </View>
+              )
+            })}
+          </View>
+        </ScrollView>
+      </BlankScreen>
+    );
+  } else {
+    return (
+      <LoadingScreen/>
+    );
+  }
+
 }

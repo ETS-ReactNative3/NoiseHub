@@ -31,10 +31,26 @@ export const timestamp_calc = (max_timestamp, max_minutes) => {
   return max_timestamp;
 }
 
-export const  max_timestamp_calc = (dict_max_timestamp) => {
+export const max_timestamp_calc = (dict_max_timestamp) => {
   let max_timestamp = parseInt(dict_max_timestamp.slice(11, -13)) - 4;
   let max_minutes = dict_max_timestamp.slice(14, 16);
   max_timestamp = timestamp_calc(max_timestamp, max_minutes);
 
   return(max_timestamp);
+}
+
+export const head_estimation = (data) => {
+  let graphData = JSON.parse(data.graphData);
+  let ts_heads = parseInt(graphData.head_data.slice(-1));
+  let correction = data["correction"];
+  let estimated_heads = ts_heads - correction;
+  let maxHeads = data["headRange"];
+
+  if (estimated_heads < maxHeads * 0.34) {
+    return "Low";
+  } else if (estimated_heads < maxHeads * 0.67) {
+    return "Med";
+  } else {
+    return "High";
+  }
 }
