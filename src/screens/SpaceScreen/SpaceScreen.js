@@ -382,9 +382,7 @@ export default function SpaceScreen({ navigation, route }) {
     );
   } else {
     return (
-      <LoadingScreen>
-
-      </LoadingScreen>
+      <LoadingScreen/>
     )
   }
 }
