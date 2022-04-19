@@ -30,3 +30,11 @@ export const timestamp_calc = (max_timestamp, max_minutes) => {
   }
   return max_timestamp;
 }
+
+export const  max_timestamp_calc = (dict_max_timestamp) => {
+  let max_timestamp = parseInt(dict_max_timestamp.slice(11, -13)) - 4;
+  let max_minutes = dict_max_timestamp.slice(14, 16);
+  max_timestamp = timestamp_calc(max_timestamp, max_minutes);
+
+  return(max_timestamp);
+}
