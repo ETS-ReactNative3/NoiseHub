@@ -61,9 +61,20 @@ export const get_space = async (uuid) => {
     );
     return response.data.getSpace;
   } catch (error) {
-    console.log("Error fetching user data", error);
+    console.log("Error fetching space data - getSpace", error);
   }
 };
+
+export const list_spaces = async () => {
+  try {
+    const response = await API.graphql(
+      graphqlOperation(listSpaces)
+    )
+    return response.data.listSpaces["items"];
+  } catch (error) {
+    console.log("Error fetching space data - listSpaces", error);
+  }
+}
 
 // Example
 // const value = {
