@@ -28,6 +28,7 @@ import BlankScreen from "../../components/BlankScreen";
 import Chart_Noise from "../../components/Chart_Noise"
 import Chart_Head from "../../components/Chart_Head"
 import Chart_Temp from "../../components/Chart_Temp"
+import LoadingScreen from "../../components/LoadingScreen"
 
 // Functions
 import * as spaceCalls from "../../API/spaceCalls";
@@ -381,9 +382,9 @@ export default function SpaceScreen({ navigation, route }) {
     );
   } else {
     return (
-      <BlankScreen>
-        <Text style={styles.texxt}>Loading</Text>
-      </BlankScreen>
+      <LoadingScreen>
+
+      </LoadingScreen>
     )
   }
 }
