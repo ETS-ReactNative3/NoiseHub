@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextInput, View, ScrollView, RefreshControl } from "react-native";
 
 // Styling + Icons
-import styles, { search_iconSize, placeholder_spaces } from "./styles";
+import styles, { search_iconSize } from "./styles";
 import colors from "../../config/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -49,11 +49,7 @@ export default function HomeScreen({ navigation }) {
     "2": "High"
   }
 
-  const [stateData, setData] = useState({
-    audio_level: undefined,
-    temp_level: undefined,
-    headCount: undefined,
-  });
+  const [stateData, setData] = useState([]);
 
   const [search, setSearch] = useState();
 
@@ -95,34 +91,69 @@ export default function HomeScreen({ navigation }) {
 
   async function getData() {
     console.log("GET DATA in HOME SCREEN");
-    let temp_data = {
-      spaceData: undefined,
-      audio_level: undefined,
-      temp_level: undefined,
-      headCount: undefined,
-    };
+
+    let spaces = []
+    let placeholders = []
 
     let ts_data = await timestreamCalls.getTimeStreamData();
 
-    temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
-    
-    temp_data.temp_level = (ts_data["noise_temp"][0]["temp"] * 1.8 + 32).toFixed(1)
+    spaceCalls.list_spaces().then((response) => {
+      for (let i=0; i<response.length; i++) {
+        let temp_data = {
+          placeholder: undefined,
+          id: undefined,
+          name: undefined,
+          noise: undefined,
+          head: undefined,
+          temp: undefined
+        };
+        
+        temp_data.placeholder = response[i]["graphData"] == null ? true : false;
+        temp_data.id = response[i]["uuid"];
+        temp_data.name = response[i]["name"];
 
-    spaceCalls.get_space("113").then((response) => {
-      temp_data.spaceData = response;
-
-      temp_data.headCount = helperFunctions.head_estimation(response);
+        // Placeholder dependent values
+        if (response[i]["graphData"] == null) {
+          temp_data.placeholder = true;
+          temp_data.head = response[i]["busyLevel"];
+          temp_data.noise = response[i]["noiseLevel"];
+          temp_data.temp = response[i]["tempLevel"];
+          placeholders.push(temp_data);
+        } else {
+          temp_data.placeholder = false;
+          temp_data.head = helperFunctions.head_estimation(response[i]);
+          temp_data.noise = audio_value_map[ts_data["noise_temp"][0]["noise"]];
+          temp_data.temp = (ts_data["noise_temp"][0]["temp"] * 1.8 + 32).toFixed(1)
+          spaces.push(temp_data);
+        }
+      }
+      console.log(spaces);
+      console.log(placeholders);
+      stateData.push(...spaces);
+      stateData.push(...placeholders);
+      setData(stateData);
+      helperFunctions.sleep(1000).then(() => {
+        console.log(stateData);
+        setLoading(true);
+      });
       
-      setData(temp_data);
-
-      setLoading(true);
     });
+
+    // spaceCalls.get_space("113").then((response) => {
+    //   temp_data.spaceData = response;
+
+    //   temp_data.headCount = helperFunctions.head_estimation(response);
+      
+    //   setData(temp_data);
+
+    //   setLoading(true);
+    // });
   }
 
   if (firstCall) {
     firstCall = false;
     console.log("First Call");
-    lambdaCalls.invokeLambda();
+    // lambdaCalls.invokeLambda();
     helperFunctions.sleep(4000).then(() => {
       getData();
     });
@@ -150,30 +181,19 @@ export default function HomeScreen({ navigation }) {
               icon={faSearch}
             />
           </View>
-          <View style={styles.buttonContainer}>
-            <SpaceCard
-              spaceName="PHO 113"
-              noise={stateData.audio_level}
-              head={stateData.headCount}
-              temp={stateData.temp_level}
-              onPress={() => {
-                navigation.navigate("Space", {
-                  spaceID: "113",
-                  spaceData: stateData.spaceData,
-                });
-              }}
-            />
-          </View>
           <View>
-            {placeholder_spaces.map((space, index) => {
+            {stateData.map((space, index) => {
               return (
                 <View key = {index} style={styles.buttonContainer}>
                   <SpaceCard
-                    spaceName={space.spaceName}
+                    spaceName={space.name}
                     noise={space.noise}
                     head={space.head}
                     temp={space.temp}
-                    onPress={helperFunctions.createOneButtonAlert}
+                    onPress={() => {space.placeholder ? 
+                      helperFunctions.createOneButtonAlert() : 
+                      navigation.navigate("Space", { spaceID: space.id })
+                    }}
                   />
                 </View>
               )
