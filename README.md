@@ -1,7 +1,8 @@
 # NoiseHub
 
 ## Summary
-College study spaces are often inconsistently managed. That variability can hinder a student’s productivity, especially when they spend time finding a comfortable location rather than studying. NoiseHub aims to give students the ability to find the perfect study space by providing accurate temperature, headcount, and noise information about locations.  This is done using a small embedded system consisting of Raspberry Pi’s and sensors that can be mounted easily in any room. With our backend hosted on AWS, data is compiled into a user friendly format on the NoiseHub companion app. 
+College study spaces are often busy and rapidly evolving environments. That variablilty can severely hinder student productivity, especially when they spend time finding a comfortable location rather than studying. NosieHub aims to give students the ability to find the perfect study space by providing accurate temperature, headcount, and noise information of study spaces. This is accomplished using a smll embedded system consisting of Raspberry Pi's and sensors that can be mounted easily in any room. Data from the system is stored and analyzed in various AWS services, being compiled into a user friendly format on the NoiseHub companion application.
+
 
 ## Frontend Setup
 npm install or yarn install
