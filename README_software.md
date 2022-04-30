@@ -21,62 +21,7 @@ This script serves as our AWS Lambda function that packages our AWS Timestream d
 
 <!-- NEW SECTION -->
 ## Dependency Flow Chart
-![Software Dependency Tree!](/assets/readme/Software_Dependency_Tree.jpg)
-
-<!-- NEW SECTION -->
-## Customer Installation
-### Prerequisites for all Pis
-After git cloning this repo, the user should set up their AWS Amplify with IoT core, Timestream, and DynamoDB. This will allow you to generate secret access keys to publish and retrieve data from the database. The bash scripts detailed below will automatically install all required pip packages unless otherwise specified, but a complete list of all packages used can be found below:
-- certifi==2020.6.20
-- chardet==4.0.0
-- click==8.1.2
-- colorzero==1.1
-- distro==1.5.0
-- gpiozero==1.6.2
-- idna==2.10
-- jmespath==1.0.0
-- numpy==1.22.3
-- paho-mqtt==1.6.1
-- PyAudio==0.2.11
-- python-apt==2.2.1
-- python-dateutil==2.8.2
-- requests==2.25.1
-- RPi.GPIO==0.7.0
-- s3transfer==0.5.2
-- six==1.16.0
-- spidev==3.5
-- ssh-import-id==5.10
-- urllib3==1.26.5
-
-### Lidar Sensor Pi
-One Lidar system will be connected to the default I2C bus on the raspberry pi. The second will need to be connected to GPIO pins that are converted into I2C. To do this, edit the /boot/config.txt file and add "dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=12,i2c_gpio_scl=13". Then, with the Lidar wired like this:
-![Lidar Diagram!](/assets/readme/Lidar_Diagram.png)
-
-pass SMBus(4) as the secondary lidar unit in the lidar distance pulling script.
-
-Install the following pip modules:
-- Awscrt
-- Awsiotsdk
-
-Next, run the door.sh script in the root of the git directory. The script will install the screen package and start a backgrounded process of pubsub_door.py.
-
-### Central Server Pi
-Install the linux screen package with “sudo apt install screen”, and install the following pip modules:
-- Awsiotsdk
-- Awscrt
-- Numpy
-- Paho-mqtt
-
-Next, change the ipv4 address inside the pubsub_noise.py script to the pi’s current ipv4 address. Lastly, run the server.sh script at the root of the cloned directory to start a backgrounded process of pubsub_noise.py.
-
-### Audio and Temperature Client Pi
-Add “dtoverlay=w1-gpio” to the bottom of the /boot/config.txt file. Exit Nano, and reboot the Pi with sudo reboot. This will enable the one wire interface for the thermistor to pull data. After the pi reboots, run the following two commands:
-```
-> sudo modprobe w1-gpio
-> sudo modprobe w1-therm
-```
-
-Run the start.sh script at the root of the cloned directory to install all apt and pip dependencies. After installing all dependencies, the script will start a backgrounded process of noise_client.py.
+![Software Dependency Tree](https://github.com/ibchand/NoiseHub/blob/main/assets/readme/Software_Dependency_Tree.jpg)
 
 
 ## Mobile Application Software Modules
@@ -108,7 +53,7 @@ The `src` directory contains most of the actual application is implemented. It c
 
 >**API**
 >
->This file contains several file, each with functions to be used throughout the application. 
+>This directory contains several files, each with functions to be used throughout the application. 
 >
 > `helperFunctions.js`:
 > - sleep() - A function that takes a numerical values as an input, representing the number of milliseconds to sleep
@@ -151,7 +96,61 @@ The `src` directory contains most of the actual application is implemented. It c
 > Rather than use these functions directly, we wrote functions in spaceCalls.js and userCalls.js for a cleaner implementation.
 
 
-## Setup Instructions
+<!-- NEW SECTION -->
+## Customer Installation
+### Prerequisites for all Pis
+After git cloning this repo, the user should set up their AWS Amplify with IoT core, Timestream, and DynamoDB. This will allow you to generate secret access keys to publish and retrieve data from the database. The bash scripts detailed below will automatically install all required pip packages unless otherwise specified, but a complete list of all packages used can be found below:
+- certifi==2020.6.20
+- chardet==4.0.0
+- click==8.1.2
+- colorzero==1.1
+- distro==1.5.0
+- gpiozero==1.6.2
+- idna==2.10
+- jmespath==1.0.0
+- numpy==1.22.3
+- paho-mqtt==1.6.1
+- PyAudio==0.2.11
+- python-apt==2.2.1
+- python-dateutil==2.8.2
+- requests==2.25.1
+- RPi.GPIO==0.7.0
+- s3transfer==0.5.2
+- six==1.16.0
+- spidev==3.5
+- ssh-import-id==5.10
+- urllib3==1.26.5
+
+### Lidar Sensor Pi
+One Lidar system will be connected to the default I2C bus on the raspberry pi. The second will need to be connected to GPIO pins that are converted into I2C. To do this, edit the /boot/config.txt file and add "dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=12,i2c_gpio_scl=13". Then, with the Lidar wired like this:
+![Lidar Diagram!](https://github.com/ibchand/NoiseHub/blob/main/assets/readme/Lidar_Diagram.png?raw=true)
+
+
+pass SMBus(4) as the secondary lidar unit in the lidar distance pulling script.
+
+Install the following pip modules:
+- Awscrt
+- Awsiotsdk
+
+Next, run the door.sh script in the root of the git directory. The script will install the screen package and start a backgrounded process of pubsub_door.py.
+
+### Central Server Pi
+Install the linux screen package with “sudo apt install screen”, and install the following pip modules:
+- Awsiotsdk
+- Awscrt
+- Numpy
+- Paho-mqtt
+
+Next, change the ipv4 address inside the pubsub_noise.py script to the pi’s current ipv4 address. Lastly, run the server.sh script at the root of the cloned directory to start a backgrounded process of pubsub_noise.py.
+
+### Audio and Temperature Client Pi
+Add “dtoverlay=w1-gpio” to the bottom of the /boot/config.txt file. Exit Nano, and reboot the Pi with sudo reboot. This will enable the one wire interface for the thermistor to pull data. After the pi reboots, run the following two commands:
+```
+> sudo modprobe w1-gpio
+> sudo modprobe w1-therm
+```
+
+Run the start.sh script at the root of the cloned directory to install all apt and pip dependencies. After installing all dependencies, the script will start a backgrounded process of noise_client.py.
 
 ### Mobile Application
 This section describes how to setup your development environment and the project to test or develop the mobile application.
