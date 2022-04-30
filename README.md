@@ -6,6 +6,14 @@ As a final deliverable, the NoiseHub team will present a fully functioning senso
 
 <!-- NEW SECTION -->
 ## Areas of the Project
+### Hardware
+The sensors, microprocessors, and physical items used in this project.
+
+### Software
+The driver code for the hardware, as well as the backend code using AWS.
+
+### Mobile App
+A piece of the software large enough to have it's own category. The software for the mobile application built using React Native.
 
 <!-- NEW SECTION -->
 ## Current State
