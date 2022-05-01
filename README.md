@@ -1,4 +1,4 @@
-# NoiseHub Engineering Addendum
+# NoiseHub Engineering Addendum (See wiki for further documentation)
 ## Intro
 The problem NoiseHub aims to solve is one all college students experience: finding a suitable study space on campus can be challenging and consume precious time, better spent studying. NoiseHub intends to improve efficiency in students' search for study spaces by providing accurate and real-time information on study spaces across campus. This information includes room temperature, noise levels, and an estimate of current occupancy.
 
