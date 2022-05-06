@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Text, ScrollView, RefreshControl } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 // Styling
@@ -25,10 +31,10 @@ import {
 
 // Components
 import BlankScreen from "../../components/BlankScreen";
-import Chart_Noise from "../../components/Chart_Noise"
-import Chart_Head from "../../components/Chart_Head"
-import Chart_Temp from "../../components/Chart_Temp"
-import LoadingScreen from "../../components/LoadingScreen"
+import Chart_Noise from "../../components/Chart_Noise";
+import Chart_Head from "../../components/Chart_Head";
+import Chart_Temp from "../../components/Chart_Temp";
+import LoadingScreen from "../../components/LoadingScreen";
 
 // Functions
 import * as spaceCalls from "../../API/spaceCalls";
@@ -79,7 +85,7 @@ export default function SpaceScreen({ navigation, route }) {
       peak_noise: undefined,
       peak_head: undefined,
       peak_temp: undefined,
-      spaceData: undefined
+      spaceData: undefined,
     };
 
     let ts_data = await timestreamCalls.getTimeStreamData();
@@ -89,7 +95,10 @@ export default function SpaceScreen({ navigation, route }) {
 
     temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
 
-    temp_data.temp_level = (ts_data["noise_temp"][0]["temp"] * 1.8 + 32).toFixed(1);
+    temp_data.temp_level = (
+      ts_data["noise_temp"][0]["temp"] * 1.8 +
+      32
+    ).toFixed(1);
 
     spaceCalls.get_space("113").then((response) => {
       console.log("HERE 1");
@@ -131,30 +140,50 @@ export default function SpaceScreen({ navigation, route }) {
         head_y.push(parseInt(head_y_str[i]));
       }
 
-      for (var i = head_y.length - 1; i >= 0; i--) {
+      for (var i = head_y.length - 1; i >= 20; i--) {
         head_y[i] -= correction;
       }
 
       // Peak value timestamps
-      temp_data.max_loud_timestamp = helperFunctions.max_timestamp_calc(dict.max_loud_timestamp);
-      temp_data.max_head_timestamp = helperFunctions.max_timestamp_calc(head_x[dict.head_data.indexOf(max_head)]);
-      temp_data.max_temp_timestamp = helperFunctions.max_timestamp_calc(dict.max_temp_timestamp);
+      temp_data.max_loud_timestamp = helperFunctions.max_timestamp_calc(
+        dict.max_loud_timestamp
+      );
+      temp_data.max_head_timestamp = helperFunctions.max_timestamp_calc(
+        head_x[dict.head_data.indexOf(max_head)]
+      );
+      temp_data.max_temp_timestamp = helperFunctions.max_timestamp_calc(
+        dict.max_temp_timestamp
+      );
 
       // Peak value timestamps
       //// Noise
-      var max_loud_timestamp = parseInt(dict.max_loud_timestamp.slice(11, -13)) - 4;
+      var max_loud_timestamp =
+        parseInt(dict.max_loud_timestamp.slice(11, -13)) - 4;
       var max_loud_minutes = dict.max_loud_timestamp.slice(14, 16);
-      temp_data.max_loud_timestamp = helperFunctions.timestamp_calc(max_loud_timestamp, max_loud_minutes);
+      temp_data.max_loud_timestamp = helperFunctions.timestamp_calc(
+        max_loud_timestamp,
+        max_loud_minutes
+      );
 
-      var new_max_head_timestamp_index = dict.head_data.indexOf(dict.max_head_value);
-      var max_head_timestamp = parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
+      var new_max_head_timestamp_index = dict.head_data.indexOf(
+        dict.max_head_value
+      );
+      var max_head_timestamp =
+        parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
       var max_head_minutes = head_x[new_max_head_timestamp_index].slice(14, 16);
-      temp_data.max_head_timestamp = helperFunctions.timestamp_calc(max_head_timestamp, max_head_minutes);
+      temp_data.max_head_timestamp = helperFunctions.timestamp_calc(
+        max_head_timestamp,
+        max_head_minutes
+      );
 
       //// Temperature
-      var max_temp_timestamp = parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
+      var max_temp_timestamp =
+        parseInt(dict.max_temp_timestamp.slice(11, -13)) - 4;
       var max_temp_minutes = dict.max_temp_timestamp.slice(14, 16);
-      temp_data.max_temp_timestamp = helperFunctions.timestamp_calc(max_temp_timestamp, max_temp_minutes);
+      temp_data.max_temp_timestamp = helperFunctions.timestamp_calc(
+        max_temp_timestamp,
+        max_temp_minutes
+      );
 
       var last_time = parseInt(noise_x.slice(-1)[0].slice(11, -13)) - 4;
       var x_label = [];
@@ -180,7 +209,9 @@ export default function SpaceScreen({ navigation, route }) {
 
       // Peak value data arrays for graphing
       temp_data.peak_noise = Array(noise_y.length).fill(2);
-      temp_data.peak_head = Array(dict.head_data.length).fill(Math.max(...head_y));
+      temp_data.peak_head = Array(dict.head_data.length).fill(
+        Math.max(...head_y)
+      );
       temp_data.peak_temp = Array(temp_y.length).fill(dict.max_temp_value);
 
       temp_data.max_head = Math.max(...head_y);
@@ -284,7 +315,7 @@ export default function SpaceScreen({ navigation, route }) {
             <Text numberOfLines={1} style={styles.texxt}>
               Noise
             </Text>
-            <Chart_Noise 
+            <Chart_Noise
               x_label={stateData.x_label}
               peak_noise={stateData.peak_noise}
               noise_y={stateData.noise_y}
@@ -381,8 +412,6 @@ export default function SpaceScreen({ navigation, route }) {
       </BlankScreen>
     );
   } else {
-    return (
-      <LoadingScreen/>
-    )
+    return <LoadingScreen />;
   }
 }
