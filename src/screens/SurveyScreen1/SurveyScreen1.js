@@ -18,7 +18,6 @@ export default function SurveyScreen1({ navigation }) {
   school_list = [
     'Boston University',
     'Northeastern University',
-    'Northeastefsdfasdfsadfasdfadsrn University',
     'Boston College',
   ]
 

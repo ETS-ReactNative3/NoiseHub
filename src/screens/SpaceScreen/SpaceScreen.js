@@ -144,9 +144,6 @@ export default function SpaceScreen({ navigation, route }) {
       var max_loud_minutes = dict.max_loud_timestamp.slice(14, 16);
       temp_data.max_loud_timestamp = helperFunctions.timestamp_calc(max_loud_timestamp, max_loud_minutes);
 
-      //// Head
-      for (var i = 0; i < head_y_str.length; i++)
-        head_y.push(parseInt(head_y_str[i]));
       var new_max_head_timestamp_index = dict.head_data.indexOf(dict.max_head_value);
       var max_head_timestamp = parseInt(head_x[new_max_head_timestamp_index].slice(11, -13)) - 4;
       var max_head_minutes = head_x[new_max_head_timestamp_index].slice(14, 16);
