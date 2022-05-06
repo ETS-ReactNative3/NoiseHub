@@ -31,6 +31,10 @@ export default function CheckInScreen({ navigation, route }) {
   const spaceID = route.params.spaceID;
   const spaceData = route.params.spaceData;
   const doorData = route.params.doorData;
+  var maxHead = route.params.max_head;
+
+  // console.log(doorData[0]["head"]);
+  console.log("MAXXXYXU: " + doorData);
 
   // console.log("USERFEEDBACK: \n" + spaceData["userFeedback"]);
 
@@ -113,13 +117,16 @@ export default function CheckInScreen({ navigation, route }) {
     }
 
     // Calculate correction
-    let heads_ts = doorData[0]["head"];
+    let heads_ts = doorData;
     let maxHeads = spaceData["headRange"];
     let oldCorrection = spaceData["correction"];
     let estimatedHeads =
       ((lowCount * 0.165 + medCount * 0.5 + highCount * 0.835) /
         userFeedbackJSON.length) *
       maxHeads;
+    console.log("ESTIMATED HEADS: " + estimatedHeads);
+    console.log("heads_ts: " + heads_ts)
+
     let newCorrection = parseInt(heads_ts - estimatedHeads);
     // console.log(
     //   "Low Count: " + lowCount + "\n" +

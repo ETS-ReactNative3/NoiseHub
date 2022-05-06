@@ -85,7 +85,7 @@ export default function SpaceScreen({ navigation, route }) {
     let ts_data = await timestreamCalls.getTimeStreamData();
     console.log("HERE 1");
     temp_data.doorData = ts_data["door"];
-    console.log(ts_data);
+    // console.log(temp_data.doorData);
 
     temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
 
@@ -120,6 +120,7 @@ export default function SpaceScreen({ navigation, route }) {
       var temp_y = [];
       var head_x = dict.head_timestamp;
       var max_head = dict.max_head_value;
+      console.log("MAX_HEAD: " + max_head);
       // temp_data.headY = dict.head_data;
 
       for (var i = 0; i < temp_y_str.length; i++) {
@@ -183,6 +184,7 @@ export default function SpaceScreen({ navigation, route }) {
       temp_data.peak_temp = Array(temp_y.length).fill(dict.max_temp_value);
 
       temp_data.max_head = Math.max(...head_y);
+      console.log("MAX_HEAD_2: " + temp_data.max_head)
       temp_data.headY = head_y;
       temp_data.temp_y = temp_y;
       temp_data.noise_y = noise_y;
@@ -232,7 +234,7 @@ export default function SpaceScreen({ navigation, route }) {
                 navigation.navigate("CheckIn", {
                   spaceID: "113",
                   spaceData: stateData.spaceData,
-                  doorData: stateData.doorData,
+                  doorData: stateData.max_head,
                 });
               }}
             >
