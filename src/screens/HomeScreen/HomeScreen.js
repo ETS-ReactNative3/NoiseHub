@@ -107,7 +107,7 @@ export default function HomeScreen({ navigation }) {
           head: undefined,
           temp: undefined
         };
-        
+
         temp_data.placeholder = response[i]["graphData"] == null ? true : false;
         temp_data.id = response[i]["uuid"];
         temp_data.name = response[i]["name"];
@@ -153,7 +153,7 @@ export default function HomeScreen({ navigation }) {
   if (firstCall) {
     firstCall = false;
     console.log("First Call");
-    // lambdaCalls.invokeLambda();
+    lambdaCalls.invokeLambda();
     helperFunctions.sleep(4000).then(() => {
       getData();
     });
