@@ -85,6 +85,7 @@ export default function SpaceScreen({ navigation, route }) {
     let ts_data = await timestreamCalls.getTimeStreamData();
     console.log("HERE 1");
     temp_data.doorData = ts_data["door"];
+    console.log(ts_data);
 
     temp_data.audio_level = audio_value_map[ts_data["noise_temp"][0]["noise"]];
 
@@ -129,7 +130,7 @@ export default function SpaceScreen({ navigation, route }) {
         head_y.push(parseInt(head_y_str[i]));
       }
 
-      for (var i = head_y.length - 1; i >= 800; i--) {
+      for (var i = head_y.length - 1; i >= 0; i--) {
         head_y[i] -= correction;
       }
 
@@ -178,7 +179,7 @@ export default function SpaceScreen({ navigation, route }) {
 
       // Peak value data arrays for graphing
       temp_data.peak_noise = Array(noise_y.length).fill(2);
-      temp_data.peak_head = Array(dict.head_data.length).fill(max_head);
+      temp_data.peak_head = Array(dict.head_data.length).fill(Math.max(...head_y));
       temp_data.peak_temp = Array(temp_y.length).fill(dict.max_temp_value);
 
       temp_data.max_head = Math.max(...head_y);
